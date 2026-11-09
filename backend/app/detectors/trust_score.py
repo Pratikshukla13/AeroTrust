@@ -1,8 +1,8 @@
 """AeroTrust Two-Axis Trust Score Engine (Phase 3.3 & 3.4).
 
 Computes integrated flight data integrity along two orthogonal axes:
-- Axis A: Hostile RF Interference (Calibrated probability from composite_v2 = a OR d,
-          with b and c as supporting reasons, plus 3-tier jamming status).
+- Axis A: Hostile RF Interference (Calibrated probability from altitude_consistency_v2 = Check a behind abstention gate,
+          with b and c as supporting reasons, plus 3-tier jamming status). Check d is inactive in v0.3.
 - Axis B: Natural Radiation Exposure (Relative radiation exposure in discrete bins:
           low, moderate, elevated, reported separately).
 
@@ -92,9 +92,9 @@ class TrustScoreEngine:
         if flag_c:
             supporting_reasons.append("pos_vel_consistency_supporting_drift")
 
-        # Isotonic piecewise calibration for Composite v2 (fitted on dev seed 42)
+        # Isotonic piecewise calibration for altitude_consistency_v2 (fitted on dev seed 42)
         raw_evidence = max(conf_a if flag_a else 0.0, conf_d if flag_d else 0.0)
-        iso_data = self.calibration.get("composite_v2_isotonic")
+        iso_data = self.calibration.get("altitude_consistency_v2_isotonic") or self.calibration.get("composite_v2_isotonic")
         if iso_data and "x_thresholds" in iso_data and "y_calibrated" in iso_data:
             calibrated_prob = float(
                 np.interp(raw_evidence, iso_data["x_thresholds"], iso_data["y_calibrated"])

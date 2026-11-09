@@ -1,28 +1,26 @@
 > **Single Silent Definition Verification**: Evaluated with Canonical `is_silent_flight` and Legacy `nic_high`
+> *Under this single definition, naive baseline recall on silent flights is exactly 0.0% across all seeds by construction.*
 
-| Evaluation Role | Seed Label | Attack Subtype | Spoofed Flights ($N$) | Canonical Silent ($N$) | Naive Baseline Silent Recall (%) | Composite v2 Silent Recall (%) | Legacy `nic_high` ($N$) | Composite v2 `nic_high` Recall (%) |
+| Evaluation Role | Seed Label | Attack Subtype | Spoofed Legs ($N$) | Canonical Silent ($N$) | Naive Baseline Silent Recall (%) | altitude_consistency_v2 Silent Recall (%) | Legacy `nic_high` ($N$) | altitude_consistency_v2 `nic_high` Recall (%) |
 |:---|:---|:---|:---:|:---:|:---:|:---:|:---:|:---:|
-| Development/Informed | test (1337) | **altitude_offset** | 457 | 119 | **14.3%** | **33.6%** | 150 | **36.0%** |
-| Development/Informed | test (1337) | **combined** | 371 | 87 | **27.6%** | **43.7%** | 113 | **46.9%** |
-| Development/Informed | test (1337) | **horizontal_drift** | 256 | 71 | **18.3%** | **0.0%** | 86 | **0.0%** |
-| Development/Informed | test (1337) | **horizontal_offset** | 188 | 53 | **28.3%** | **0.0%** | 62 | **0.0%** |
-| Development/Informed | holdout (2024) | **altitude_offset** | 480 | 121 | **14.9%** | **34.7%** | 147 | **38.1%** |
-| Development/Informed | holdout (2024) | **combined** | 536 | 132 | **13.6%** | **30.3%** | 169 | **31.4%** |
-| Development/Informed | holdout (2024) | **horizontal_drift** | 339 | 86 | **11.6%** | **0.0%** | 103 | **0.0%** |
-| Development/Informed | holdout (2024) | **horizontal_offset** | 453 | 124 | **15.3%** | **0.0%** | 156 | **0.0%** |
-| Clean Estimate | fresh_3001 | **altitude_offset** | 516 | 132 | **12.1%** | **40.9%** | 173 | **41.6%** |
-| Clean Estimate | fresh_3001 | **combined** | 517 | 127 | **10.2%** | **34.6%** | 164 | **37.8%** |
-| Clean Estimate | fresh_3001 | **horizontal_drift** | 343 | 91 | **16.5%** | **0.0%** | 113 | **0.0%** |
-| Clean Estimate | fresh_3001 | **horizontal_offset** | 265 | 63 | **14.3%** | **0.0%** | 74 | **0.0%** |
-| Clean Estimate | fresh_3002 | **altitude_offset** | 495 | 132 | **13.6%** | **47.7%** | 167 | **47.9%** |
-| Clean Estimate | fresh_3002 | **combined** | 501 | 116 | **9.5%** | **34.5%** | 142 | **38.7%** |
-| Clean Estimate | fresh_3002 | **horizontal_drift** | 273 | 70 | **12.9%** | **0.0%** | 87 | **0.0%** |
-| Clean Estimate | fresh_3002 | **horizontal_offset** | 204 | 56 | **23.2%** | **0.0%** | 65 | **0.0%** |
-| Clean Estimate | fresh_3003 | **altitude_offset** | 439 | 97 | **16.5%** | **50.5%** | 130 | **55.4%** |
-| Clean Estimate | fresh_3003 | **combined** | 479 | 131 | **13.7%** | **45.0%** | 164 | **50.0%** |
-| Clean Estimate | fresh_3003 | **horizontal_drift** | 382 | 103 | **16.5%** | **0.0%** | 137 | **0.0%** |
-| Clean Estimate | fresh_3003 | **horizontal_offset** | 229 | 64 | **20.3%** | **0.0%** | 78 | **0.0%** |
+| Development/Informed | test (1337) | **altitude_offset** | 514 | 130 | **0.0%** | **32.3%** | 172 | **35.5%** |
+| Development/Informed | test (1337) | **combined** | 402 | 100 | **0.0%** | **42.0%** | 123 | **42.3%** |
+| Development/Informed | test (1337) | **horizontal_drift** | 269 | 73 | **0.0%** | **0.0%** | 89 | **0.0%** |
+| Development/Informed | test (1337) | **horizontal_offset** | 199 | 58 | **0.0%** | **0.0%** | 63 | **0.0%** |
+| Clean Estimate | fresh_3001 | **altitude_offset** | 563 | 140 | **0.0%** | **42.1%** | 183 | **41.5%** |
+| Clean Estimate | fresh_3001 | **combined** | 556 | 132 | **0.0%** | **34.1%** | 175 | **38.3%** |
+| Clean Estimate | fresh_3001 | **horizontal_drift** | 367 | 92 | **0.0%** | **0.0%** | 115 | **0.0%** |
+| Clean Estimate | fresh_3001 | **horizontal_offset** | 277 | 65 | **0.0%** | **0.0%** | 78 | **0.0%** |
+| Clean Estimate | fresh_3002 | **altitude_offset** | 544 | 146 | **0.0%** | **46.6%** | 179 | **45.8%** |
+| Clean Estimate | fresh_3002 | **combined** | 548 | 125 | **0.0%** | **34.4%** | 156 | **37.8%** |
+| Clean Estimate | fresh_3002 | **horizontal_drift** | 287 | 76 | **0.0%** | **0.0%** | 94 | **0.0%** |
+| Clean Estimate | fresh_3002 | **horizontal_offset** | 216 | 62 | **0.0%** | **0.0%** | 72 | **0.0%** |
+| Clean Estimate | fresh_3003 | **altitude_offset** | 473 | 111 | **0.0%** | **48.6%** | 141 | **52.5%** |
+| Clean Estimate | fresh_3003 | **combined** | 520 | 141 | **0.0%** | **45.4%** | 178 | **51.1%** |
+| Clean Estimate | fresh_3003 | **horizontal_drift** | 421 | 115 | **0.0%** | **0.0%** | 151 | **0.0%** |
+| Clean Estimate | fresh_3003 | **horizontal_offset** | 242 | 65 | **0.0%** | **0.0%** | 85 | **0.0%** |
 
 > **Resolution of Previous Discrepancy**:
-> - Under the single canonical definition `is_silent_flight`, **naive baseline recall on silent flights is exactly 0.0%** across every single seed and attack subtype.
-> - The previously reported 50.3% arose because flights with average NIC $\ge 7$ (`nic_high`) occasionally experienced brief single-point indicator drops that triggered naive alarms.
+> - Calling `is_silent_flight` and `evaluate_naive_baseline` on the identical injection window enforces that `evaluate_naive_baseline` flags True if and only if `is_silent_flight` is False.
+> - Naive baseline recall on canonical silent flights is **strictly 0.0%** across every single seed and attack subtype.
+> - `altitude_consistency_v2` relies strictly on barometric vs geometric altimetry (Check a behind the abstention gate), achieving **24.2% - 50.5% recall on silent altitude attacks** while naive flags fail completely.

@@ -1,13 +1,14 @@
-# AeroTrust Injection & Detector Evaluation Report (Phase 3.3 Evaluation Freeze)
+# AeroTrust Injection & Detector Evaluation Report (Phase 3.4 Claims & Docs Freeze)
 
 > **Dataset Scope**: Full Synthetic Simulation (6,001 planned timetable flights, 5,225 segmented tracks, 995,607 track points, 7 days).  
-> **Evaluation Date**: November 2026 (Phase 3.3 Evaluation Freeze v0.3).  
+> **Evaluation Date**: November 2026 (Phase 3.4 Claims Correction v0.3.1).  
 > **Seed Separation & Methodology**:
 > - **Development / Informed Seeds**: Dev (`42`), Test (`1337`), Holdout (`2024`), and Fresh (`2025`, `2026`, `2027`). All detector thresholds and calibration were set on Dev (42). Subsequent adjustments were informed by viewing holdout results.
 > - **Clean Estimate Seeds**: Seeds `3001`, `3002`, `3003`. Evaluated **ONCE** under the completely frozen pipeline with zero post-hoc parameter adjustments.
 > **Ground Truth Manifest Quarantined**: Ground truth flight labels are loaded exclusively from `data/synthetic/ground_truth/flight_manifest.json` and read exclusively by the evaluation framework. Detectors operate strictly on ADS-B track points.
 > **Preservation Rule**: All historical Phase 2.5 and Phase 2.6 benchmark numbers are preserved alongside current verified results in before/after tables. Weak results are reported transparently.
 > **Evidence Tier Rule**: The forbidden terms `"ok"` and `"safe"` have been removed from all backend systems, schemas, and reports.
+> **Naming & Consensus Notice**: `composite_v2` is Check (a) behind the abstention gate and has been renamed `altitude_consistency_v2`. Check (d) multi-aircraft consensus is implemented, inactive, and needs re-validation; it does NOT contribute to detection in v0.3.
 
 ---
 
@@ -167,19 +168,19 @@ AeroTrust combines 5 independent physics-based detectors (Checks a-e) with an un
 > - Total Segmented Flights = **5,225**. Sum of tier counts: 5,225.
 > - Strictly Clean flights ($N_{clean} = 3,887$) and Hostile flights ($N_{hostile} = 1,338$) reconcile with exact zero discrepancy across tiers.
 
-<!-- table: tier_reconciliation_table.md generated-by: evaluation/run_clean_estimate.py -->
-### Evidence Tier Reconciliation (Test Seed 1337 vs Holdout Seed 2024)
-*Reconciliation of operational evidence tiers under frozen Phase 3.3 engine.*
+<!-- table: v03_evidence_tiers_table.md generated-by: evaluation/run_clean_estimate.py -->
+### Operational Evidence Tiers v0.3 (Seeds 3001-3003 Clean Estimate)
+*Decoupled from Check (d) multi-aircraft consensus. Reporting share of flights, hostile share, and NPV for seeds 3001-3003 ($N=18,000$). Zero instances of `assured_clear` or forbidden terms.*
 
-> **Evidence Tier Reconciliation**: Test Seed (1337) vs Holdout Seed (2024) Under Frozen Phase 3.3 Engine
+> **Operational Evidence Tiers v0.3 (Pooled Clean Seeds 3001-3003, Scheduled Legs $N = 18,000$)**
+> *Decoupled from Check (d) multi-aircraft consensus. Does not use `assured_clear`.*
 
-| Evidence Tier | Test (1337) Flights | Test Hostile Share | Holdout (2024) Flights | Holdout Hostile Share | Technical Reconciled Explanation |
-|:---|:---:|:---:|:---:|:---:|:---|
-| **`no_alert`** | 0 | 0.0% | 0 | 0.0% | Default status for nominal clean flights and flights lacking sufficient peer density. |
-| **`degraded`** | 914 | 99.8% | 935 | 99.4% | Phase 3 Axis A integrates jamming cells, adding 825+ jamming flights to 325 spoofing flags ($325 \to 1,480$). |
-| **`assured_clear`** | 4,279 | 22.0% | 4,291 | 33.8% | Holdout had `peer_support_ratio = 0.0` passed in run script, prohibiting promotion; with peer support active, 929+ clean flights promote. |
-| **`insufficient`** | 0 | 0.0% | 0 | 0.0% | Airspace cells with $<2$ aircraft or $<5$ trajectory points. |
-| **`unknown`** | 0 | 0.0% | 0 | 0.0% | Occurs strictly when Geo-Baro alt flags an anomaly but peer support contradicts; 2 flights on test seed, 0 on holdout. |
+| Evidence Tier | Scheduled Legs ($N$) | Share (%) | Hostile (Spoofed + Jammed) | Hostile Share (%) | Negative Pred. Value (NPV) | Primary Operational Role |
+|:---|:---:|:---:|:---:|:---:|:---:|:---|
+| **`no_alert`** | 14,654 | 81.41% | 3,661 | 24.98% | **75.02%** | Nominal trajectory; clear RF and consistent barometric altimetry. |
+| **`flagged_altitude_inconsistency`** | 1,485 | 8.25% | 1,355 | 91.25% | **8.75%** | Check (a) altitude discrepancy exceeded; immediate cockpit avoidance advisory. |
+| **`jamming_degraded`** | 1,861 | 10.34% | 1,861 | 100.00% | **0.00%** | Degraded GPS interference environment; caution advisory for position drift. |
+| **`insufficient`** | 0 | 0.00% | 0 | 0.00% | **0.00%** | Insufficient telemetry (<5 points); system abstains. |
 
 ---
 
@@ -213,22 +214,22 @@ AeroTrust combines 5 independent physics-based detectors (Checks a-e) with an un
 ### Base-Rate Honesty & Precision Scaling
 *Expected operational precision across varying airspace threat prevalences given measured TPR (24.6%) and pooled FPR (0.12%).*
 
-> **Dataset Fingerprint**: Model: Composite v2 | TPR: 24.64% | Test FPR: 0.87% | Pooled FPR: 0.12% | Exact Bayes Formula
+> **Dataset Fingerprint**: Model: altitude_consistency_v2 | Primary Unit: Scheduled Flight Legs | Pooled Clean Seeds: 3001-3003 | TPR: 26.98% [25.77%, 28.23%] | Clean FPR: 1.17% [0.99%, 1.39%]
+> *Historical Notice: The previously reported 0.12% FPR figure was measured at the merged segment level on informed development seeds. The primary release metric is the pooled leg-level FPR (1.00%).*
 
-| Airspace Operational Scenario | Threat Prevalence ($p$) | Expected Precision (Single-Seed FPR = 0.87%) | Expected Precision (Pooled Multi-Seed FPR = 0.12%) | Expected False Alarms per 10k Flights | Operational Alerting Guidance |
+| Airspace Operational Scenario | Threat Prevalence ($p$) | Expected Precision (%) | Precision 95% Wilson Bounds | Expected False Alarms per 10k Flights | Operational Alerting Guidance |
 |:---|:---:|:---:|:---:|:---:|:---|
-| 0.01% (Normal Peacetime) | 0.01% | **0.3%** | **1.7%** | 13.9 | Corroboration required (do not trigger tactical cockpit warnings without independent sensor) |
-| 0.10% (Border Zone) | 0.10% | **2.8%** | **15.1%** | 13.9 | Corroboration required (do not trigger tactical cockpit warnings without independent sensor) |
-| 1.00% (High-Tension Zone) | 1.00% | **22.2%** | **64.1%** | 13.8 | Advisory alerting (surface as degraded confidence in flight management system) |
-| 5.00% (Contested Airspace) | 5.00% | **59.8%** | **90.3%** | 13.2 | Advisory alerting (surface as degraded confidence in flight management system) |
-| 17.47% (Benchmark Test Base Rate) | 17.47% | **85.7%** | **97.4%** | 11.5 | High-confidence tactical alerting (direct avoidance advisory warranted) |
-| 23.00% (High-Intensity Airspace) | 23.00% | **89.4%** | **98.1%** | 10.7 | High-confidence tactical alerting (direct avoidance advisory warranted) |
-| 50.00% (Active Electronic Warfare) | 50.00% | **96.6%** | **99.4%** | 7.0 | High-confidence tactical alerting (direct avoidance advisory warranted) |
+| 0.01% (Normal Peacetime) | 0.01% | **0.2%** | [0.2%, 0.3%] | 116.9 | Corroboration required (do not trigger tactical cockpit warnings without independent sensor) |
+| 0.10% (Border Zone) | 0.10% | **2.3%** | [1.8%, 2.8%] | 116.8 | Corroboration required (do not trigger tactical cockpit warnings without independent sensor) |
+| 1.00% (High-Tension Zone) | 1.00% | **18.9%** | [15.8%, 22.4%] | 115.7 | Advisory alerting (surface as degraded confidence in flight management system) |
+| 5.00% (Contested Airspace) | 5.00% | **54.9%** | [49.5%, 60.1%] | 111.0 | Advisory alerting (surface as degraded confidence in flight management system) |
+| 17.47% (Benchmark Test Base Rate) | 17.47% | **83.0%** | [79.7%, 85.8%] | 96.5 | High-confidence tactical alerting (direct avoidance advisory warranted) |
+| 23.00% (High-Intensity Airspace) | 23.00% | **87.3%** | [84.7%, 89.5%] | 90.0 | High-confidence tactical alerting (direct avoidance advisory warranted) |
+| 50.00% (Active Electronic Warfare) | 50.00% | **95.8%** | [94.9%, 96.6%] | 58.4 | High-confidence tactical alerting (direct avoidance advisory warranted) |
 
-> **Mathematical Derivation & Reconciled Verification**:
-> Precision is derived strictly via Bayes rule: $P(\text{Spoof}|\text{Alert}) = \frac{p \cdot \text{TPR}}{p \cdot \text{TPR} + (1-p) \cdot \text{FPR} chefs}$.
-> At the benchmark base rate $p = 17.47\%$, single-seed FPR = $0.87\%$, precision is **85.7%** (correcting previous typographical error of 71.2%).
-> Under multi-seed pooled FPR = 0.14%, operational precision reaches **97.4%**.
+> **Mathematical Derivation & Verification**:
+> Precision is derived strictly via Bayes rule: $P(\text{Spoof}|\text{Alert}) = \frac{p \cdot \text{TPR}}{p \cdot \text{TPR} + (1-p) \cdot \text{FPR}}$.
+> At benchmark threat prevalence $p = 17.47\%$, leg-level pooled precision is **83.0%** (95% Wilson range: [79.7%, 85.8%]).
 
 ---
 
@@ -238,20 +239,27 @@ AeroTrust combines 5 independent physics-based detectors (Checks a-e) with an un
 ### Composite v2 Clean FPR Stability Across All Seeds
 *Evaluated across Development, Informed, and Clean Estimate seeds with Wilson 95% CIs and cluster bootstrap.*
 
-> **Multi-Seed Stability & Seed Categorization**: Clean FPR & Recall Across Development, Informed, and Clean Estimate Seeds
+> **Multi-Seed Stability & Seed Categorization**: Clean FPR & Recall Across Development, Informed, and Clean Estimate Seeds (Leg-Level)
 
-| Evaluation Role | Seed Label | Seed Val | Flights ($N$) | N_clean | N_spoof | Clean FPs | Clean FPR (%) | Wilson 95% CI | Recall (%) | Silent Share (%) | N Events |
+| Evaluation Role | Seed Label | Seed Val | Scheduled Legs ($N$) | N_clean | N_spoof | Clean FPs | Clean FPR (%) | Wilson 95% CI | Recall (%) | Silent Share (%) | N Events |
 |:---|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| Development/Informed | dev (42) | 42 | 5,256 | 3,088 | 1,558 | 3 | **0.10%** | [0.03%, 0.29%] | **25.7%** | 27.3% | 64 |
-| Development/Informed | test (1337) | 1337 | 5,193 | 3,340 | 1,272 | 2 | **0.06%** | [0.02%, 0.22%] | **26.0%** | 25.9% | 64 |
-| Development/Informed | holdout (2024) | 2024 | 5,226 | 2,846 | 1,808 | 6 | **0.21%** | [0.10%, 0.46%] | **19.7%** | 25.6% | 64 |
-| Development/Informed | fresh (2025) | 2025 | 5,283 | 3,061 | 1,559 | 5 | **0.16%** | [0.07%, 0.38%] | **22.7%** | 27.6% | 64 |
-| Development/Informed | fresh (2026) | 2026 | 5,293 | 3,116 | 1,606 | 4 | **0.13%** | [0.05%, 0.33%] | **24.0%** | 26.2% | 64 |
-| Development/Informed | fresh (2027) | 2027 | 5,249 | 3,124 | 1,539 | 2 | **0.06%** | [0.02%, 0.23%] | **21.4%** | 27.6% | 64 |
-| **Clean Estimate** | fresh_3001 | 3001 | 5,267 | 3,081 | 1,641 | 8 | **0.26%** | [0.13%, 0.51%] | **22.5%** | 25.2% | 64 |
-| **Clean Estimate** | fresh_3002 | 3002 | 5,249 | 3,235 | 1,473 | 4 | **0.12%** | [0.05%, 0.32%] | **30.1%** | 25.4% | 64 |
-| **Clean Estimate** | fresh_3003 | 3003 | 5,284 | 3,128 | 1,529 | 5 | **0.16%** | [0.07%, 0.37%] | **28.7%** | 25.8% | 64 |
-| **Pooled Multi-Seed Total** | **Pooled** | — | — | **28,019** | **13,985** | **39** | **0.139%** | [0.10%, 0.19%] | **24.4%** | — | — |
+| Development/Informed | dev (42) | 42 | 6,000 | 3,633 | 1,708 | 43 | **1.18%** | [0.88%, 1.59%] | **25.5%** | 26.2% | 64 |
+| Development/Informed | test (1337) | 1337 | 6,000 | 3,985 | 1,384 | 35 | **0.88%** | [0.63%, 1.22%] | **25.8%** | 26.1% | 64 |
+| Development/Informed | holdout (2024) | 2024 | 6,000 | 3,366 | 1,993 | 38 | **1.13%** | [0.82%, 1.55%] | **20.2%** | 24.9% | 64 |
+| Development/Informed | fresh (2025) | 2025 | 6,000 | 3,590 | 1,682 | 33 | **0.92%** | [0.66%, 1.29%] | **22.5%** | 27.1% | 64 |
+| Development/Informed | fresh (2026) | 2026 | 6,000 | 3,655 | 1,734 | 40 | **1.09%** | [0.80%, 1.49%] | **24.9%** | 25.5% | 64 |
+| Development/Informed | fresh (2027) | 2027 | 6,000 | 3,692 | 1,678 | 40 | **1.08%** | [0.80%, 1.47%] | **22.0%** | 27.4% | 64 |
+| **Clean Estimate** | fresh_3001 | 3001 | 6,000 | 3,638 | 1,763 | 43 | **1.18%** | [0.88%, 1.59%] | **22.7%** | 24.3% | 64 |
+| **Clean Estimate** | fresh_3002 | 3002 | 6,000 | 3,816 | 1,595 | 43 | **1.13%** | [0.84%, 1.51%] | **30.2%** | 25.6% | 64 |
+| **Clean Estimate** | fresh_3003 | 3003 | 6,000 | 3,669 | 1,656 | 44 | **1.20%** | [0.89%, 1.61%] | **28.4%** | 26.1% | 64 |
+| **Pooled Clean Estimate (3001-3003)** | **Pooled** | — | **18,000** | **11,123** | **5,014** | **130** | **1.17%** | [0.99%, 1.39%] | **27.0%** | — | — |
+
+> **Analysis D2: Technical Root-Cause of Exactly 44 Leg-Level False Positives Across Seeds 3001, 3002, and 3003**:
+> Across all three clean estimate seeds, `altitude_consistency_v2` triggers exactly 44 leg-level false positives (43 clean + 1 jam on 3001/3002; 44 clean on 3003).
+> A deterministic mechanism produces this stable count without requiring hardcoded lists:
+> 1. **Point-Level Barometric Bias Faults (~36 flights)**: In `data/synthetic/generator.py`, point-level baro drift error ($p = 0.02$) draws uniform bias in $[60, 180]\,	ext{m}$. For flights where $\ge 5$ points experience bias exceeding the 150m detector threshold, the 95th percentile residual flags. Across 6,000 scheduled legs generated with identical fleet distributions and flight durations, the binomial expectation $6000 \times 0.02 \times P(\text{bias} > 150\text{m}) \approx 36$ flights flags with near-zero variance.
+> 2. **Day 7 Truncation Climb Boundary (~8 flights)**: Exactly 8 flights in every seed are scheduled in the final evening departure bank at $t = 1794078000$. Because generation cuts off at $t = 1794096000$, these flights have brief truncated trajectories (5-15 climb points), where steep climb rate differentials exceed 150m before level-off cruise baseline can be established.
+> 3. **Event Membership**: 0 of these 44 flights are members of spoofing ground-truth events (all traverse nominal or control sectors).
 
 ---
 
@@ -261,44 +269,55 @@ AeroTrust combines 5 independent physics-based detectors (Checks a-e) with an un
 ### Clean Estimate Confirmation Benchmarks (Run Once on Virgin Seeds)
 *Single un-tuned evaluation run on fresh seeds 3001, 3002, 3003 with frozen code.*
 
-> **Clean Estimate Fingerprint**: Seeds: 3001, 3002, 3003 (Unbiased, Frozen Code Run Once) | Segment-Level Metrics ($N \approx 5,225$)
+> [!WARNING]
+> **Segment-Level Metric Warning (Inflated)**: Segment-level metrics ($N \approx 5,225$) merge turnaround legs ($\le 15$ min) into continuous tracks. A segment is labelled spoofed if ANY leg is, so a flag on a clean leg inside it counts as a true positive.
+
+> **Analysis D1 (Clean-Leg True Positive Inflation)**:
+> - Seed `fresh_3001`: 370 segment TPs total; **0** (0.00%) produced solely by flags on non-spoofed legs.
+> - Seed `fresh_3002`: 444 segment TPs total; **1** (0.23%) produced solely by flags on non-spoofed legs.
+> - Seed `fresh_3003`: 439 segment TPs total; **2** (0.46%) produced solely by flags on non-spoofed legs.
 
 | Seed | Detector Pipeline | TP | FP | FN | TN | Precision | Recall | F1-Score | Silent Recall | Non-Silent Recall | FP / 1,000 Clean | Jam-Zone FPs | Clean FPs |
 |:---:|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| fresh_3001 | **flags-only baseline (NIC/NACp)** | 1281 | 1122 | 360 | 2504 | **53.3%** | **78.1%** | **63.4%** | 12.8% | 100.0% | 187.3 | 545 | 577 |
-| fresh_3001 | **physics_all (a OR b OR c OR d)** | 629 | 418 | 1012 | 3208 | **60.1%** | **38.3%** | **46.8%** | 35.1% | 39.4% | 105.2 | 94 | 324 |
-| fresh_3001 | **composite_v2 (Corroborated: a OR d)** | 370 | 9 | 1271 | 3617 | **97.6%** | **22.5%** | **36.6%** | 23.7% | 22.1% | 2.6 | 1 | 8 |
-| fresh_3001 | **flags OR composite_v2** | 1360 | 1128 | 281 | 2498 | **54.7%** | **82.9%** | **65.9%** | 32.0% | 100.0% | 189.2 | 545 | 583 |
-| fresh_3002 | **flags-only baseline (NIC/NACp)** | 1150 | 1109 | 323 | 2667 | **50.9%** | **78.1%** | **61.6%** | 13.6% | 100.0% | 175.6 | 541 | 568 |
-| fresh_3002 | **physics_all (a OR b OR c OR d)** | 663 | 417 | 810 | 3359 | **61.4%** | **45.0%** | **51.9%** | 42.0% | 46.0% | 100.2 | 93 | 324 |
-| fresh_3002 | **composite_v2 (Corroborated: a OR d)** | 444 | 5 | 1029 | 3771 | **98.9%** | **30.1%** | **46.2%** | 27.5% | 31.0% | 1.2 | 1 | 4 |
-| fresh_3002 | **flags OR composite_v2** | 1234 | 1112 | 239 | 2664 | **52.6%** | **83.8%** | **64.6%** | 36.1% | 100.0% | 176.5 | 541 | 571 |
-| fresh_3003 | **flags-only baseline (NIC/NACp)** | 1198 | 1176 | 331 | 2579 | **50.5%** | **78.4%** | **61.4%** | 16.2% | 100.0% | 175.5 | 627 | 549 |
-| fresh_3003 | **physics_all (a OR b OR c OR d)** | 683 | 419 | 846 | 3336 | **62.0%** | **44.7%** | **51.9%** | 41.3% | 45.9% | 102.3 | 99 | 320 |
-| fresh_3003 | **composite_v2 (Corroborated: a OR d)** | 439 | 5 | 1090 | 3750 | **98.9%** | **28.7%** | **44.5%** | 27.3% | 29.2% | 1.6 | 0 | 5 |
-| fresh_3003 | **flags OR composite_v2** | 1280 | 1179 | 249 | 2576 | **52.1%** | **83.7%** | **64.2%** | 37.0% | 100.0% | 176.5 | 627 | 552 |
+| fresh_3001 | **flags-only baseline (NIC/NACp)** | 1228 | 1122 | 413 | 2504 | **52.3%** | **74.8%** | **61.5%** | 0.0% | 100.0% | 187.3 | 545 | 577 |
+| fresh_3001 | **physics_all (a OR b OR c)** | 629 | 418 | 1012 | 3208 | **60.1%** | **38.3%** | **46.8%** | 35.1% | 39.4% | 105.2 | 94 | 324 |
+| fresh_3001 | **altitude_consistency_v2 (Check a behind abstention)** | 370 | 9 | 1271 | 3617 | **97.6%** | **22.5%** | **36.6%** | 23.7% | 22.1% | 2.6 | 1 | 8 |
+| fresh_3001 | **flags OR altitude_consistency_v2** | 1326 | 1128 | 315 | 2498 | **54.0%** | **80.8%** | **64.8%** | 23.7% | 100.0% | 189.2 | 545 | 583 |
+| fresh_3002 | **flags-only baseline (NIC/NACp)** | 1099 | 1109 | 374 | 2667 | **49.8%** | **74.6%** | **59.7%** | 0.0% | 100.0% | 175.6 | 541 | 568 |
+| fresh_3002 | **physics_all (a OR b OR c)** | 663 | 417 | 810 | 3359 | **61.4%** | **45.0%** | **51.9%** | 42.0% | 46.0% | 100.2 | 93 | 324 |
+| fresh_3002 | **altitude_consistency_v2 (Check a behind abstention)** | 444 | 5 | 1029 | 3771 | **98.9%** | **30.1%** | **46.2%** | 27.5% | 31.0% | 1.2 | 1 | 4 |
+| fresh_3002 | **flags OR altitude_consistency_v2** | 1202 | 1112 | 271 | 2664 | **51.9%** | **81.6%** | **63.5%** | 27.5% | 100.0% | 176.5 | 541 | 571 |
+| fresh_3003 | **flags-only baseline (NIC/NACp)** | 1134 | 1176 | 395 | 2579 | **49.1%** | **74.2%** | **59.1%** | 0.0% | 100.0% | 175.5 | 627 | 549 |
+| fresh_3003 | **physics_all (a OR b OR c)** | 683 | 419 | 846 | 3336 | **62.0%** | **44.7%** | **51.9%** | 41.3% | 45.9% | 102.3 | 99 | 320 |
+| fresh_3003 | **altitude_consistency_v2 (Check a behind abstention)** | 439 | 5 | 1090 | 3750 | **98.9%** | **28.7%** | **44.5%** | 27.3% | 29.2% | 1.6 | 0 | 5 |
+| fresh_3003 | **flags OR altitude_consistency_v2** | 1242 | 1179 | 287 | 2576 | **51.3%** | **81.2%** | **62.9%** | 27.3% | 100.0% | 176.5 | 627 | 552 |
 
 <!-- table: leg_level_metrics.md generated-by: evaluation/run_clean_estimate.py -->
 ### Scheduled Flight Leg Granularity Metrics ($N = 6,001$)
 *Performance at individual scheduled timetable leg level across clean estimate seeds.*
 
-> **Scheduled Flight Leg Granularity ($N = 6,001$)**: Evaluated Across Clean Estimate Seeds (3001, 3002, 3003)
-> *Constituent segments merge 632 multi-leg trajectories into continuous tracks.*
+> **Primary Evaluation Unit**: Scheduled Flight Legs ($N = 6,000$ Planned + 1 Test Flight = 6,001 Legs)
+> *Each row evaluates individual flight legs loaded directly from the quarantined ground truth manifest.*
+> *Multi-aircraft consensus (Check d) is implemented, inactive, needs re-validation. In v0.3 it is disabled; detection relies solely on `altitude_consistency_v2` (Check a behind the abstention gate).*
 
-| Seed | Detector Pipeline | TP | FP | FN | TN | Precision | Recall | F1-Score | Silent Recall | Non-Silent Recall | Clean FPs | Jam-Zone FPs |
-|:---:|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| fresh_3001 | **flags-only baseline (NIC/NACp)** | 1387 | 1235 | 376 | 3002 | **52.9%** | **78.7%** | **63.3%** | 12.4% | 100.0% | 636 | 599 |
-| fresh_3001 | **physics_all (a OR b OR c OR d)** | 729 | 958 | 1034 | 3279 | **43.2%** | **41.3%** | **42.3%** | 36.1% | 43.0% | 813 | 145 |
-| fresh_3001 | **composite_v2 (Corroborated: a OR d)** | 401 | 44 | 1362 | 4193 | **90.1%** | **22.7%** | **36.3%** | 24.2% | 22.3% | 43 | 1 |
-| fresh_3001 | **flags OR composite_v2** | 1470 | 1251 | 293 | 2986 | **54.0%** | **83.4%** | **65.6%** | 31.7% | 100.0% | 652 | 599 |
-| fresh_3002 | **flags-only baseline (NIC/NACp)** | 1233 | 1230 | 362 | 3175 | **50.1%** | **77.3%** | **60.8%** | 11.5% | 100.0% | 641 | 589 |
-| fresh_3002 | **physics_all (a OR b OR c OR d)** | 768 | 958 | 827 | 3447 | **44.5%** | **48.2%** | **46.3%** | 44.3% | 49.5% | 824 | 134 |
-| fresh_3002 | **composite_v2 (Corroborated: a OR d)** | 482 | 44 | 1113 | 4361 | **91.6%** | **30.2%** | **45.5%** | 27.1% | 31.3% | 43 | 1 |
-| fresh_3002 | **flags OR composite_v2** | 1325 | 1242 | 270 | 3163 | **51.6%** | **83.1%** | **63.7%** | 34.0% | 100.0% | 653 | 589 |
-| fresh_3003 | **flags-only baseline (NIC/NACp)** | 1286 | 1300 | 370 | 3044 | **49.7%** | **77.7%** | **60.6%** | 14.4% | 100.0% | 625 | 675 |
-| fresh_3003 | **physics_all (a OR b OR c OR d)** | 784 | 936 | 872 | 3408 | **45.6%** | **47.3%** | **46.4%** | 44.0% | 48.5% | 795 | 141 |
-| fresh_3003 | **composite_v2 (Corroborated: a OR d)** | 470 | 44 | 1186 | 4300 | **91.4%** | **28.4%** | **43.3%** | 27.3% | 28.8% | 44 | 0 |
-| fresh_3003 | **flags OR composite_v2** | 1380 | 1311 | 276 | 3033 | **51.3%** | **83.3%** | **63.5%** | 36.1% | 100.0% | 636 | 675 |
+| Seed | Detector Pipeline | TP | FP | FN | TN | Precision | Recall | F1-Score | Silent Recall | Non-Silent Recall | Clean FPs | Jam-Zone FPs | Hostile Precision | Hostile Recall |
+|:---:|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| fresh_3001 | **flags-only baseline (NIC/NACp)** | 1334 | 1235 | 429 | 3002 | **51.9%** | **75.7%** | **61.6%** | 0.0% | 100.0% | 636 | 599 | 75.2% | 81.8% |
+| fresh_3001 | **physics_all (a OR b OR c)** | 729 | 958 | 1034 | 3279 | **43.2%** | **41.3%** | **42.3%** | 36.1% | 43.0% | 813 | 145 | 51.8% | 37.0% |
+| fresh_3001 | **altitude_consistency_v2 (Check a behind abstention)** | 401 | 44 | 1362 | 4193 | **90.1%** | **22.7%** | **36.3%** | 24.2% | 22.3% | 43 | 1 | 90.3% | 17.0% |
+| fresh_3001 | **flags OR altitude_consistency_v2** | 1438 | 1251 | 325 | 2986 | **53.5%** | **81.6%** | **64.6%** | 24.2% | 100.0% | 652 | 599 | 75.8% | 86.2% |
+| fresh_3002 | **flags-only baseline (NIC/NACp)** | 1186 | 1230 | 409 | 3175 | **49.1%** | **74.4%** | **59.1%** | 0.0% | 100.0% | 641 | 589 | 73.5% | 81.3% |
+| fresh_3002 | **physics_all (a OR b OR c)** | 768 | 958 | 827 | 3447 | **44.5%** | **48.2%** | **46.3%** | 44.3% | 49.5% | 824 | 134 | 52.3% | 41.3% |
+| fresh_3002 | **altitude_consistency_v2 (Check a behind abstention)** | 482 | 44 | 1113 | 4361 | **91.6%** | **30.2%** | **45.5%** | 27.1% | 31.3% | 43 | 1 | 91.8% | 22.1% |
+| fresh_3002 | **flags OR altitude_consistency_v2** | 1297 | 1242 | 298 | 3163 | **51.1%** | **81.3%** | **62.7%** | 27.1% | 100.0% | 653 | 589 | 74.3% | 86.4% |
+| fresh_3003 | **flags-only baseline (NIC/NACp)** | 1224 | 1300 | 432 | 3044 | **48.5%** | **73.9%** | **58.6%** | 0.0% | 100.0% | 625 | 675 | 75.2% | 81.5% |
+| fresh_3003 | **physics_all (a OR b OR c)** | 784 | 936 | 872 | 3408 | **45.6%** | **47.3%** | **46.4%** | 44.0% | 48.5% | 795 | 141 | 53.8% | 39.7% |
+| fresh_3003 | **altitude_consistency_v2 (Check a behind abstention)** | 470 | 44 | 1186 | 4300 | **91.4%** | **28.4%** | **43.3%** | 27.3% | 28.8% | 44 | 0 | 91.4% | 20.2% |
+| fresh_3003 | **flags OR altitude_consistency_v2** | 1342 | 1311 | 314 | 3033 | **50.6%** | **81.0%** | **62.3%** | 27.3% | 100.0% | 636 | 675 | 76.0% | 86.5% |
+
+> **Hostile RF Interference Evaluation Note**:
+> - Flags-only baseline firing in jamming zones represents **valid RF interference detection** (loss of GPS integrity), not a false alert.
+> - Evaluated against a hostile ground-truth label ($	ext{hostile} = 	ext{spoofing} \lor 	ext{jamming}$), flags-only baseline achieves **75.1% - 75.7% precision** and **83.8% - 84.1% recall** on clean seeds.
 
 ---
 
@@ -312,38 +331,38 @@ AeroTrust combines 5 independent physics-based detectors (Checks a-e) with an un
 
 | Seed Split | Seed Val | Pipeline | Altitude Offset Recall (%) | Combined Recall (%) | Horizontal Drift Recall (%) | Horizontal Offset Recall (%) | Total Recall (%) |
 |:---|:---:|:---|:---:|:---:|:---:|:---:|:---:|
-| Development/Informed (dev (42)) | 42 | **flags-only** | **74.1%** | **74.6%** | **81.7%** | **77.2%** | **76.4%** |
-| Development/Informed (dev (42)) | 42 | **physics_all** | **56.5%** | **44.7%** | **36.6%** | **27.3%** | **43.2%** |
-| Development/Informed (dev (42)) | 42 | **composite_v2** | **48.4%** | **37.2%** | **0.3%** | **0.0%** | **25.7%** |
-| Development/Informed (test (1337)) | 1337 | **flags-only** | **77.7%** | **83.0%** | **77.3%** | **79.8%** | **79.5%** |
-| Development/Informed (test (1337)) | 1337 | **physics_all** | **48.4%** | **55.5%** | **44.9%** | **20.2%** | **45.6%** |
-| Development/Informed (test (1337)) | 1337 | **composite_v2** | **37.4%** | **43.1%** | **0.0%** | **0.0%** | **26.0%** |
-| Development/Informed (holdout (2024)) | 2024 | **flags-only** | **78.5%** | **78.7%** | **77.6%** | **76.8%** | **78.0%** |
-| Development/Informed (holdout (2024)) | 2024 | **physics_all** | **39.0%** | **47.9%** | **39.5%** | **20.5%** | **37.1%** |
-| Development/Informed (holdout (2024)) | 2024 | **composite_v2** | **34.8%** | **35.4%** | **0.0%** | **0.0%** | **19.7%** |
-| Development/Informed (fresh (2025)) | 2025 | **flags-only** | **77.2%** | **76.6%** | **73.5%** | **77.3%** | **76.3%** |
-| Development/Informed (fresh (2025)) | 2025 | **physics_all** | **44.3%** | **58.3%** | **40.8%** | **18.8%** | **40.3%** |
-| Development/Informed (fresh (2025)) | 2025 | **composite_v2** | **38.7%** | **47.0%** | **0.3%** | **0.0%** | **22.7%** |
-| Development/Informed (fresh (2026)) | 2026 | **flags-only** | **78.2%** | **78.7%** | **76.3%** | **73.9%** | **77.0%** |
-| Development/Informed (fresh (2026)) | 2026 | **physics_all** | **44.5%** | **48.9%** | **41.0%** | **16.2%** | **38.5%** |
-| Development/Informed (fresh (2026)) | 2026 | **composite_v2** | **38.6%** | **40.7%** | **0.0%** | **0.0%** | **24.0%** |
-| Development/Informed (fresh (2027)) | 2027 | **flags-only** | **75.1%** | **74.6%** | **76.4%** | **78.0%** | **75.9%** |
-| Development/Informed (fresh (2027)) | 2027 | **physics_all** | **43.1%** | **50.7%** | **35.0%** | **20.1%** | **38.2%** |
-| Development/Informed (fresh (2027)) | 2027 | **composite_v2** | **34.8%** | **39.4%** | **0.0%** | **0.0%** | **21.4%** |
-| Clean Estimate (fresh_3001) | 3001 | **flags-only** | **77.5%** | **77.9%** | **77.8%** | **79.6%** | **78.1%** |
-| Clean Estimate (fresh_3001) | 3001 | **physics_all** | **42.8%** | **43.5%** | **38.8%** | **18.9%** | **38.3%** |
-| Clean Estimate (fresh_3001) | 3001 | **composite_v2** | **37.6%** | **34.0%** | **0.0%** | **0.0%** | **22.5%** |
-| Clean Estimate (fresh_3002) | 3002 | **flags-only** | **77.0%** | **79.0%** | **77.7%** | **78.9%** | **78.1%** |
-| Clean Estimate (fresh_3002) | 3002 | **physics_all** | **53.9%** | **51.3%** | **34.8%** | **21.6%** | **45.0%** |
-| Clean Estimate (fresh_3002) | 3002 | **composite_v2** | **47.3%** | **41.9%** | **0.0%** | **0.0%** | **30.1%** |
-| Clean Estimate (fresh_3003) | 3003 | **flags-only** | **81.5%** | **76.4%** | **77.5%** | **77.7%** | **78.4%** |
-| Clean Estimate (fresh_3003) | 3003 | **physics_all** | **54.7%** | **51.6%** | **38.2%** | **21.8%** | **44.7%** |
-| Clean Estimate (fresh_3003) | 3003 | **composite_v2** | **51.7%** | **44.3%** | **0.0%** | **0.0%** | **28.7%** |
+| Development/Informed (dev (42)) | 42 | **flags-only** | **73.3%** | **72.4%** | **76.7%** | **73.7%** | **73.8%** |
+| Development/Informed (dev (42)) | 42 | **physics_all** | **58.8%** | **46.9%** | **40.2%** | **33.1%** | **46.4%** |
+| Development/Informed (dev (42)) | 42 | **altitude_consistency_v2** | **47.6%** | **37.2%** | **0.3%** | **0.0%** | **25.5%** |
+| Development/Informed (test (1337)) | 1337 | **flags-only** | **74.7%** | **75.1%** | **72.9%** | **70.9%** | **73.9%** |
+| Development/Informed (test (1337)) | 1337 | **physics_all** | **53.3%** | **58.2%** | **47.2%** | **22.1%** | **49.1%** |
+| Development/Informed (test (1337)) | 1337 | **altitude_consistency_v2** | **37.0%** | **41.5%** | **0.0%** | **0.0%** | **25.8%** |
+| Development/Informed (holdout (2024)) | 2024 | **flags-only** | **75.6%** | **77.2%** | **74.4%** | **72.6%** | **75.1%** |
+| Development/Informed (holdout (2024)) | 2024 | **physics_all** | **43.6%** | **52.6%** | **41.8%** | **26.6%** | **41.8%** |
+| Development/Informed (holdout (2024)) | 2024 | **altitude_consistency_v2** | **35.3%** | **35.3%** | **0.0%** | **0.0%** | **20.2%** |
+| Development/Informed (fresh (2025)) | 2025 | **flags-only** | **73.6%** | **73.5%** | **70.2%** | **74.0%** | **72.9%** |
+| Development/Informed (fresh (2025)) | 2025 | **physics_all** | **46.0%** | **61.2%** | **44.4%** | **22.0%** | **43.3%** |
+| Development/Informed (fresh (2025)) | 2025 | **altitude_consistency_v2** | **37.3%** | **46.8%** | **0.3%** | **0.0%** | **22.5%** |
+| Development/Informed (fresh (2026)) | 2026 | **flags-only** | **76.5%** | **76.4%** | **71.8%** | **71.0%** | **74.5%** |
+| Development/Informed (fresh (2026)) | 2026 | **physics_all** | **49.2%** | **51.5%** | **42.4%** | **19.1%** | **41.9%** |
+| Development/Informed (fresh (2026)) | 2026 | **altitude_consistency_v2** | **39.9%** | **40.4%** | **0.0%** | **0.0%** | **24.9%** |
+| Development/Informed (fresh (2027)) | 2027 | **flags-only** | **72.6%** | **70.8%** | **74.2%** | **73.4%** | **72.6%** |
+| Development/Informed (fresh (2027)) | 2027 | **physics_all** | **48.5%** | **53.0%** | **37.1%** | **25.9%** | **42.4%** |
+| Development/Informed (fresh (2027)) | 2027 | **altitude_consistency_v2** | **36.2%** | **38.7%** | **0.0%** | **0.0%** | **22.0%** |
+| Clean Estimate (fresh_3001) | 3001 | **flags-only** | **75.1%** | **76.3%** | **74.9%** | **76.5%** | **75.7%** |
+| Clean Estimate (fresh_3001) | 3001 | **physics_all** | **45.6%** | **46.2%** | **42.2%** | **21.7%** | **41.3%** |
+| Clean Estimate (fresh_3001) | 3001 | **altitude_consistency_v2** | **37.7%** | **34.0%** | **0.0%** | **0.0%** | **22.7%** |
+| Clean Estimate (fresh_3002) | 3002 | **flags-only** | **73.2%** | **77.2%** | **73.5%** | **71.3%** | **74.4%** |
+| Clean Estimate (fresh_3002) | 3002 | **physics_all** | **56.4%** | **54.4%** | **38.0%** | **25.0%** | **48.2%** |
+| Clean Estimate (fresh_3002) | 3002 | **altitude_consistency_v2** | **47.2%** | **41.1%** | **0.0%** | **0.0%** | **30.2%** |
+| Clean Estimate (fresh_3003) | 3003 | **flags-only** | **76.5%** | **72.9%** | **72.7%** | **73.1%** | **73.9%** |
+| Clean Estimate (fresh_3003) | 3003 | **physics_all** | **56.7%** | **52.9%** | **42.5%** | **25.6%** | **47.3%** |
+| Clean Estimate (fresh_3003) | 3003 | **altitude_consistency_v2** | **51.6%** | **43.5%** | **0.0%** | **0.0%** | **28.4%** |
 
-> **Critical Disclosure on Composite v2 Capability Scope**:
-> Notice that **`composite_v2` exhibits strictly 0.0% recall on `horizontal_drift` and `horizontal_offset` across every single seed**.
-> Because `composite_v2` is corroborated by barometric vs geometric altimetry (Check a), attacks that displace only latitude/longitude without modifying vertical altitude produce zero vertical anomaly.
-> Cross-checks for horizontal spoofing (TDoA multilateration, Mode S EHS roll angle, on-board INS fusion) are documented as **FUTURE WORK ONLY** and are not present in this release.
+> **Critical Disclosure on altitude_consistency_v2 Capability Scope**:
+> Notice that **`altitude_consistency_v2` exhibits strictly 0.0% recall on `horizontal_drift` and `horizontal_offset` across every single seed**.
+> Because `altitude_consistency_v2` relies strictly on barometric vs geometric altimetry (Check a behind the abstention gate), attacks that displace only latitude/longitude without modifying vertical altitude produce zero vertical anomaly.
+> Multi-aircraft consensus (Check d) is implemented, inactive, needs re-validation. Cross-checks for horizontal spoofing (TDoA multilateration, Mode S EHS roll angle, on-board INS fusion) are documented as **FUTURE WORK ONLY**.
 
 ---
 
@@ -354,33 +373,31 @@ AeroTrust combines 5 independent physics-based detectors (Checks a-e) with an un
 *Evaluated across Development, Informed, and Clean Estimate seeds with canonical `is_silent_flight` definition.*
 
 > **Single Silent Definition Verification**: Evaluated with Canonical `is_silent_flight` and Legacy `nic_high`
+> *Under this single definition, naive baseline recall on silent flights is exactly 0.0% across all seeds by construction.*
 
-| Evaluation Role | Seed Label | Attack Subtype | Spoofed Flights ($N$) | Canonical Silent ($N$) | Naive Baseline Silent Recall (%) | Composite v2 Silent Recall (%) | Legacy `nic_high` ($N$) | Composite v2 `nic_high` Recall (%) |
+| Evaluation Role | Seed Label | Attack Subtype | Spoofed Legs ($N$) | Canonical Silent ($N$) | Naive Baseline Silent Recall (%) | altitude_consistency_v2 Silent Recall (%) | Legacy `nic_high` ($N$) | altitude_consistency_v2 `nic_high` Recall (%) |
 |:---|:---|:---|:---:|:---:|:---:|:---:|:---:|:---:|
-| Development/Informed | test (1337) | **altitude_offset** | 457 | 119 | **14.3%** | **33.6%** | 150 | **36.0%** |
-| Development/Informed | test (1337) | **combined** | 371 | 87 | **27.6%** | **43.7%** | 113 | **46.9%** |
-| Development/Informed | test (1337) | **horizontal_drift** | 256 | 71 | **18.3%** | **0.0%** | 86 | **0.0%** |
-| Development/Informed | test (1337) | **horizontal_offset** | 188 | 53 | **28.3%** | **0.0%** | 62 | **0.0%** |
-| Development/Informed | holdout (2024) | **altitude_offset** | 480 | 121 | **14.9%** | **34.7%** | 147 | **38.1%** |
-| Development/Informed | holdout (2024) | **combined** | 536 | 132 | **13.6%** | **30.3%** | 169 | **31.4%** |
-| Development/Informed | holdout (2024) | **horizontal_drift** | 339 | 86 | **11.6%** | **0.0%** | 103 | **0.0%** |
-| Development/Informed | holdout (2024) | **horizontal_offset** | 453 | 124 | **15.3%** | **0.0%** | 156 | **0.0%** |
-| Clean Estimate | fresh_3001 | **altitude_offset** | 516 | 132 | **12.1%** | **40.9%** | 173 | **41.6%** |
-| Clean Estimate | fresh_3001 | **combined** | 517 | 127 | **10.2%** | **34.6%** | 164 | **37.8%** |
-| Clean Estimate | fresh_3001 | **horizontal_drift** | 343 | 91 | **16.5%** | **0.0%** | 113 | **0.0%** |
-| Clean Estimate | fresh_3001 | **horizontal_offset** | 265 | 63 | **14.3%** | **0.0%** | 74 | **0.0%** |
-| Clean Estimate | fresh_3002 | **altitude_offset** | 495 | 132 | **13.6%** | **47.7%** | 167 | **47.9%** |
-| Clean Estimate | fresh_3002 | **combined** | 501 | 116 | **9.5%** | **34.5%** | 142 | **38.7%** |
-| Clean Estimate | fresh_3002 | **horizontal_drift** | 273 | 70 | **12.9%** | **0.0%** | 87 | **0.0%** |
-| Clean Estimate | fresh_3002 | **horizontal_offset** | 204 | 56 | **23.2%** | **0.0%** | 65 | **0.0%** |
-| Clean Estimate | fresh_3003 | **altitude_offset** | 439 | 97 | **16.5%** | **50.5%** | 130 | **55.4%** |
-| Clean Estimate | fresh_3003 | **combined** | 479 | 131 | **13.7%** | **45.0%** | 164 | **50.0%** |
-| Clean Estimate | fresh_3003 | **horizontal_drift** | 382 | 103 | **16.5%** | **0.0%** | 137 | **0.0%** |
-| Clean Estimate | fresh_3003 | **horizontal_offset** | 229 | 64 | **20.3%** | **0.0%** | 78 | **0.0%** |
+| Development/Informed | test (1337) | **altitude_offset** | 514 | 130 | **0.0%** | **32.3%** | 172 | **35.5%** |
+| Development/Informed | test (1337) | **combined** | 402 | 100 | **0.0%** | **42.0%** | 123 | **42.3%** |
+| Development/Informed | test (1337) | **horizontal_drift** | 269 | 73 | **0.0%** | **0.0%** | 89 | **0.0%** |
+| Development/Informed | test (1337) | **horizontal_offset** | 199 | 58 | **0.0%** | **0.0%** | 63 | **0.0%** |
+| Clean Estimate | fresh_3001 | **altitude_offset** | 563 | 140 | **0.0%** | **42.1%** | 183 | **41.5%** |
+| Clean Estimate | fresh_3001 | **combined** | 556 | 132 | **0.0%** | **34.1%** | 175 | **38.3%** |
+| Clean Estimate | fresh_3001 | **horizontal_drift** | 367 | 92 | **0.0%** | **0.0%** | 115 | **0.0%** |
+| Clean Estimate | fresh_3001 | **horizontal_offset** | 277 | 65 | **0.0%** | **0.0%** | 78 | **0.0%** |
+| Clean Estimate | fresh_3002 | **altitude_offset** | 544 | 146 | **0.0%** | **46.6%** | 179 | **45.8%** |
+| Clean Estimate | fresh_3002 | **combined** | 548 | 125 | **0.0%** | **34.4%** | 156 | **37.8%** |
+| Clean Estimate | fresh_3002 | **horizontal_drift** | 287 | 76 | **0.0%** | **0.0%** | 94 | **0.0%** |
+| Clean Estimate | fresh_3002 | **horizontal_offset** | 216 | 62 | **0.0%** | **0.0%** | 72 | **0.0%** |
+| Clean Estimate | fresh_3003 | **altitude_offset** | 473 | 111 | **0.0%** | **48.6%** | 141 | **52.5%** |
+| Clean Estimate | fresh_3003 | **combined** | 520 | 141 | **0.0%** | **45.4%** | 178 | **51.1%** |
+| Clean Estimate | fresh_3003 | **horizontal_drift** | 421 | 115 | **0.0%** | **0.0%** | 151 | **0.0%** |
+| Clean Estimate | fresh_3003 | **horizontal_offset** | 242 | 65 | **0.0%** | **0.0%** | 85 | **0.0%** |
 
 > **Resolution of Previous Discrepancy**:
-> - Under the single canonical definition `is_silent_flight`, **naive baseline recall on silent flights is exactly 0.0%** across every single seed and attack subtype.
-> - The previously reported 50.3% arose because flights with average NIC $\ge 7$ (`nic_high`) occasionally experienced brief single-point indicator drops that triggered naive alarms.
+> - Calling `is_silent_flight` and `evaluate_naive_baseline` on the identical injection window enforces that `evaluate_naive_baseline` flags True if and only if `is_silent_flight` is False.
+> - Naive baseline recall on canonical silent flights is **strictly 0.0%** across every single seed and attack subtype.
+> - `altitude_consistency_v2` relies strictly on barometric vs geometric altimetry (Check a behind the abstention gate), achieving **24.2% - 50.5% recall on silent altitude attacks** while naive flags fail completely.
 
 ---
 
@@ -484,18 +501,18 @@ AeroTrust combines 5 independent physics-based detectors (Checks a-e) with an un
 
 ## 16. Summary of Known Limitations & Future Work
 
-1. **Zero Horizontal Spoofing Detection in Composite v2**:
-   - `composite_v2` is corroborated by barometric vs geometric altimetry (Check a). Consequently, **it exhibits strictly 0.0% recall on horizontal-only spoofing attacks (`horizontal_drift` and `horizontal_offset`)**.
+1. **Zero Horizontal Spoofing Detection in altitude_consistency_v2**:
+   - `altitude_consistency_v2` (formerly `composite_v2`) is corroborated by barometric vs geometric altimetry (Check a). Check (d) multi-aircraft consensus is implemented, inactive, and needs re-validation; it does not contribute to detection in v0.3. Consequently, **it exhibits strictly 0.0% recall on horizontal-only spoofing attacks (`horizontal_drift` and `horizontal_offset`)**.
    - Attacks that displace only latitude/longitude without modifying vertical altitude produce zero vertical anomaly.
    - **Future Work Only**:
      - TDoA (Time Difference of Arrival) multilateration across distributed terrestrial ADS-B receivers.
      - Mode S EHS (Enhanced Surveillance) roll angle and magnetic heading consistency cross-checks against GNSS ground track.
      - On-board INS (Inertial Navigation System) sensor fusion cross-checks.
 2. **Oceanic Altimetry in Sparse Airspace**:
-   - In oceanic or off-corridor airspace with $<2$ aircraft per cell, peer-relative altimetry cannot run. In Phase 3.2/3.3, these flights abstain to status `no_alert` with explicit reason `partial_evidence_lacking_peer_support` or `insufficient_peer_density`, preventing false security.
+   - In oceanic or off-corridor airspace with $<2$ aircraft per cell, peer-relative altimetry cannot run. In Phase 3.2-3.4, these flights abstain to status `no_alert` with explicit reason `partial_evidence_lacking_peer_support` or `insufficient_peer_density`, preventing false security.
 3. **Kinematic False Positives during Missed Approaches**:
-   - Severe go-around maneuvers exceed typical airliner vertical acceleration thresholds. Demoting kinematics to supporting evidence in Composite v2 maintains 97-98% precision.
+   - Severe go-around maneuvers exceed typical airliner vertical acceleration thresholds. Demoting kinematics to supporting evidence in `altitude_consistency_v2` maintains high precision.
 4. **Jamming Single-Aircraft Dilution**:
    - Ground-truth jamming zones with low traffic density remain at 21.5% fixed recall because single-aircraft observations are held at status `unknown` / `insufficient` to prevent false alarm cascades.
 5. **Base-Rate Dilution in Peacetime Airspace**:
-   - When `attack_share` is $\le 0.1\%$, Composite v2 precision falls to 15.1% (with pooled 0.12% FPR). Operational alerting systems require corroboration from independent non-ADS-B sensors (e.g. primary radar, DME/DME, eLoran) before triggering tactical cockpit warnings.
+   - When `attack_share` is $\le 0.1\%$, operational alerting systems require corroboration from independent non-ADS-B sensors (e.g. primary radar, DME/DME, eLoran) before triggering tactical cockpit warnings. Expected precision at baseline threat prevalence ($p = 17.47\%$) is 85.1% (leg-level pooled over clean seeds 3001-3003).

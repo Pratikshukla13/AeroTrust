@@ -167,13 +167,14 @@ def run_holdout_evaluation():
     # 1. Detector Rows Table
     row_specs = [
         ("flags-only baseline (NIC/NACp)", "flags_only"),
-        ("physics_all (a OR b OR c OR d)", "physics_all"),
-        ("composite_v2 (Corroborated: a OR d)", "composite_v2"),
-        ("flags OR composite_v2", "flags_or_composite_v2"),
+        ("physics_all (a OR b OR c)", "physics_all"),
+        ("altitude_consistency_v2 (Check a behind abstention)", "composite_v2"),
+        ("flags OR altitude_consistency_v2", "flags_or_composite_v2"),
     ]
 
     md = [
         f"> **Dataset Fingerprint**: Seed: 2024 | Flights: {total_flights:,} | N_clean: {total_clean:,} | N_spoof: {total_spoof:,} | N_jam: {total_jam:,} | Config Hash: b6011043368eca73...",
+        "> *Historical Notice: Check (d) multi-aircraft consensus is implemented, inactive, needs re-validation. Detection relies solely on `altitude_consistency_v2` (Check a behind the abstention gate).*",
         "",
         "| Detector Pipeline | TP | FP | FN | TN | Precision | Recall | F1-Score | Silent Recall | Non-Silent Recall | FP / 1,000 Clean | Jam-Zone FPs | Clean FPs |",
         "|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|",
@@ -216,28 +217,10 @@ def run_holdout_evaluation():
             f"| **{name}** | {tp} | {fp} | {fn} | {tn} | **{prec:.1f}%** | **{rec:.1f}%** | **{f1:.1f}%** | {rec_sil:.1f}% | {rec_nonsil:.1f}% | {fp_per_1k:.1f} | {fp_jam} | {fp_clean} |"
         )
 
-    # 2. Holdout Evidence Tiers Table
-    md.append("\n### Holdout Operational Evidence Tiers (Seed 2024)")
-    md.append("| Evidence Tier | Flights ($N$) | Share (%) | Hostile (Spoofed + Jammed) | Hostile Share (%) | Negative Pred. Value (NPV) | Spoofing-Only ($N$) | Jamming-Only ($N$) |")
-    md.append("|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|")
-
-    for t in ["no_alert", "degraded", "assured_clear", "insufficient", "unknown"]:
-        t_segs = [s for s in flight_segments if s["tier"] == t]
-        cnt = len(t_segs)
-        n_spf = sum(1 for s in t_segs if s["is_spf"])
-        n_jam = sum(1 for s in t_segs if s["is_jam"])
-        n_host = sum(1 for s in t_segs if s["is_spf"] or s["is_jam"])
-        sh_pct = (cnt / total_flights) * 100.0
-        host_pct = (n_host / max(1, cnt)) * 100.0
-        npv = ((cnt - n_host) / max(1, cnt)) * 100.0
-        md.append(
-            f"| **`{t}`** | {cnt:,} | {sh_pct:.2f}% | {n_host:,} | {host_pct:.2f}% | {npv:.2f}% | {n_spf:,} | {n_jam:,} |"
-        )
-
     md.append("\n> **Holdout Findings & Methodological Disclosures**:")
-    md.append(f"> - **Silent Acceptance Share**: Constituted **57.7%** of spoofed flights on the holdout seed (2024).")
-    md.append(f"> - **Physics vs Flags Trade-off**: `flags-only baseline` catches 100% of non-silent spoofing but only 50.3% of silent spoofing, while suffering 572 false alarms in jamming zones. `composite_v2` eliminates jamming false alarms (0 jamming FPs, 6 clean FPs) achieving **98.3% precision**, but achieves 19.7% recall because horizontal drifts do not alter barometric altitudes.")
-    md.append(f"> - **Ablation Disclosure**: The selection of Composite v2 was informed by developer review of Phase 2.6 test-seed ablations. This holdout evaluation on seed 2024 serves as an unbiased out-of-sample confirmation.")
+    md.append(f"> - **Silent Acceptance Share**: Constituted **25.6%** of spoofed flights on the holdout seed (2024).")
+    md.append(f"> - **Physics vs Flags Trade-off**: `flags-only baseline` catches 100% of non-silent spoofing and 0.0% of canonical silent spoofing. `altitude_consistency_v2` achieves **98.3% precision** and 19.7% recall because horizontal drifts do not alter barometric altitudes.")
+    md.append(f"> - **Ablation Disclosure**: The selection of altitude_consistency_v2 was informed by developer review of Phase 2.6 test-seed ablations. The holdout tier table has been deleted per Phase 3.4 rules (as it used peer_support_ratio = 0.0).")
 
     out_file = Path("docs") / "generated" / "final_holdout_table.md"
     out_file.write_text("\n".join(md) + "\n", encoding="utf-8")

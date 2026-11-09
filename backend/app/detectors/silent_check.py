@@ -98,3 +98,4 @@ def is_nic_high(
     if df.empty or "nic" not in df.columns:
         return False
     return bool(np.mean(df["nic"].values >= threshold) > 0.5)
+

@@ -68,6 +68,20 @@ export default function LimitationsPage() {
             Airbus and EASA maintain internal engineering teardowns. AeroTrust operates exclusively on publicly accessible open-source telemetry architectures and validated external reporting.
           </p>
         </div>
+
+        <div className="glass-card" style={{ padding: '24px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
+            <div style={{ padding: '8px', borderRadius: '8px', backgroundColor: 'rgba(239, 68, 68, 0.15)', color: '#ef4444' }}>
+              <AlertOctagon size={20} aria-hidden="true" />
+            </div>
+            <h3 style={{ margin: 0, fontSize: 'var(--text-base)', color: '#f8fafc', fontWeight: 700 }}>
+              5. Multi-Aircraft Consensus (Check d) Inactive
+            </h3>
+          </div>
+          <p style={{ margin: 0, fontSize: 'var(--text-sm)', color: '#cbd5e1', lineHeight: '1.6' }}>
+            Multi-aircraft consensus is <strong>implemented, inactive, needs re-validation</strong>. In v0.3, Check (d) was disabled due to a self-referential peer anomaly bug identified during holdout testing. Detection in v0.3 relies exclusively on <code>altitude_consistency_v2</code> (Check a behind the abstention gate); Check (d) does not contribute to detection in v0.3.
+          </p>
+        </div>
       </div>
     </div>
   )

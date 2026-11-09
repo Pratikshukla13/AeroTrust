@@ -227,11 +227,11 @@ def test_every_table_has_generating_script():
 
 
 def test_derived_base_rate_precision_formula():
-    """Phase 3.3 Requirement 3: Base-rate precision must be recomputed by script via Bayes rule.
+    """Phase 3.4 Requirement 6: Base-rate precision must be recomputed by script via Bayes rule.
     
     Precision = (p * TPR) / (p * TPR + (1 - p) * FPR)
-    At p = 0.1747, TPR = 0.2464, FPR = 0.0087:
-    Expected Precision = 85.7% (correcting historical typo of 71.2%).
+    At p = 0.1747, using leg-level pooled clean seeds 3001-3003 (TPR ~ 26.98%, FPR ~ 1.17%):
+    Expected Precision is ~ 83.0%.
     """
     table_path = os.path.join("docs", "generated", "base_rate_honesty_table.md")
     assert os.path.exists(table_path)
@@ -242,16 +242,22 @@ def test_derived_base_rate_precision_formula():
         denom = num + (1.0 - p) * fpr
         return (num / denom) * 100.0 if denom > 0 else 0.0
 
-    tpr = 0.2464
-    fpr_single = 0.0087
+    # Parse TPR and FPR from fingerprint
+    m_tpr = re.search(r"TPR:\s*([0-9.]+)%", content)
+    m_fpr = re.search(r"Clean FPR:\s*([0-9.]+)%", content)
+    assert m_tpr is not None and m_fpr is not None, "Failed to parse TPR and FPR from base_rate_honesty_table.md"
+    tpr = float(m_tpr.group(1)) / 100.0
+    fpr = float(m_fpr.group(1)) / 100.0
 
-    # Benchmark test base rate
+    # Benchmark test base rate p = 0.1747
     p_test = 0.1747
-    calc_prec = bayes_prec(p_test, tpr, fpr_single)
-    assert abs(calc_prec - 85.704) < 0.1
+    calc_prec = bayes_prec(p_test, tpr, fpr)
 
-    # Verify that reported number in table is 85.7%
-    assert re.search(r"\|\s*17\.47%.*\|\s*\*\*85\.7%\*\*", content) is not None
+    # Verify that reported number in table matches Bayes calculation
+    m_row = re.search(r"\|\s*17\.47%[^\n]*\|\s*17\.47%\s*\|\s*\*\*([0-9.]+)%\*\*", content)
+    assert m_row is not None, "Did not find 17.47% row in base_rate_honesty_table.md"
+    rep_prec = float(m_row.group(1))
+    assert abs(rep_prec - calc_prec) < 0.2, f"Reported precision {rep_prec}% != Bayes calculation {calc_prec:.1f}%"
 
 
 def test_single_silent_definition_enforcement():
@@ -299,15 +305,15 @@ def test_single_silent_definition_enforcement():
 
 
 def test_horizontal_spoofing_honesty():
-    """Phase 3.3 Requirement 5: Prominently verify 0.0% recall on horizontal spoofing."""
+    """Phase 3.4 Requirement: Prominently verify 0.0% recall on horizontal spoofing under altitude_consistency_v2."""
     table_path = os.path.join("docs", "generated", "event_type_honesty_table.md")
     assert os.path.exists(table_path)
     content = open(table_path, "r", encoding="utf-8").read()
 
-    # Search composite_v2 rows in the event-type table
+    # Search altitude_consistency_v2 / composite_v2 rows in the event-type table
     lines = content.splitlines()
-    comp_rows = [l for l in lines if "**composite_v2**" in l]
-    assert len(comp_rows) >= 9, f"Expected at least 9 seed rows for composite_v2, found {len(comp_rows)}"
+    comp_rows = [l for l in lines if "**altitude_consistency_v2**" in l or "**composite_v2**" in l]
+    assert len(comp_rows) >= 9, f"Expected at least 9 seed rows for detector, found {len(comp_rows)}"
 
     for row in comp_rows:
         cells = [c.strip() for c in row.split("|")[1:-1]]
@@ -325,4 +331,29 @@ def test_clean_estimate_seeds_exist():
 
     for s in ["fresh_3001", "fresh_3002", "fresh_3003"]:
         assert s in content, f"Missing clean estimate seed {s} in clean_estimate_table.md"
+
+
+def test_no_stray_tool_errors_in_generated_docs():
+    """Phase 3.4 Requirement 8: Sanitization check for stray error strings in generated docs."""
+    forbidden_substrings = [
+        "network issue",
+        "tool-error",
+        "traceback",
+        "chefs",
+        "undefined",
+        "nan%",
+    ]
+    gen_dir = os.path.join("docs", "generated")
+    assert os.path.exists(gen_dir)
+
+    doc_files = [os.path.join(gen_dir, f) for f in os.listdir(gen_dir) if f.endswith(".md")]
+    report_file = os.path.join("docs", "INJECTION_REPORT.md")
+    if os.path.exists(report_file):
+        doc_files.append(report_file)
+
+    for doc_path in doc_files:
+        text = open(doc_path, "r", encoding="utf-8").read().lower()
+        for forbidden in forbidden_substrings:
+            assert forbidden not in text, f"Found stray error string '{forbidden}' in {doc_path}!"
+
 

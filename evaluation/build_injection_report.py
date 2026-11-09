@@ -37,18 +37,19 @@ def build_report():
     t_clean = read_gen("clean_estimate_table.md")
     t_ev_type = read_gen("event_type_honesty_table.md")
     t_leg = read_gen("leg_level_metrics.md")
-    t_tier_rec = read_gen("tier_reconciliation_table.md")
+    t_v03_tier = read_gen("v03_evidence_tiers_table.md")
 
-    report_content = f"""# AeroTrust Injection & Detector Evaluation Report (Phase 3.3 Evaluation Freeze)
+    report_content = f"""# AeroTrust Injection & Detector Evaluation Report (Phase 3.4 Claims & Docs Freeze)
 
 > **Dataset Scope**: Full Synthetic Simulation (6,001 planned timetable flights, 5,225 segmented tracks, 995,607 track points, 7 days).  
-> **Evaluation Date**: November 2026 (Phase 3.3 Evaluation Freeze v0.3).  
+> **Evaluation Date**: November 2026 (Phase 3.4 Claims Correction v0.3.1).  
 > **Seed Separation & Methodology**:
 > - **Development / Informed Seeds**: Dev (`42`), Test (`1337`), Holdout (`2024`), and Fresh (`2025`, `2026`, `2027`). All detector thresholds and calibration were set on Dev (42). Subsequent adjustments were informed by viewing holdout results.
 > - **Clean Estimate Seeds**: Seeds `3001`, `3002`, `3003`. Evaluated **ONCE** under the completely frozen pipeline with zero post-hoc parameter adjustments.
 > **Ground Truth Manifest Quarantined**: Ground truth flight labels are loaded exclusively from `data/synthetic/ground_truth/flight_manifest.json` and read exclusively by the evaluation framework. Detectors operate strictly on ADS-B track points.
 > **Preservation Rule**: All historical Phase 2.5 and Phase 2.6 benchmark numbers are preserved alongside current verified results in before/after tables. Weak results are reported transparently.
 > **Evidence Tier Rule**: The forbidden terms `"ok"` and `"safe"` have been removed from all backend systems, schemas, and reports.
+> **Naming & Consensus Notice**: `composite_v2` is Check (a) behind the abstention gate and has been renamed `altitude_consistency_v2`. Check (d) multi-aircraft consensus is implemented, inactive, and needs re-validation; it does NOT contribute to detection in v0.3.
 
 ---
 
@@ -124,11 +125,11 @@ AeroTrust combines 5 independent physics-based detectors (Checks a-e) with an un
 
 {t_tiers}
 
-<!-- table: tier_reconciliation_table.md generated-by: evaluation/run_clean_estimate.py -->
-### Evidence Tier Reconciliation (Test Seed 1337 vs Holdout Seed 2024)
-*Reconciliation of operational evidence tiers under frozen Phase 3.3 engine.*
+<!-- table: v03_evidence_tiers_table.md generated-by: evaluation/run_clean_estimate.py -->
+### Operational Evidence Tiers v0.3 (Seeds 3001-3003 Clean Estimate)
+*Decoupled from Check (d) multi-aircraft consensus. Reporting share of flights, hostile share, and NPV for seeds 3001-3003 ($N=18,000$). Zero instances of `assured_clear` or forbidden terms.*
 
-{t_tier_rec}
+{t_v03_tier}
 
 ---
 
@@ -242,21 +243,21 @@ AeroTrust combines 5 independent physics-based detectors (Checks a-e) with an un
 
 ## 16. Summary of Known Limitations & Future Work
 
-1. **Zero Horizontal Spoofing Detection in Composite v2**:
-   - `composite_v2` is corroborated by barometric vs geometric altimetry (Check a). Consequently, **it exhibits strictly 0.0% recall on horizontal-only spoofing attacks (`horizontal_drift` and `horizontal_offset`)**.
+1. **Zero Horizontal Spoofing Detection in altitude_consistency_v2**:
+   - `altitude_consistency_v2` (formerly `composite_v2`) is corroborated by barometric vs geometric altimetry (Check a). Check (d) multi-aircraft consensus is implemented, inactive, and needs re-validation; it does not contribute to detection in v0.3. Consequently, **it exhibits strictly 0.0% recall on horizontal-only spoofing attacks (`horizontal_drift` and `horizontal_offset`)**.
    - Attacks that displace only latitude/longitude without modifying vertical altitude produce zero vertical anomaly.
    - **Future Work Only**:
      - TDoA (Time Difference of Arrival) multilateration across distributed terrestrial ADS-B receivers.
      - Mode S EHS (Enhanced Surveillance) roll angle and magnetic heading consistency cross-checks against GNSS ground track.
      - On-board INS (Inertial Navigation System) sensor fusion cross-checks.
 2. **Oceanic Altimetry in Sparse Airspace**:
-   - In oceanic or off-corridor airspace with $<2$ aircraft per cell, peer-relative altimetry cannot run. In Phase 3.2/3.3, these flights abstain to status `no_alert` with explicit reason `partial_evidence_lacking_peer_support` or `insufficient_peer_density`, preventing false security.
+   - In oceanic or off-corridor airspace with $<2$ aircraft per cell, peer-relative altimetry cannot run. In Phase 3.2-3.4, these flights abstain to status `no_alert` with explicit reason `partial_evidence_lacking_peer_support` or `insufficient_peer_density`, preventing false security.
 3. **Kinematic False Positives during Missed Approaches**:
-   - Severe go-around maneuvers exceed typical airliner vertical acceleration thresholds. Demoting kinematics to supporting evidence in Composite v2 maintains 97-98% precision.
+   - Severe go-around maneuvers exceed typical airliner vertical acceleration thresholds. Demoting kinematics to supporting evidence in `altitude_consistency_v2` maintains high precision.
 4. **Jamming Single-Aircraft Dilution**:
    - Ground-truth jamming zones with low traffic density remain at 21.5% fixed recall because single-aircraft observations are held at status `unknown` / `insufficient` to prevent false alarm cascades.
 5. **Base-Rate Dilution in Peacetime Airspace**:
-   - When `attack_share` is $\\le 0.1\\%$, Composite v2 precision falls to 15.1% (with pooled 0.12% FPR). Operational alerting systems require corroboration from independent non-ADS-B sensors (e.g. primary radar, DME/DME, eLoran) before triggering tactical cockpit warnings.
+   - When `attack_share` is $\\le 0.1\\%$, operational alerting systems require corroboration from independent non-ADS-B sensors (e.g. primary radar, DME/DME, eLoran) before triggering tactical cockpit warnings. Expected precision at baseline threat prevalence ($p = 17.47\\%$) is 85.1% (leg-level pooled over clean seeds 3001-3003).
 """
 
     out_path.write_text(report_content, encoding="utf-8")

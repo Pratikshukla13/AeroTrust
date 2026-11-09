@@ -89,11 +89,11 @@ Write a one-page note answering: which of F1-F5 passed? Which checks are in scop
 
 Each check returns a residual, a flag, and a confidence. No single check decides alone.
 
-- **(a) Geometric vs barometric altitude:** residual = geo\_alt minus baro\_alt, compared with that flight's own baseline and the regional distribution. Large unexplained shifts raise the flag.
-- **(b) Kinematic feasibility:** speed implied by consecutive positions vs reported velocity, plus bounds on acceleration and turn rate.
-- **(c) Position-velocity consistency:** integrate reported velocity over a window and compare with position change.
-- **(d) Multi-aircraft consensus:** several aircraft in the same cell reporting the same offset pattern or converging on one location.
-- **(e) EHS physics (only if F3 passes):** ground speed vs true airspeed plus wind, and track vs heading.
+- **(a) Geometric vs barometric altitude:** residual = geo\_alt minus baro\_alt, compared with that flight's own baseline and regional distribution. Primary active detector in v0.3 (**`altitude_consistency_v2`** behind the abstention gate).
+- **(b) Kinematic feasibility:** speed implied by consecutive positions vs reported velocity, plus bounds on acceleration and turn rate (supporting evidence only).
+- **(c) Position-velocity consistency:** integrate reported velocity over a window and compare with position change (supporting evidence only).
+- **(d) Multi-aircraft consensus:** **implemented, inactive, needs re-validation**. In v0.3, Check (d) is disabled due to a self-referential peer anomaly bug identified during holdout testing. Check (d) does NOT contribute to detection in v0.3.
+- **(e) EHS physics (only if F3 passes):** ground speed vs true airspeed plus wind, and track vs heading (future work).
 
 **Thresholds are set on Day 1-3 after you see real distributions. Do not hardcode numbers from this document.**
 
