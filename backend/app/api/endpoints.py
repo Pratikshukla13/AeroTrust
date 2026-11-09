@@ -19,6 +19,7 @@ from backend.app.schemas.api import (
     AxisBDetails,
     InterferenceCellResponse,
     RadiationIndexResponse,
+    SARAggregateResponse,
     SpaceWeatherResponse,
     TrustScoreResponse,
 )
@@ -268,4 +269,60 @@ def get_flight_radiation(flight_id: str):
         )
         for r in rows
     ]
+
+
+@router.get("/sar", response_model=List[SARAggregateResponse])
+def list_sar_aggregate(
+    family: Optional[str] = Query(None, description="Filter by aircraft family"),
+    region: Optional[str] = Query(None, description="Filter by geographic region"),
+    month: Optional[str] = Query(None, description="Filter by calendar month (YYYY-MM)"),
+):
+    """Retrieves privacy-preserving Silent Acceptance Rate (SAR) aggregated by family x region x month.
+    
+    Privacy Rule: Never exposes icao24, registration, tail number, flight_id, or flight-level memberships.
+    Suppression Rule: Suppresses any cell with fewer than 30 flagged flights.
+    """
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    query = """
+        SELECT family, region, month, n_flights_flagged, n_silent, sar, ci_low, ci_high, suppressed
+        FROM sar_aggregate
+    """
+    conditions = []
+    params = []
+    if family:
+        conditions.append("family = %s")
+        params.append(family)
+    if region:
+        conditions.append("region = %s")
+        params.append(region)
+    if month:
+        conditions.append("month = %s")
+        params.append(month)
+
+    if conditions:
+        query += " WHERE " + " AND ".join(conditions)
+
+    query += " ORDER BY month DESC, family ASC, region ASC;"
+
+    cur.execute(query, params)
+    rows = cur.fetchall()
+    conn.close()
+
+    return [
+        SARAggregateResponse(
+            family=r[0],
+            region=r[1],
+            month=r[2],
+            n_flights_flagged=r[3],
+            n_silent=r[4],
+            sar=r[5] if not r[8] else None,  # Mask SAR if suppressed
+            ci_low=r[6] if not r[8] else None,
+            ci_high=r[7] if not r[8] else None,
+            suppressed=r[8],
+        )
+        for r in rows
+    ]
+
 

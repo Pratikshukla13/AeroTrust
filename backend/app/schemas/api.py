@@ -60,3 +60,16 @@ class RadiationIndexResponse(BaseModel):
     relative_index: float = Field(description="Relative cosmic radiation index (never probability)")
     components: Dict[str, Any] = Field(default_factory=dict)
 
+
+class SARAggregateResponse(BaseModel):
+    family: str = Field(description="Aircraft family (e.g. 'A320-family', 'A330', 'A350', 'other')")
+    region: str = Field(description="Geographic region")
+    month: str = Field(description="Calendar month (YYYY-MM)")
+    n_flights_flagged: int = Field(description="Total flagged legs evaluated")
+    n_silent: int = Field(description="Count of flagged legs accepting spoofing silently")
+    sar: Optional[float] = Field(None, description="Silent Acceptance Rate [0, 1] (None if suppressed)")
+    ci_low: Optional[float] = Field(None, description="Wilson 95% CI lower bound")
+    ci_high: Optional[float] = Field(None, description="Wilson 95% CI upper bound")
+    suppressed: bool = Field(description="True if cell has fewer than 30 flagged flights (privacy rule)")
+
+
