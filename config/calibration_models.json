@@ -1,0 +1,78 @@
+{
+  "geo_baro_alt": {
+    "w": 0.01761,
+    "b": -2.0144,
+    "method": "mle_logistic_regression",
+    "is_hand_set": false
+  },
+  "kinematic_feasibility": {
+    "w": 0.0,
+    "b": -0.9838,
+    "method": "mle_logistic_regression",
+    "is_hand_set": false
+  },
+  "pos_vel_consistency": {
+    "w": 0.0,
+    "b": -1.0052,
+    "method": "mle_logistic_regression",
+    "is_hand_set": false
+  },
+  "multi_aircraft_consensus": {
+    "w": 11.74358,
+    "b": -5.489,
+    "method": "mle_logistic_regression",
+    "is_hand_set": false
+  },
+  "composite_v2_isotonic": {
+    "x_thresholds": [
+      0.0,
+      0.6269,
+      0.6387,
+      0.75,
+      0.7628,
+      0.7833,
+      0.8031,
+      0.8297,
+      0.8357,
+      0.8495,
+      0.865,
+      0.8709,
+      0.9221,
+      0.9225,
+      0.9546,
+      0.9937,
+      0.9964,
+      0.9981,
+      1.0
+    ],
+    "y_calibrated": [
+      0.0,
+      0.0,
+      0.0,
+      0.9922,
+      0.9922,
+      0.9922,
+      0.9922,
+      0.9922,
+      0.9922,
+      0.9922,
+      0.9922,
+      0.9922,
+      0.9922,
+      0.9922,
+      0.9922,
+      0.9922,
+      0.9922,
+      0.9922,
+      0.9922
+    ],
+    "method": "isotonic_regression",
+    "is_hand_set": false
+  },
+  "composite": {
+    "w": 10.07887,
+    "b": -4.5377,
+    "method": "mle_logistic_regression",
+    "is_hand_set": false
+  }
+}

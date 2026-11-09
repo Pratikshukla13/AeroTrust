@@ -1,0 +1,1026 @@
+[
+  {
+    "event_id": "GTE-JAM-001",
+    "event_type": "jamming",
+    "region": "Baltic",
+    "start_ts": 1793496749,
+    "end_ts": 1793507081,
+    "intensity": 0.9,
+    "spoof_type": null,
+    "affected_icao24": null,
+    "metadata": {
+      "target_quality_drop": "NIC/NACp severe drop"
+    }
+  },
+  {
+    "event_id": "GTE-SPF-002",
+    "event_type": "spoofing",
+    "region": "Baltic",
+    "start_ts": 1793531201,
+    "end_ts": 1793533335,
+    "intensity": 0.63,
+    "spoof_type": "altitude_offset",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 32.9,
+      "target_horiz_offset_m": 537.8,
+      "target_drift_mps": 4.2,
+      "offset_bin": "30-150m",
+      "subtle": true
+    }
+  },
+  {
+    "event_id": "GTE-SPF-003",
+    "event_type": "spoofing",
+    "region": "Baltic",
+    "start_ts": 1793572400,
+    "end_ts": 1793574482,
+    "intensity": 0.34,
+    "spoof_type": "horizontal_offset",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 257.1,
+      "target_horiz_offset_m": 923.7,
+      "target_drift_mps": 3.08,
+      "offset_bin": "150-400m",
+      "subtle": false
+    }
+  },
+  {
+    "event_id": "GTE-SPF-004",
+    "event_type": "spoofing",
+    "region": "Baltic",
+    "start_ts": 1793608181,
+    "end_ts": 1793615046,
+    "intensity": 0.41,
+    "spoof_type": "horizontal_drift",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 533.3,
+      "target_horiz_offset_m": 898.5,
+      "target_drift_mps": 2.84,
+      "offset_bin": "400-800m",
+      "subtle": false
+    }
+  },
+  {
+    "event_id": "GTE-JAM-005",
+    "event_type": "jamming",
+    "region": "Baltic",
+    "start_ts": 1793646879,
+    "end_ts": 1793661469,
+    "intensity": 0.83,
+    "spoof_type": null,
+    "affected_icao24": null,
+    "metadata": {
+      "target_quality_drop": "NIC/NACp severe drop"
+    }
+  },
+  {
+    "event_id": "GTE-SPF-006",
+    "event_type": "spoofing",
+    "region": "Baltic",
+    "start_ts": 1793682862,
+    "end_ts": 1793695253,
+    "intensity": 0.7,
+    "spoof_type": "combined",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 67.7,
+      "target_horiz_offset_m": 448.5,
+      "target_drift_mps": 4.84,
+      "offset_bin": "30-150m",
+      "subtle": true
+    }
+  },
+  {
+    "event_id": "GTE-SPF-007",
+    "event_type": "spoofing",
+    "region": "Baltic",
+    "start_ts": 1793720463,
+    "end_ts": 1793722374,
+    "intensity": 0.72,
+    "spoof_type": "altitude_offset",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 257.3,
+      "target_horiz_offset_m": 763.8,
+      "target_drift_mps": 3.96,
+      "offset_bin": "150-400m",
+      "subtle": false
+    }
+  },
+  {
+    "event_id": "GTE-SPF-008",
+    "event_type": "spoofing",
+    "region": "Baltic",
+    "start_ts": 1793760242,
+    "end_ts": 1793772926,
+    "intensity": 0.8,
+    "spoof_type": "horizontal_offset",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 793.9,
+      "target_horiz_offset_m": 623.8,
+      "target_drift_mps": 3.4,
+      "offset_bin": "400-800m",
+      "subtle": false
+    }
+  },
+  {
+    "event_id": "GTE-JAM-009",
+    "event_type": "jamming",
+    "region": "Baltic",
+    "start_ts": 1793798567,
+    "end_ts": 1793811656,
+    "intensity": 0.93,
+    "spoof_type": null,
+    "affected_icao24": null,
+    "metadata": {
+      "target_quality_drop": "NIC/NACp severe drop"
+    }
+  },
+  {
+    "event_id": "GTE-SPF-010",
+    "event_type": "spoofing",
+    "region": "Baltic",
+    "start_ts": 1793834714,
+    "end_ts": 1793852898,
+    "intensity": 0.65,
+    "spoof_type": "horizontal_drift",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 34.5,
+      "target_horiz_offset_m": 56.3,
+      "target_drift_mps": 2.07,
+      "offset_bin": "30-150m",
+      "subtle": true
+    }
+  },
+  {
+    "event_id": "GTE-SPF-011",
+    "event_type": "spoofing",
+    "region": "Baltic",
+    "start_ts": 1793873988,
+    "end_ts": 1793876712,
+    "intensity": 0.5,
+    "spoof_type": "combined",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 320.6,
+      "target_horiz_offset_m": 351.9,
+      "target_drift_mps": 4.31,
+      "offset_bin": "150-400m",
+      "subtle": false
+    }
+  },
+  {
+    "event_id": "GTE-SPF-012",
+    "event_type": "spoofing",
+    "region": "Baltic",
+    "start_ts": 1793909407,
+    "end_ts": 1793918928,
+    "intensity": 0.31,
+    "spoof_type": "altitude_offset",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 729.0,
+      "target_horiz_offset_m": 227.8,
+      "target_drift_mps": 1.33,
+      "offset_bin": "400-800m",
+      "subtle": false
+    }
+  },
+  {
+    "event_id": "GTE-JAM-013",
+    "event_type": "jamming",
+    "region": "Baltic",
+    "start_ts": 1793947490,
+    "end_ts": 1793959770,
+    "intensity": 0.76,
+    "spoof_type": null,
+    "affected_icao24": null,
+    "metadata": {
+      "target_quality_drop": "NIC/NACp severe drop"
+    }
+  },
+  {
+    "event_id": "GTE-SPF-014",
+    "event_type": "spoofing",
+    "region": "Baltic",
+    "start_ts": 1793985206,
+    "end_ts": 1793991575,
+    "intensity": 0.79,
+    "spoof_type": "horizontal_offset",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 107.8,
+      "target_horiz_offset_m": 449.1,
+      "target_drift_mps": 4.65,
+      "offset_bin": "30-150m",
+      "subtle": true
+    }
+  },
+  {
+    "event_id": "GTE-SPF-015",
+    "event_type": "spoofing",
+    "region": "Baltic",
+    "start_ts": 1794025703,
+    "end_ts": 1794042021,
+    "intensity": 0.61,
+    "spoof_type": "horizontal_drift",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 150.8,
+      "target_horiz_offset_m": 185.4,
+      "target_drift_mps": 1.23,
+      "offset_bin": "150-400m",
+      "subtle": true
+    }
+  },
+  {
+    "event_id": "GTE-SPF-016",
+    "event_type": "spoofing",
+    "region": "Baltic",
+    "start_ts": 1794058893,
+    "end_ts": 1794075151,
+    "intensity": 0.76,
+    "spoof_type": "combined",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 429.9,
+      "target_horiz_offset_m": 492.5,
+      "target_drift_mps": 3.58,
+      "offset_bin": "400-800m",
+      "subtle": false
+    }
+  },
+  {
+    "event_id": "GTE-JAM-017",
+    "event_type": "jamming",
+    "region": "Eastern Mediterranean",
+    "start_ts": 1793495192,
+    "end_ts": 1793501552,
+    "intensity": 0.77,
+    "spoof_type": null,
+    "affected_icao24": null,
+    "metadata": {
+      "target_quality_drop": "NIC/NACp severe drop"
+    }
+  },
+  {
+    "event_id": "GTE-SPF-018",
+    "event_type": "spoofing",
+    "region": "Eastern Mediterranean",
+    "start_ts": 1793530260,
+    "end_ts": 1793544028,
+    "intensity": 0.51,
+    "spoof_type": "altitude_offset",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 80.4,
+      "target_horiz_offset_m": 745.2,
+      "target_drift_mps": 6.89,
+      "offset_bin": "30-150m",
+      "subtle": true
+    }
+  },
+  {
+    "event_id": "GTE-SPF-019",
+    "event_type": "spoofing",
+    "region": "Eastern Mediterranean",
+    "start_ts": 1793571343,
+    "end_ts": 1793577708,
+    "intensity": 0.4,
+    "spoof_type": "horizontal_offset",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 207.7,
+      "target_horiz_offset_m": 951.9,
+      "target_drift_mps": 7.81,
+      "offset_bin": "150-400m",
+      "subtle": false
+    }
+  },
+  {
+    "event_id": "GTE-SPF-020",
+    "event_type": "spoofing",
+    "region": "Eastern Mediterranean",
+    "start_ts": 1793608063,
+    "end_ts": 1793610312,
+    "intensity": 0.73,
+    "spoof_type": "horizontal_drift",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 422.4,
+      "target_horiz_offset_m": 146.8,
+      "target_drift_mps": 6.67,
+      "offset_bin": "400-800m",
+      "subtle": true
+    }
+  },
+  {
+    "event_id": "GTE-JAM-021",
+    "event_type": "jamming",
+    "region": "Eastern Mediterranean",
+    "start_ts": 1793647412,
+    "end_ts": 1793665099,
+    "intensity": 0.65,
+    "spoof_type": null,
+    "affected_icao24": null,
+    "metadata": {
+      "target_quality_drop": "NIC/NACp severe drop"
+    }
+  },
+  {
+    "event_id": "GTE-SPF-022",
+    "event_type": "spoofing",
+    "region": "Eastern Mediterranean",
+    "start_ts": 1793683311,
+    "end_ts": 1793690045,
+    "intensity": 0.89,
+    "spoof_type": "combined",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 143.0,
+      "target_horiz_offset_m": 416.8,
+      "target_drift_mps": 3.07,
+      "offset_bin": "30-150m",
+      "subtle": true
+    }
+  },
+  {
+    "event_id": "GTE-SPF-023",
+    "event_type": "spoofing",
+    "region": "Eastern Mediterranean",
+    "start_ts": 1793721993,
+    "end_ts": 1793728623,
+    "intensity": 0.81,
+    "spoof_type": "altitude_offset",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 253.3,
+      "target_horiz_offset_m": 53.7,
+      "target_drift_mps": 6.08,
+      "offset_bin": "150-400m",
+      "subtle": true
+    }
+  },
+  {
+    "event_id": "GTE-SPF-024",
+    "event_type": "spoofing",
+    "region": "Eastern Mediterranean",
+    "start_ts": 1793760902,
+    "end_ts": 1793768070,
+    "intensity": 0.85,
+    "spoof_type": "horizontal_offset",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 789.6,
+      "target_horiz_offset_m": 586.3,
+      "target_drift_mps": 7.05,
+      "offset_bin": "400-800m",
+      "subtle": false
+    }
+  },
+  {
+    "event_id": "GTE-JAM-025",
+    "event_type": "jamming",
+    "region": "Eastern Mediterranean",
+    "start_ts": 1793798692,
+    "end_ts": 1793815160,
+    "intensity": 0.82,
+    "spoof_type": null,
+    "affected_icao24": null,
+    "metadata": {
+      "target_quality_drop": "NIC/NACp severe drop"
+    }
+  },
+  {
+    "event_id": "GTE-SPF-026",
+    "event_type": "spoofing",
+    "region": "Eastern Mediterranean",
+    "start_ts": 1793832382,
+    "end_ts": 1793850860,
+    "intensity": 0.62,
+    "spoof_type": "horizontal_drift",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 58.8,
+      "target_horiz_offset_m": 858.4,
+      "target_drift_mps": 4.73,
+      "offset_bin": "30-150m",
+      "subtle": true
+    }
+  },
+  {
+    "event_id": "GTE-SPF-027",
+    "event_type": "spoofing",
+    "region": "Eastern Mediterranean",
+    "start_ts": 1793872870,
+    "end_ts": 1793880425,
+    "intensity": 0.46,
+    "spoof_type": "combined",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 359.4,
+      "target_horiz_offset_m": 175.5,
+      "target_drift_mps": 6.2,
+      "offset_bin": "150-400m",
+      "subtle": true
+    }
+  },
+  {
+    "event_id": "GTE-SPF-028",
+    "event_type": "spoofing",
+    "region": "Eastern Mediterranean",
+    "start_ts": 1793910799,
+    "end_ts": 1793925817,
+    "intensity": 0.42,
+    "spoof_type": "altitude_offset",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 425.1,
+      "target_horiz_offset_m": 644.1,
+      "target_drift_mps": 4.67,
+      "offset_bin": "400-800m",
+      "subtle": false
+    }
+  },
+  {
+    "event_id": "GTE-JAM-029",
+    "event_type": "jamming",
+    "region": "Eastern Mediterranean",
+    "start_ts": 1793947533,
+    "end_ts": 1793960002,
+    "intensity": 0.63,
+    "spoof_type": null,
+    "affected_icao24": null,
+    "metadata": {
+      "target_quality_drop": "NIC/NACp severe drop"
+    }
+  },
+  {
+    "event_id": "GTE-SPF-030",
+    "event_type": "spoofing",
+    "region": "Eastern Mediterranean",
+    "start_ts": 1793985554,
+    "end_ts": 1793990165,
+    "intensity": 0.93,
+    "spoof_type": "horizontal_offset",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 38.4,
+      "target_horiz_offset_m": 342.0,
+      "target_drift_mps": 6.43,
+      "offset_bin": "30-150m",
+      "subtle": true
+    }
+  },
+  {
+    "event_id": "GTE-SPF-031",
+    "event_type": "spoofing",
+    "region": "Eastern Mediterranean",
+    "start_ts": 1794025737,
+    "end_ts": 1794037203,
+    "intensity": 0.79,
+    "spoof_type": "horizontal_drift",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 190.4,
+      "target_horiz_offset_m": 119.3,
+      "target_drift_mps": 7.37,
+      "offset_bin": "150-400m",
+      "subtle": true
+    }
+  },
+  {
+    "event_id": "GTE-SPF-032",
+    "event_type": "spoofing",
+    "region": "Eastern Mediterranean",
+    "start_ts": 1794058581,
+    "end_ts": 1794062327,
+    "intensity": 0.33,
+    "spoof_type": "combined",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 675.6,
+      "target_horiz_offset_m": 487.5,
+      "target_drift_mps": 6.26,
+      "offset_bin": "400-800m",
+      "subtle": false
+    }
+  },
+  {
+    "event_id": "GTE-JAM-033",
+    "event_type": "jamming",
+    "region": "Black Sea",
+    "start_ts": 1793495983,
+    "end_ts": 1793509825,
+    "intensity": 0.78,
+    "spoof_type": null,
+    "affected_icao24": null,
+    "metadata": {
+      "target_quality_drop": "NIC/NACp severe drop"
+    }
+  },
+  {
+    "event_id": "GTE-SPF-034",
+    "event_type": "spoofing",
+    "region": "Black Sea",
+    "start_ts": 1793534290,
+    "end_ts": 1793552323,
+    "intensity": 0.59,
+    "spoof_type": "altitude_offset",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 53.2,
+      "target_horiz_offset_m": 553.2,
+      "target_drift_mps": 1.17,
+      "offset_bin": "30-150m",
+      "subtle": true
+    }
+  },
+  {
+    "event_id": "GTE-SPF-035",
+    "event_type": "spoofing",
+    "region": "Black Sea",
+    "start_ts": 1793569879,
+    "end_ts": 1793577309,
+    "intensity": 0.64,
+    "spoof_type": "horizontal_offset",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 298.7,
+      "target_horiz_offset_m": 455.2,
+      "target_drift_mps": 1.36,
+      "offset_bin": "150-400m",
+      "subtle": false
+    }
+  },
+  {
+    "event_id": "GTE-SPF-036",
+    "event_type": "spoofing",
+    "region": "Black Sea",
+    "start_ts": 1793606894,
+    "end_ts": 1793615103,
+    "intensity": 0.4,
+    "spoof_type": "horizontal_drift",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 588.8,
+      "target_horiz_offset_m": 222.1,
+      "target_drift_mps": 6.55,
+      "offset_bin": "400-800m",
+      "subtle": false
+    }
+  },
+  {
+    "event_id": "GTE-JAM-037",
+    "event_type": "jamming",
+    "region": "Black Sea",
+    "start_ts": 1793647612,
+    "end_ts": 1793655061,
+    "intensity": 0.92,
+    "spoof_type": null,
+    "affected_icao24": null,
+    "metadata": {
+      "target_quality_drop": "NIC/NACp severe drop"
+    }
+  },
+  {
+    "event_id": "GTE-SPF-038",
+    "event_type": "spoofing",
+    "region": "Black Sea",
+    "start_ts": 1793685378,
+    "end_ts": 1793687540,
+    "intensity": 0.75,
+    "spoof_type": "combined",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 51.3,
+      "target_horiz_offset_m": 931.5,
+      "target_drift_mps": 4.95,
+      "offset_bin": "30-150m",
+      "subtle": true
+    }
+  },
+  {
+    "event_id": "GTE-SPF-039",
+    "event_type": "spoofing",
+    "region": "Black Sea",
+    "start_ts": 1793720406,
+    "end_ts": 1793724360,
+    "intensity": 0.54,
+    "spoof_type": "altitude_offset",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 161.6,
+      "target_horiz_offset_m": 682.1,
+      "target_drift_mps": 0.89,
+      "offset_bin": "150-400m",
+      "subtle": false
+    }
+  },
+  {
+    "event_id": "GTE-SPF-040",
+    "event_type": "spoofing",
+    "region": "Black Sea",
+    "start_ts": 1793759573,
+    "end_ts": 1793761498,
+    "intensity": 0.69,
+    "spoof_type": "horizontal_offset",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 798.7,
+      "target_horiz_offset_m": 195.3,
+      "target_drift_mps": 6.86,
+      "offset_bin": "400-800m",
+      "subtle": true
+    }
+  },
+  {
+    "event_id": "GTE-JAM-041",
+    "event_type": "jamming",
+    "region": "Black Sea",
+    "start_ts": 1793799057,
+    "end_ts": 1793817463,
+    "intensity": 0.89,
+    "spoof_type": null,
+    "affected_icao24": null,
+    "metadata": {
+      "target_quality_drop": "NIC/NACp severe drop"
+    }
+  },
+  {
+    "event_id": "GTE-SPF-042",
+    "event_type": "spoofing",
+    "region": "Black Sea",
+    "start_ts": 1793832183,
+    "end_ts": 1793848912,
+    "intensity": 0.39,
+    "spoof_type": "horizontal_drift",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 106.9,
+      "target_horiz_offset_m": 291.2,
+      "target_drift_mps": 4.46,
+      "offset_bin": "30-150m",
+      "subtle": true
+    }
+  },
+  {
+    "event_id": "GTE-SPF-043",
+    "event_type": "spoofing",
+    "region": "Black Sea",
+    "start_ts": 1793871083,
+    "end_ts": 1793874244,
+    "intensity": 0.84,
+    "spoof_type": "combined",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 301.3,
+      "target_horiz_offset_m": 249.4,
+      "target_drift_mps": 2.13,
+      "offset_bin": "150-400m",
+      "subtle": false
+    }
+  },
+  {
+    "event_id": "GTE-SPF-044",
+    "event_type": "spoofing",
+    "region": "Black Sea",
+    "start_ts": 1793907832,
+    "end_ts": 1793919821,
+    "intensity": 0.88,
+    "spoof_type": "altitude_offset",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 768.2,
+      "target_horiz_offset_m": 653.3,
+      "target_drift_mps": 4.39,
+      "offset_bin": "400-800m",
+      "subtle": false
+    }
+  },
+  {
+    "event_id": "GTE-JAM-045",
+    "event_type": "jamming",
+    "region": "Black Sea",
+    "start_ts": 1793949862,
+    "end_ts": 1793959531,
+    "intensity": 0.9,
+    "spoof_type": null,
+    "affected_icao24": null,
+    "metadata": {
+      "target_quality_drop": "NIC/NACp severe drop"
+    }
+  },
+  {
+    "event_id": "GTE-SPF-046",
+    "event_type": "spoofing",
+    "region": "Black Sea",
+    "start_ts": 1793983559,
+    "end_ts": 1793994460,
+    "intensity": 0.88,
+    "spoof_type": "horizontal_offset",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 94.8,
+      "target_horiz_offset_m": 217.7,
+      "target_drift_mps": 1.03,
+      "offset_bin": "30-150m",
+      "subtle": true
+    }
+  },
+  {
+    "event_id": "GTE-SPF-047",
+    "event_type": "spoofing",
+    "region": "Black Sea",
+    "start_ts": 1794025683,
+    "end_ts": 1794030222,
+    "intensity": 0.91,
+    "spoof_type": "horizontal_drift",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 260.0,
+      "target_horiz_offset_m": 519.0,
+      "target_drift_mps": 3.64,
+      "offset_bin": "150-400m",
+      "subtle": false
+    }
+  },
+  {
+    "event_id": "GTE-SPF-048",
+    "event_type": "spoofing",
+    "region": "Black Sea",
+    "start_ts": 1794062832,
+    "end_ts": 1794065160,
+    "intensity": 0.54,
+    "spoof_type": "combined",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 427.1,
+      "target_horiz_offset_m": 774.4,
+      "target_drift_mps": 1.77,
+      "offset_bin": "400-800m",
+      "subtle": false
+    }
+  },
+  {
+    "event_id": "GTE-JAM-049",
+    "event_type": "jamming",
+    "region": "Middle East",
+    "start_ts": 1793495539,
+    "end_ts": 1793515321,
+    "intensity": 0.61,
+    "spoof_type": null,
+    "affected_icao24": null,
+    "metadata": {
+      "target_quality_drop": "NIC/NACp severe drop"
+    }
+  },
+  {
+    "event_id": "GTE-SPF-050",
+    "event_type": "spoofing",
+    "region": "Middle East",
+    "start_ts": 1793531871,
+    "end_ts": 1793548254,
+    "intensity": 0.75,
+    "spoof_type": "altitude_offset",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 32.4,
+      "target_horiz_offset_m": 583.0,
+      "target_drift_mps": 7.76,
+      "offset_bin": "30-150m",
+      "subtle": true
+    }
+  },
+  {
+    "event_id": "GTE-SPF-051",
+    "event_type": "spoofing",
+    "region": "Middle East",
+    "start_ts": 1793569163,
+    "end_ts": 1793582154,
+    "intensity": 0.87,
+    "spoof_type": "horizontal_offset",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 227.2,
+      "target_horiz_offset_m": 157.4,
+      "target_drift_mps": 0.9,
+      "offset_bin": "150-400m",
+      "subtle": true
+    }
+  },
+  {
+    "event_id": "GTE-SPF-052",
+    "event_type": "spoofing",
+    "region": "Middle East",
+    "start_ts": 1793607300,
+    "end_ts": 1793618788,
+    "intensity": 0.47,
+    "spoof_type": "horizontal_drift",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 638.5,
+      "target_horiz_offset_m": 724.2,
+      "target_drift_mps": 5.39,
+      "offset_bin": "400-800m",
+      "subtle": false
+    }
+  },
+  {
+    "event_id": "GTE-JAM-053",
+    "event_type": "jamming",
+    "region": "Middle East",
+    "start_ts": 1793643286,
+    "end_ts": 1793662682,
+    "intensity": 0.64,
+    "spoof_type": null,
+    "affected_icao24": null,
+    "metadata": {
+      "target_quality_drop": "NIC/NACp severe drop"
+    }
+  },
+  {
+    "event_id": "GTE-SPF-054",
+    "event_type": "spoofing",
+    "region": "Middle East",
+    "start_ts": 1793681202,
+    "end_ts": 1793691699,
+    "intensity": 0.82,
+    "spoof_type": "combined",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 70.2,
+      "target_horiz_offset_m": 275.3,
+      "target_drift_mps": 2.96,
+      "offset_bin": "30-150m",
+      "subtle": true
+    }
+  },
+  {
+    "event_id": "GTE-SPF-055",
+    "event_type": "spoofing",
+    "region": "Middle East",
+    "start_ts": 1793722267,
+    "end_ts": 1793728391,
+    "intensity": 0.44,
+    "spoof_type": "altitude_offset",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 176.8,
+      "target_horiz_offset_m": 994.5,
+      "target_drift_mps": 1.54,
+      "offset_bin": "150-400m",
+      "subtle": false
+    }
+  },
+  {
+    "event_id": "GTE-SPF-056",
+    "event_type": "spoofing",
+    "region": "Middle East",
+    "start_ts": 1793758695,
+    "end_ts": 1793770029,
+    "intensity": 0.9,
+    "spoof_type": "horizontal_offset",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 450.8,
+      "target_horiz_offset_m": 473.4,
+      "target_drift_mps": 4.94,
+      "offset_bin": "400-800m",
+      "subtle": false
+    }
+  },
+  {
+    "event_id": "GTE-JAM-057",
+    "event_type": "jamming",
+    "region": "Middle East",
+    "start_ts": 1793799064,
+    "end_ts": 1793812549,
+    "intensity": 0.61,
+    "spoof_type": null,
+    "affected_icao24": null,
+    "metadata": {
+      "target_quality_drop": "NIC/NACp severe drop"
+    }
+  },
+  {
+    "event_id": "GTE-SPF-058",
+    "event_type": "spoofing",
+    "region": "Middle East",
+    "start_ts": 1793834029,
+    "end_ts": 1793850076,
+    "intensity": 0.85,
+    "spoof_type": "horizontal_drift",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 106.5,
+      "target_horiz_offset_m": 396.8,
+      "target_drift_mps": 2.06,
+      "offset_bin": "30-150m",
+      "subtle": true
+    }
+  },
+  {
+    "event_id": "GTE-SPF-059",
+    "event_type": "spoofing",
+    "region": "Middle East",
+    "start_ts": 1793870589,
+    "end_ts": 1793874276,
+    "intensity": 0.56,
+    "spoof_type": "combined",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 195.9,
+      "target_horiz_offset_m": 107.7,
+      "target_drift_mps": 0.66,
+      "offset_bin": "150-400m",
+      "subtle": true
+    }
+  },
+  {
+    "event_id": "GTE-SPF-060",
+    "event_type": "spoofing",
+    "region": "Middle East",
+    "start_ts": 1793910797,
+    "end_ts": 1793918393,
+    "intensity": 0.51,
+    "spoof_type": "altitude_offset",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 413.0,
+      "target_horiz_offset_m": 626.7,
+      "target_drift_mps": 3.62,
+      "offset_bin": "400-800m",
+      "subtle": false
+    }
+  },
+  {
+    "event_id": "GTE-JAM-061",
+    "event_type": "jamming",
+    "region": "Middle East",
+    "start_ts": 1793948332,
+    "end_ts": 1793963553,
+    "intensity": 0.85,
+    "spoof_type": null,
+    "affected_icao24": null,
+    "metadata": {
+      "target_quality_drop": "NIC/NACp severe drop"
+    }
+  },
+  {
+    "event_id": "GTE-SPF-062",
+    "event_type": "spoofing",
+    "region": "Middle East",
+    "start_ts": 1793985957,
+    "end_ts": 1793987763,
+    "intensity": 0.57,
+    "spoof_type": "horizontal_offset",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 141.1,
+      "target_horiz_offset_m": 823.7,
+      "target_drift_mps": 6.89,
+      "offset_bin": "30-150m",
+      "subtle": true
+    }
+  },
+  {
+    "event_id": "GTE-SPF-063",
+    "event_type": "spoofing",
+    "region": "Middle East",
+    "start_ts": 1794022252,
+    "end_ts": 1794027636,
+    "intensity": 0.38,
+    "spoof_type": "horizontal_drift",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 353.7,
+      "target_horiz_offset_m": 411.3,
+      "target_drift_mps": 7.02,
+      "offset_bin": "150-400m",
+      "subtle": false
+    }
+  },
+  {
+    "event_id": "GTE-SPF-064",
+    "event_type": "spoofing",
+    "region": "Middle East",
+    "start_ts": 1794061585,
+    "end_ts": 1794071469,
+    "intensity": 0.78,
+    "spoof_type": "combined",
+    "affected_icao24": null,
+    "metadata": {
+      "target_alt_offset_m": 424.0,
+      "target_horiz_offset_m": 55.4,
+      "target_drift_mps": 6.16,
+      "offset_bin": "400-800m",
+      "subtle": true
+    }
+  }
+]

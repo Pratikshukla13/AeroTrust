@@ -1,0 +1,44 @@
+version: 1.0.0
+last_calibrated: '2026-11-09 13:54:55'
+spoofing:
+  geo_baro_alt:
+    max_residual_meters: 120.0
+    min_points_required: 5
+    baseline_window_seconds: 300
+    confidence_scale: 0.02
+  kinematic:
+    max_speed_mps: 340.0
+    max_acceleration_mps2: 4.0
+    max_turn_rate_deg_per_sec: 15.0
+    min_points_required: 3
+  pos_vel_consistency:
+    window_seconds: 60
+    max_drift_meters: 600.0
+    min_points_required: 4
+  multi_aircraft:
+    h3_resolution: 5
+    min_aircraft_cluster: 3
+    convergence_distance_meters: 2500.0
+  ehs_physics:
+    enabled: false
+    max_ground_air_diff_mps: 50.0
+jamming:
+  h3_resolution: 5
+  time_bucket_minutes: 60
+  nic_drop_threshold: 8
+  nacp_drop_threshold: 8
+  sil_drop_threshold: 2
+  min_aircraft_per_cell: 3
+abstention:
+  min_total_points_in_window: 10
+  min_independent_checks_available: 2
+  max_check_disagreement_std: 0.45
+sar:
+  k_independent_checks: 2
+  suppression_min_flagged_flights: 30
+  confidence_interval_level: 0.95
+radiation:
+  base_alt_scale_m: 10000.0
+  proton_flux_threshold_10mev: 10.0
+  geomag_lat_cutoff_deg: 55.0
+calibration_method: unsupervised_robust_mad_and_p99_control_sectors

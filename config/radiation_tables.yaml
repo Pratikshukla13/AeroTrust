@@ -1,0 +1,85 @@
+# AeroTrust Radiation Exposure Lookup Tables (Phase 3.1)
+# Models cosmic radiation exposure factors based on atmospheric altitude shielding,
+# geomagnetic cutoff rigidity, and solar particle events / space weather.
+#
+# NOTICE: All tables and values are illustrative placeholders until each TODO-CITE is resolved.
+# Rule: Never express as a probability. Relative exposure index only.
+# Every uncited constant is marked TODO-CITE with candidate public sources to check.
+
+version: "1.0.0"
+
+# 1. Altitude Factor (Atmospheric Column Depth Attenuation)
+# Monotonic with altitude: higher flight levels experience reduced atmospheric shielding
+# Reference baseline: FL350 ~ 10,500 m = nominal cruise index 2.40
+altitude_bins:
+  - alt_max_m: 1000.0   # Sea level to 1,000 m (FL0-FL30)
+    factor: 0.05        # TODO-CITE: Atmospheric column depth ~1000 g/cm^2
+  - alt_max_m: 4000.0   # 1,000 m to 4,000 m (FL30-FL130)
+    factor: 0.25        # TODO-CITE: Mid-troposphere secondary neutron attenuation
+  - alt_max_m: 7500.0   # 4,000 m to 7,500 m (FL130-FL250)
+    factor: 0.75        # TODO-CITE: Upper troposphere Pfotzer maximum onset
+  - alt_max_m: 9500.0   # 7,500 m to 9,500 m (FL250-FL310)
+    factor: 1.60        # TODO-CITE: Standard short-haul cruise
+  - alt_max_m: 11000.0  # 9,500 m to 11,000 m (FL310-FL360)
+    factor: 2.40        # TODO-CITE: Long-haul commercial cruise baseline
+  - alt_max_m: 12500.0  # 11,000 m to 12,500 m (FL360-FL410)
+    factor: 3.50        # TODO-CITE: High-altitude twin-engine cruise
+  - alt_max_m: 15000.0  # 12,500 m to 15,000 m (FL410-FL490)
+    factor: 4.80        # TODO-CITE: Business jet / supersonic ceiling
+
+# 2. Geomagnetic Latitude Factor (Dipole Cutoff Rigidity Shielding)
+# Earth's geomagnetic field deflects lower-energy cosmic rays at the equator.
+# Near the magnetic poles, cutoff rigidity drops to near zero.
+# Absolute geomagnetic latitude |lambda_m|:
+geomagnetic_latitude_bins:
+  - max_geomag_lat_deg: 20.0   # Equatorial (|lat_m| < 20 deg, high cutoff rigidity ~15 GV)
+    factor: 0.60               # TODO-CITE: Strong geomagnetic deflection
+  - max_geomag_lat_deg: 40.0   # Sub-tropical (20 to 40 deg, cutoff ~9-14 GV)
+    factor: 0.85               # TODO-CITE: Moderate deflection
+  - max_geomag_lat_deg: 60.0   # Mid-latitude (40 to 60 deg, cutoff ~3-9 GV)
+    factor: 1.35               # TODO-CITE: Weakening geomagnetic shield
+  - max_geomag_lat_deg: 90.0   # Auroral / Polar (60 to 90 deg, cutoff < 3 GV)
+    factor: 2.10               # TODO-CITE: Open field lines, maximum cosmic flux
+
+# Geomagnetic Dipole Pole reference (IGRF-13 epoch 2025/2026 approximation)
+geomagnetic_pole:
+  north_pole_lat: 80.7         # TODO-CITE: IGRF-13 dipole north latitude
+  north_pole_lon: -72.7        # TODO-CITE: IGRF-13 dipole north longitude
+
+# 3. Space Weather Multipliers (Solar Energetic Protons & Geomagnetic Activity)
+# Scaled by NOAA SWPC Solar Radiation Storm (S-scale) and Geomagnetic Storm (G-scale)
+space_weather_tiers:
+  - name: "quiet"
+    min_proton_flux_10mev: 0.0
+    min_kp: 0.0
+    multiplier: 1.00           # TODO-CITE: Galactic Cosmic Ray (GCR) background only
+  - name: "minor_storm"        # NOAA S1 / G1
+    min_proton_flux_10mev: 10.0
+    min_kp: 5.0
+    multiplier: 1.30           # TODO-CITE: Low solar proton enhancement
+  - name: "moderate_storm"     # NOAA S2 / G2
+    min_proton_flux_10mev: 100.0
+    min_kp: 6.0
+    multiplier: 1.85           # TODO-CITE: Noticeable GLE precursors
+  - name: "strong_storm"       # NOAA S3 / G3
+    min_proton_flux_10mev: 1000.0
+    min_kp: 7.0
+    multiplier: 2.90           # TODO-CITE: Significant polar absorption & SEU risk
+  - name: "severe_storm"       # NOAA S4-S5 / G4-G5
+    min_proton_flux_10mev: 10000.0
+    min_kp: 8.0
+    multiplier: 4.50           # TODO-CITE: Major Ground Level Enhancement (GLE)
+
+# 4. Discrete Natural Exposure Levels (Axis B Bins)
+# Evaluated separately from hostile interference (Axis A)
+exposure_levels:
+  low:
+    threshold_max: 2.50
+    description: "Nominal atmospheric cosmic ray background"
+  moderate:
+    threshold_max: 5.50
+    description: "Elevated high-altitude or polar exposure"
+  elevated:
+    threshold_max: 9999.0
+    description: "Significant space-weather event or extreme high-altitude polar flight"
+

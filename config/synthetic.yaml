@@ -1,0 +1,227 @@
+# AeroTrust Synthetic World Configuration
+# Strictly synthetic parameters. No real aircraft or personal identifiers.
+
+version: "1.0.0"
+
+seeds:
+  dev: 42
+  test: 1337
+  holdout: 2024
+
+# Default generation sizing (balanced for quick laptop runs & thoroughness)
+scale:
+  n_aircraft: 600
+  n_flights: 6000
+  n_days: 7
+  sampling_interval_seconds: 30
+
+fleet_distribution:
+  A320-family: 0.55
+  A330: 0.20
+  A350: 0.15
+  other: 0.10
+
+# Traffic Routing and Density Shaping (Phase 2 Option A)
+traffic_shaping:
+  corridor_flight_fraction: 0.70       # 70% of flights follow named corridors
+  direct_flight_fraction: 0.30         # 30% off-corridor / direct routing (preserves sparse cells)
+  departure_banks_hours: [6.5, 11.5, 16.5, 20.5]  # 4 daily banks: morning, midday, afternoon, evening
+  departure_bank_sigma_minutes: 40.0   # Gaussian spread around bank peaks
+  corridor_lateral_jitter_km: 2.5      # Lateral polyline jitter to maintain H3 cell tube coherence
+
+# Named Airway Corridors across interference regions and clean controls
+corridors:
+  - id: "CORR-BAL-01"
+    name: "Baltic Coastway North"
+    region: "Baltic"
+    is_control: false
+    waypoints:
+      - [54.68, 25.28]  # Vilnius
+      - [56.95, 24.11]  # Riga
+      - [59.44, 24.75]  # Tallinn
+      - [60.17, 24.94]  # Helsinki
+  - id: "CORR-BAL-02"
+    name: "Baltic Maritime Corridor"
+    region: "Baltic"
+    is_control: false
+    waypoints:
+      - [55.71, 21.13]  # Klaipeda
+      - [57.53, 21.71]  # Ventspils
+      - [58.38, 24.50]  # Parnu
+  - id: "CORR-EMD-01"
+    name: "Levant Coastal Corridor"
+    region: "Eastern Mediterranean"
+    is_control: false
+    waypoints:
+      - [31.50, 34.46]  # Gaza approach
+      - [32.01, 34.88]  # Tel Aviv
+      - [33.89, 35.50]  # Beirut
+      - [34.87, 33.62]  # Larnaca
+  - id: "CORR-EMD-02"
+    name: "South Cyprus Oceanic"
+    region: "Eastern Mediterranean"
+    is_control: false
+    waypoints:
+      - [34.50, 31.00]  # West Cyprus offshore
+      - [34.30, 33.50]  # South Cyprus transit
+      - [33.50, 35.80]  # Levant basin
+  - id: "CORR-BS-01"
+    name: "West Black Sea Trunk"
+    region: "Black Sea"
+    is_control: false
+    waypoints:
+      - [46.48, 30.73]  # Odessa
+      - [44.18, 28.63]  # Constanta
+      - [43.21, 27.91]  # Varna
+      - [41.27, 28.75]  # Istanbul
+  - id: "CORR-BS-02"
+    name: "Central Black Sea Transit"
+    region: "Black Sea"
+    is_control: false
+    waypoints:
+      - [44.62, 33.53]  # Sevastopol area
+      - [43.50, 35.50]  # Central Basin
+      - [42.00, 38.00]  # Trabzon approach
+  - id: "CORR-MEA-01"
+    name: "Gulf Oceanic Trunk"
+    region: "Middle East"
+    is_control: false
+    waypoints:
+      - [29.37, 47.98]  # Kuwait
+      - [26.23, 50.59]  # Bahrain / Dammam
+      - [25.25, 55.36]  # Dubai
+      - [24.43, 54.65]  # Abu Dhabi
+  - id: "CORR-MEA-02"
+    name: "Emirates-Oman Corridor"
+    region: "Middle East"
+    is_control: false
+    waypoints:
+      - [25.25, 55.36]  # Dubai
+      - [24.00, 56.50]  # Al Ain / Sohar
+      - [23.59, 58.28]  # Muscat
+  - id: "CORR-WE-01"
+    name: "Western Europe Trunk"
+    region: "Western Europe"
+    is_control: true
+    waypoints:
+      - [48.72, 2.36]   # Paris Orly
+      - [49.00, 2.55]   # Paris CDG
+      - [49.50, 5.00]   # Luxembourg border
+      - [50.03, 8.57]   # Frankfurt
+  - id: "CORR-NAT-01"
+    name: "North Atlantic Track Zulu"
+    region: "North Atlantic"
+    is_control: true
+    waypoints:
+      - [51.47, -0.45]  # London Heathrow
+      - [53.50, -10.00] # Shannon exit
+      - [55.00, -25.00] # Oceanic midpoint
+      - [46.00, -50.00] # Gander entry
+
+# Regional traffic allocation (preserves clean controls and deliberately sparse areas)
+regional_flight_distribution:
+  Baltic: 0.22
+  Eastern Mediterranean: 0.28
+  Black Sea: 0.16
+  Middle East: 0.24
+  Western Europe: 0.08   # Clean control
+  North Atlantic: 0.02   # Clean control & deliberately sparse for abstention exercise
+
+# Silent Acceptance probability when spoofed (by family)
+# Modulates whether NIC/NACp stay high (silent acceptance) or drop during a spoofing event
+silent_acceptance_probability:
+  A320-family: 0.40
+  A330: 0.25
+  A350: 0.15
+  other: 0.30
+
+# Spatial Resolution (README Section 3 / Phase 0.5)
+spatial_indexing:
+  h3_interference_cell_resolution: 5  # Coarse resolution (4 or 5) for regional interference cells
+  h3_track_point_resolution: 7        # Fine resolution (~1.2 km) for individual track points
+
+# Flight Duration Distribution (Realistic airline operations: mostly 1-5h with some short hops)
+duration_profile:
+  short_flight_fraction: 0.15         # 35 to 55 minutes
+  short_duration_minutes_range: [35, 55]
+  medium_flight_fraction: 0.65        # 1 to 3 hours (60 to 180 min)
+  medium_duration_minutes_range: [60, 180]
+  long_flight_fraction: 0.20          # 3 to 5.5 hours (180 to 330 min)
+  long_duration_minutes_range: [180, 330]
+
+# Difficulty Knobs (tunable for testing detector sensitivity limits)
+difficulty_knobs:
+  noise_level_sigma_meters: 15.0      # Standard sensor noise on baro/geo alts
+  # Continuous distribution including subtle and larger disturbances:
+  spoof_offset_meters_range: [30.0, 800.0]
+  spoof_altitude_offset_meters_range: [30.0, 800.0]
+  spoof_horizontal_offset_meters_range: [50.0, 1000.0]
+  spoof_drift_rate_mps_range: [0.5, 8.0]
+  coverage_dropout_probability: 0.04 # Probability of missing track points (gaps)
+  turbulence_spike_probability: 0.03 # Hard negative: sudden vrate spike in cruise
+  baro_drift_error_probability: 0.02 # Hard negative: baro error without GNSS spoofing
+  go_around_probability: 0.03        # Hard negative: aborted landing & sudden climb profile
+
+# Target Regions & Synthetic Hubs
+regions:
+  Baltic:
+    center: [57.5, 21.5]
+    airports:
+      - { code: "XBAL", name: "Synthetic Baltic Hub Alpha", lat: 56.92, lon: 23.97 }
+      - { code: "XBBE", name: "Synthetic Baltic Hub Beta", lat: 59.41, lon: 24.83 }
+  Eastern Mediterranean:
+    center: [34.5, 33.5]
+    airports:
+      - { code: "XEMA", name: "Synthetic EastMed Hub Alpha", lat: 34.87, lon: 33.62 }
+      - { code: "XEMB", name: "Synthetic EastMed Hub Beta", lat: 32.01, lon: 34.88 }
+  Black Sea:
+    center: [43.5, 35.0]
+    airports:
+      - { code: "XBSA", name: "Synthetic BlackSea Hub Alpha", lat: 44.18, lon: 28.63 }
+      - { code: "XBSB", name: "Synthetic BlackSea Hub Beta", lat: 41.27, lon: 28.75 }
+  Middle East:
+    center: [28.0, 48.0]
+    airports:
+      - { code: "XMEA", name: "Synthetic Gulf Hub Alpha", lat: 25.25, lon: 55.36 }
+      - { code: "XMEB", name: "Synthetic Gulf Hub Beta", lat: 24.43, lon: 54.65 }
+  Western Europe:
+    center: [48.0, 5.0]
+    airports:
+      - { code: "XWEA", name: "Synthetic WestEuro Hub Alpha", lat: 49.00, lon: 2.55 }
+      - { code: "XWEB", name: "Synthetic WestEuro Hub Beta", lat: 50.03, lon: 8.57 }
+  North Atlantic:
+    center: [55.0, -30.0]
+    airports:
+      - { code: "XNAA", name: "Synthetic Atlantic Gateway Alpha", lat: 51.47, lon: -0.45 }
+      - { code: "XNAB", name: "Synthetic Atlantic Gateway Beta", lat: 40.64, lon: -73.78 }
+
+# Public Incident Cases (Strictly Seeded from README Section 4.6)
+incident_seed_cases:
+  - case_id: "A320-SOLAR-2025"
+    name: "A320 Solar Radiation Single-Event Effect Scoping"
+    trigger_date: "2025-10-30"
+    public_statement_date: "2025-11-28"
+    directive_date: "2025-11-29"
+    aircraft_held_in_service: 6000
+    aircraft_held_undelivered: 0
+    days_to_scope: 29
+    source_urls: "verify:Airbus public statement 28 Nov 2025; EASA Emergency AD 29 Nov 2025"
+  - case_id: "A320-PANEL-2025"
+    name: "A320 Fuselage Panels Production Discrepancy"
+    trigger_date: "2025-12-01"
+    public_statement_date: "2025-12-15"
+    directive_date: "2025-12-17"
+    aircraft_held_in_service: 177
+    aircraft_held_undelivered: 451
+    days_to_scope: 16
+    source_urls: "verify:EASA Directive 17 Dec 2025; Airbus revised 2025 target (820 to 790)"
+  - case_id: "A330-TOOL-2026"
+    name: "A330 Stray Assembly Tool Inspection"
+    trigger_date: "2026-05-31"
+    public_statement_date: "2026-07-15"
+    directive_date: "2026-11-15"
+    aircraft_held_in_service: 0
+    aircraft_held_undelivered: 9
+    days_to_scope: 75
+    source_urls: "verify:Airbus delivery reports June-July 2026 (0 A330s); EASA inspection policy filing mid-Nov 2026"
+
