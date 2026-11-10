@@ -1,212 +1,124 @@
-# AeroTrust: Build Spec v1
+# AeroTrust: Avionics Telemetry Integrity Observatory
 
-**Data audit checklist, database schema, metric definitions, validation plan, and day-by-day schedule**
+AeroTrust is an avionics data-integrity observatory designed to evaluate aircraft ADS-B telemetry against GNSS spoofing, interference, and atmospheric radiation anomalies in a single unified interface. Operating under frozen verification benchmarks on synthetic flight trajectories, it pairs physics-based altimetry consistency checks with an unsupervised abstention engine, classifying telemetry into four standardized evidence tiers (`no_alert`, `flagged_altitude_inconsistency`, `jamming_degraded`, `insufficient`). It features an aggregate Silent Acceptance Rate (SAR) auditor, geographic H3 interference mapping, and an Incident Clock scoping calculator for aviation airworthiness directives.
 
-Prepared for Pratik Shukla | November 2026
-
----
-
-## 1. Project in one paragraph
-
-AeroTrust is a data-integrity observatory for aircraft. Airbus has openly named two outside threats to aircraft data: intense solar radiation (A320 recall, November 2025) and GNSS jamming/spoofing (EASA's top safety priority; Airbus's own Fly Your Ideas 2026 theme). AeroTrust scores both in one place, says "unknown" when evidence is weak, measures a new metric called Silent Acceptance Rate (SAR), and includes an Incident Clock that prices the cost of slow scoping using Airbus's public cases.
-
-> **Radiation Causality Notice:** Airbus stated that intense solar radiation may corrupt data critical to flight controls. Independent experts have questioned whether the radiation level on that date was unusual. Axis B is exposure context, not a cause.
-
-**Scope tiers**
-
-| Tier | Components |
-| --- | --- |
-| Must | Jamming baseline, spoofing detector, radiation exposure index, trust score with abstention, SAR (aggregate only), validation |
-| Next | Incident Clock (calculator + precursor scanner), 24h forecast vs baseline, LLM briefing with verifier |
-| Stretch | Delivery-corridor brief |
-
-If time runs short, ship Must only. It is strong on its own.
+> **SYNTHETIC DATASET NOTICE**: All operational flight paths, telemetry points, and threat injections evaluated in AeroTrust are generated synthetically. Performance benchmarks reflect simulated ADS-B disruptions and do not represent operational airline flight safety records.
 
 ---
 
-## 2. Data audit checklist (Days 1-2)
+## What This Can and Cannot Do
 
-Goal: find out what data you really have before writing any model code. Every item has a pass condition and a fallback.
+### What this CAN do:
+* **Altimetry Consistency Verification**: Evaluates geometric (GNSS) altitude vs. barometric altimetry residuals along flight trajectories (Check a), flagging discrepancies exceeding the 120.0 m threshold.
+* **Jamming Environment Mapping**: Aggregates multi-aircraft ADS-B radio-frequency degradation indicators (NIC, NACp, SIL drops) into spatial H3 hexagons to map interference corridors.
+* **Evidence-Tiered Scoring**: Classifies telemetry into four strict operational tiers (`no_alert`, `flagged_altitude_inconsistency`, `jamming_degraded`, `insufficient`) without presenting uncalibrated model probabilities as ground truth.
+* **Privacy-Preserving SAR Auditing**: Reports Silent Acceptance Rate ($\hat{\text{SAR}}$) metrics across aircraft families and geographic regions under strict minimum cohort thresholds ($N \ge 30$) with cell suppression.
+* **Scoping Cost Sensitivity Modeling**: Provides a transparent calculator to model the financial holding cost of delayed fleet scoping during airworthiness directives using user-verified parameters.
 
-### 2.1 Access and terms
-
-| # | Task | Pass condition | Fallback |
-| --- | --- | --- | --- |
-| A1 | Create an OpenSky account and request historical (Trino) access. **Do this today**, approval takes time. | Access granted | Use the live REST API and collect your own snapshots over 2-3 weeks |
-| A2 | Read OpenSky terms | Research / non-commercial use allowed for an interview prototype | Do not publish a public product; keep the demo private |
-| A3 | Check NOAA SWPC data terms | Public data, free use | None needed |
-
-### 2.2 Field availability (verify, do not assume)
-
-| # | Question | Why it matters | If missing |
-| --- | --- | --- | --- |
-| F1 | Do tracks include barometric altitude **and** geometric (GNSS) altitude? | Core spoofing check (Section 4.1 check a) | Without both, drop check (a) |
-| F2 | Are ADS-B integrity/accuracy fields available (NIC, NACp, SIL)? | Jamming baseline and SAR | Fall back to data-gap and position-jump indicators for jamming; SAR becomes "not computable", say so |
-| F3 | Are Mode S Comm-B (EHS) registers available (e.g. airspeed, heading)? | Physics check against wind (check e) | Skip check (e); use checks a-d |
-| F4 | Update rate and coverage in target regions (Baltic, Eastern Mediterranean, Black Sea, Middle East) vs a clean region (North Atlantic or Western Europe) | Detector needs enough points per flight | Narrow the study region to where coverage is good |
-| F5 | Can icao24 be mapped to aircraft type and family (A319/A320/A321, A330, A350)? | Family-level SAR and precursor scanner | Use callsign/registration lookups; if coverage is low, report SAR for "all aircraft" only |
-
-### 2.3 Space weather and validation sources
-
-| # | Task | Notes |
-| --- | --- | --- |
-| S1 | Locate NOAA SWPC JSON services for proton flux (>10 MeV), Kp index, X-ray flux | **Verify exact endpoint names on the SWPC data page.** Store raw payloads with timestamps |
-| V1 | Snapshot EASA's affected flight information regions list (7-day and 30-day rankings) weekly | Validation proxy. Note: it is itself built from ADS-B plus reports, so agreement is a sanity check, not proof |
-| V2 | Identify candidate flights in historical data | Test case n=1. Confirm callsign and time window before use |
-
-### 2.4 Decision gate at end of Day 2
-
-Write a one-page note answering: which of F1-F5 passed? Which checks are in scope? Which fallbacks were used? Everything after this depends on that note.
+### What this CANNOT do:
+* **Detect Horizontal / Lateral Spoofing**: Produces **0.0% recall** on lateral track offsets or waypoint substitutions, as only vertical altimetry consistency is active in v0.3.
+* **Guarantee Real-World Air Traffic Safety**: All benchmarks are conducted on synthetic datasets; detector thresholds have not been calibrated on certified airline flight data recorder (FDR) streams.
+* **Execute Multi-Aircraft Peer Consensus**: Multi-aircraft consensus (Check d) is disabled in v0.3 due to self-referential graph dependencies and does not contribute to detection.
+* **Provide Reliable Cockpit Warnings in Peacetime Airspace**: In normal low-threat airspaces (0.01% base rate), precision drops to **0.2%** due to background barometric false alarms (~117 false alarms per 10,000 clean flights); independent sensor corroboration is required.
+* **Prove Radiation Causality**: Space weather indices (NOAA proton flux, Kp) serve strictly as illustrative exposure context; they do not establish physical causality for avionics computer upsets.
+* **Provide Certified Incident Financial Valuations**: Incident Clock cases are illustrative benchmarks; all seeded presets require verified primary regulatory documents.
 
 ---
 
-## 3. Database schema (PostgreSQL + PostGIS, H3 cells for geography)
+## Quickstart in Three Commands
 
-**flight\_track\_points**: icao24, ts, lat, lon, baro\_alt\_m, geo\_alt\_m, gs\_mps, track\_deg, vrate\_mps, on\_ground, nic, nacp, sil, source\_note
+```bash
+# 1. Launch self-contained static demo (runs 100% offline with zero database dependency)
+npm run demo
 
-**aircraft**: icao24 (PK), registration, type\_code, family, operator
+# 2. Run backend test suite (73 tests covering detectors, privacy, and integrity)
+pytest backend/tests/ -q
 
-**spoof\_checks**: icao24, ts\_window\_start, ts\_window\_end, check\_name, residual, flag, confidence, n\_points
+# 3. Run frontend test suite (21 Vitest unit and accessibility tests)
+npm test
+```
 
-**interference\_cells**: h3\_cell, time\_bucket, jam\_score, spoof\_score, n\_aircraft, n\_checks, status (ok / degraded / unknown)
-
-**space\_weather**: ts, kp, proton\_flux\_10mev, xray\_flux, raw\_payload\_ref
-
-**radiation\_index**: icao24, ts, alt\_m, geomag\_lat, relative\_index, components (JSON)
-
-**trust\_scores**: flight\_id, segment\_start, segment\_end, score, uncertainty, status (ok / degraded / unknown), reasons (array)
-
-**sar\_aggregate**: family, region, month, n\_flights\_flagged, n\_silent, sar, ci\_low, ci\_high, suppressed (bool). **No tail numbers or icao24 anywhere in this table.**
-
-**incident\_cases**: case\_id, name, trigger\_date, public\_statement\_date, directive\_date, aircraft\_held\_in\_service, aircraft\_held\_undelivered, days\_to\_scope, source\_urls
-
-**precursor\_candidates** (private, never exported): icao24, ts, event\_type, vrate\_dip, altitude\_loss, radiation\_index\_at\_time, review\_status
+To build a standalone production bundle deployable to any free static host (GitHub Pages, Netlify, Vercel, S3):
+```bash
+npm run build:static
+# Output generated in frontend/dist/
+```
 
 ---
 
-## 4. Definitions
+## Architecture
 
-### 4.1 Spoofing checks
+```mermaid
+flowchart TD
+    subgraph Data_Sources ["Data & Ingestion Sources"]
+        ADS_B["Synthetic ADS-B Generator<br/>(Seeds 3001-3003, N=18,000 Legs)"]
+        SWPC["NOAA SWPC Ingestion<br/>(Proton Flux & Kp Indices)"]
+        NE_GEO["Natural Earth & NASA Textures<br/>(Public Domain Cartography)"]
+    end
 
-Each check returns a residual, a flag, and a confidence. No single check decides alone.
+    subgraph Core_Engine ["Detection & Scoring Engine (Frozen v0.3.2)"]
+        CHECK_A["Check (a): Altitude Consistency<br/>(|Geo - Baro| > 120m)"]
+        CHECK_C["Check (c): Jamming Degradation<br/>(NIC / NACp / SIL Collapse)"]
+        CHECK_D["Check (d): Peer Consensus<br/>(INACTIVE / Disabled in v0.3)"]
+        ABSTAIN["Abstention Engine<br/>(Coverage & Sensor Plausibility)"]
+        TIER_MAP["Evidence Tier Classifier<br/>(no_alert / flagged / jamming / insufficient)"]
+    end
 
-- **(a) Geometric vs barometric altitude:** residual = geo\_alt minus baro\_alt, compared with that flight's own baseline and regional distribution. Primary active detector in v0.3 (**`altitude_consistency_v2`** behind the abstention gate).
-- **(b) Kinematic feasibility:** speed implied by consecutive positions vs reported velocity, plus bounds on acceleration and turn rate (supporting evidence only).
-- **(c) Position-velocity consistency:** integrate reported velocity over a window and compare with position change (supporting evidence only).
-- **(d) Multi-aircraft consensus:** **implemented, inactive, needs re-validation**. In v0.3, Check (d) is disabled due to a self-referential peer anomaly bug identified during holdout testing. Check (d) does NOT contribute to detection in v0.3.
-- **(e) EHS physics (only if F3 passes):** ground speed vs true airspeed plus wind, and track vs heading (future work).
+    subgraph Storage_Layer ["Data Storage & Privacy Layer"]
+        PG_DB[("PostgreSQL + PostGIS<br/>H3 Hexagonal Aggregations")]
+        SAR_ENG["SAR Privacy Engine<br/>(Complementary Suppression N >= 30)"]
+        STATIC_SNAPS["Static Demo JSON Snapshots<br/>(frontend/public/static-data/)"]
+    end
 
-**Thresholds are set on Day 1-3 after you see real distributions. Do not hardcode numbers from this document.**
+    subgraph Observatory_UI ["Frontend Observatory (React + TypeScript)"]
+        UI_OVERVIEW["Overview Page<br/>(Tier Distribution & Limitations)"]
+        UI_MAP["Interference Map<br/>(3D Globe & H3 Interference Hexagons)"]
+        UI_FLIGHT["Flight Detail Inspector<br/>(Check Breakdown & Altimetry Plot)"]
+        UI_SAR["SAR Privacy Auditor<br/>(Family & Regional Aggregates)"]
+        UI_INCIDENT["Incident Clock Calculator<br/>(Directive Scoping Costs)"]
+    end
 
-### 4.2 Jamming baseline
-
-Drops in NIC/NACp (if F2 passes) or abnormal data gaps and position-quality loss, aggregated per H3 cell and time bucket.
-
-### 4.3 Abstention rules (status = unknown)
-
-A score is replaced by **unknown** when any of these hold: too few points in the window, fewer than the minimum number of independent checks available, or checks strongly disagree. The reasons array always says why.
-
-### 4.4 Silent Acceptance Rate (SAR)
-
-- **Numerator:** flights where at least k independent checks flagged inconsistency **and** integrity flags (NIC/NACp) stayed high throughout the flagged window.
-- **Denominator:** flights where at least k independent checks flagged inconsistency.
-- **Report:** SAR with a Wilson confidence interval.
-- **Privacy and safety guardrails:** aggregate by aircraft family and region-month only; suppress any cell with fewer than 30 flagged flights; never publish per-aircraft or per-avionics-configuration results.
-- k and the NIC/NACp cutoffs are chosen after the data audit.
-
-### 4.5 Radiation relative index
-
-Relative exposure index = altitude factor x geomagnetic-latitude factor x space-weather multiplier (from proton flux and Kp bins).
-
-- It is **relative**, not a probability of any failure. Never claim a bit-flip probability.
-- **Radiation Causality Notice:** Airbus stated that intense solar radiation may corrupt data critical to flight controls. Independent experts have questioned whether the radiation level on that date was unusual. Axis B is exposure context, not a cause.
-- For the shape of each factor, use a documented published model or tables (for example FAA CARI-7 or NAIRAS publications), and **cite the source in your README**. Do not invent constants.
-
-### 4.6 Incident Clock & Scoping Calculator (Phase 7, 7.1 & 7.2)
-
-**Inputs (all user-editable):** days to scope, aircraft held in-service, aircraft held undelivered, baseline monthly handover rate (optional), share recovered later (optional), value per aircraft (optional).
-
-**Outputs (with formulas and assumptions listed on screen):**
-- **Output a (Aircraft-Days Held):** `aircraft_days_held = (aircraft_held_in_service + aircraft_held_undelivered) × days_to_scope`.
-- **Output b (Model A - Line Stop):** `gross_handovers_lost = baseline_handover_rate_per_month × (days_to_scope / 30)`, net of `share_recovered_later` if provided.
-- **Output c (Model B - Finished Aircraft Hold):** Delivery slippage in aircraft-days: `handover_delay_aircraft_days = aircraft_held_undelivered × days_to_scope`.
-- **Output d (Valuation Impact):** If `value_per_aircraft` is blank, **no money figure is shown**. Shows `--` with prompts to enter valuation.
-- **One-Day Cost of Delay:** Stated in `aircraft-days / day`, with financial rate shown only if valuation is provided.
-- **Sensitivity Matrix:** Sensitivity over scoping duration (0.5x, 1x, 2x).
-- **Public Disclosure Timeline:** A320 solar radiation timeline (30 Oct 2025 event -> 28 Nov 2025 statement -> 28 Nov 2025 AD issued -> 1 Dec 2025 remediation), detailing the computed 29-day public gap with public-only disclosure caveat.
-- **A320 Radiation Preset:** Leaves `days_to_scope` empty. Stores `days_event_to_public_statement` (29) as a separate display-only field with helper text: *"This is the public gap between the incident and Airbus's statement. It is not a hold period and not a scoping time."*
-- **URL Verification Guardrail:** Every URL must be either a real user-provided URL or null. Cases without a primary URL show "primary source missing" in red. All URLs show status "unchecked". A case can become "sourced" only when it has a primary URL with status "verified by user".
-
-**Seed Cases (Strictly public facts; all marked "needs verification" until source URL is confirmed and marked sourced):**
-
-| Case ID | Title | Directive Status | Sourced Public Facts | Verification Status |
-| --- | --- | --- | --- | --- |
-| `A320-SOLAR-2025` | A320 Solar Radiation Single-Event Effect | `issued` | Airbus alert and EASA emergency directive issued 28 Nov 2025 (effective date to be confirmed from the AD document); about 6,000 aircraft affected; fewer than 100 remaining on 1 Dec 2025. Computed statement gap: 29 days (display-only, leaves days_to_scope empty). Primary source awaits user URL. | `needs verification` |
-| `A320-PANEL-2025` | A320 Fuselage Panels Production Discrepancy | `proposed` | Airbus public statement 2 Dec 2025 (628 in scope); 2025 delivery target cut 820 to 790 on 3 Dec 2025; EASA proposed directive published 17 Dec 2025 (177 in service, 451 in production); later final directive to be confirmed. Dual sourced breakdowns: EASA proposed (177 in-service / 451 production) vs Reuters investigation (168 in service, 245 on assembly lines [about 100 due for delivery in 2025], 215 in earlier production). Primary source awaits user URL. | `needs verification` |
-| `A330NEO-TOOL-2026` | A330neo Stray Assembly Tool Inspection | `none_published_or_unknown` | Zero deliveries in June and July 2026; 3, 2, 4 in March, April, May; one on 11 Aug 2026; number of aircraft inspected not disclosed; policy to regulator due mid-November 2026; scope note: "Reports conflict: one says no retroactive fix is required for in-service aircraft, another says inspections are recommended for aircraft delivered from early 2021 to end of May 2026, with final requirements under discussion with the regulator. Needs verification." Primary source awaits user URL. | `needs verification` |
-
-*Mandatory Scenario Notice:* "This calculator turns public information into a scenario. It does not describe Airbus internal data or decisions. Scenario outputs depend on the inputs you enter."
-
-*Mandatory Radiation Context:* "Airbus stated that intense solar radiation may corrupt data critical to flight controls. Independent experts have questioned whether the radiation level on that date was unusual. Axis B is exposure context, not a cause."
-
-### 4.7 Precursor scanner (hypothesis generator only)
-
-Find A320-family aircraft in cruise with a sudden pitch-down-like profile: vertical rate drops sharply and recovers, with a defined altitude loss, outside normal phase changes. Run across cruise flights and **count false alarms** (turbulence, TCAS, ATC-directed changes). Output is a private, manually reviewed candidate list. It proves nothing by itself.
+    ADS_B --> CHECK_A & CHECK_C & ABSTAIN
+    CHECK_A & CHECK_C & CHECK_D & ABSTAIN --> TIER_MAP
+    TIER_MAP --> PG_DB
+    SWPC --> PG_DB
+    PG_DB --> SAR_ENG
+    PG_DB --> STATIC_SNAPS
+    STATIC_SNAPS -.->|Offline Mode| Observatory_UI
+    PG_DB -->|Live API Mode| Observatory_UI
+    NE_GEO --> UI_MAP
+```
 
 ---
 
-## 5. Validation plan
+## Claims and Evidence
 
-| Test | Method | Honest caveat |
-| --- | --- | --- |
-| Spoofing detector | Inject synthetic offsets and drifts of varying size and onset into clean tracks; report precision/recall vs offset size | Synthetic injection is not real spoofing |
-| Regional sanity | Rank correlation of your cell scores with EASA's 7/30-day affected-region rankings | EASA's list uses ADS-B too, so partly circular |
-| False positives | Run on a clean region and report flag rate | Clean means "no known interference", not guaranteed |
-| Forecast (Next tier) | Time-split backtest vs a "repeat yesterday's map" baseline | If you do not beat the baseline, say so |
-| LLM briefing (Next tier) | The model may only use numbers from computed tables; a verifier checks every number | Target: 100% of numbers verified |
-| Precursor scanner | Run on the JetBlue flight (n=1), then count candidates elsewhere | Sanity check, not proof |
-
----
-
-## 6. Schedule (Must tier first)
-
-| Day | Work | Deliverable |
-| --- | --- | --- |
-| 1 | Apply for OpenSky; field audit F1-F5 on whatever data you can already reach; SWPC exploration | Audit notes |
-| 2 | Finish audit; one-page decision note (Section 2.4) | Decision note |
-| 3-4 | Ingestion pipeline, schema, H3 cells; jamming baseline map | Working map |
-| 5-7 | Spoofing checks a-d (e if available); abstention rules; injection tests | Detector + test report |
-| 8-9 | Radiation index; space-weather ingestion; trust score | Trust score per flight |
-| 10-11 | SAR (aggregate); validation vs EASA rankings | SAR table + validation page |
-| 12-13 | Dashboard (map, trust score, unknown states, SAR), deploy | Live demo |
-| 14 | Demo rehearsal and limitations slide | Rehearsed 5-minute demo |
-| 15+ | Next tier: Incident Clock calculator, then precursor scanner, forecast, LLM briefing | As time allows |
+| Claim | Verified Metric | Baseline / Context | Frozen Tag | Supporting Artifact / Report |
+| :--- | :---: | :---: | :---: | :--- |
+| **Altitude Spoofing Precision** | **83.0%** (79.7%–85.8%) | Test Base Rate = 17.47% ($N=5,225$) | `v0.3.2-verified` | [`docs/INJECTION_REPORT.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/INJECTION_REPORT.md#2-multi-level-performance-benchmarks) |
+| **Altitude Spoofing Recall** | **40.8%** (37.6%–44.0%) | Check (a) vertical discrepancy | `v0.3.2-verified` | [`docs/INJECTION_REPORT.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/INJECTION_REPORT.md#2-multi-level-performance-benchmarks) |
+| **Horizontal Spoofing Recall** | **0.0%** | Lateral manipulation undetectable | `v0.3.2-verified` | [`docs/INJECTION_REPORT.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/INJECTION_REPORT.md#horizontal-spoofing-recall) |
+| **Clean False Positives (Leg-Level)**| **42 to 52** per seed | $\approx 35\text{--}36$ baro bias + $7\text{--}16$ boundary | `v0.3.2-verified` | [`docs/INJECTION_REPORT.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/INJECTION_REPORT.md#leg-level-vs-segment-level) |
+| **Multi-Aircraft Consensus** | **Inactive** (0% contribution) | Disabled in v0.3 release | `v0.3.1-claims` | [`docs/INJECTION_REPORT.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/INJECTION_REPORT.md#naming--consensus-notice) |
+| **SAR Privacy Suppression** | **$N \ge 30$** strictly enforced | Marginal & family views masked | `v0.3.2-verified` | [`backend/tests/test_sar_privacy.py`](file:///c:/Users/ASus/Desktop/AeroTrust/backend/tests/test_sar_privacy.py) |
+| **Incident Presets Veracity** | **Needs Verification** | Primary URLs null; status unchecked | `v0.3.4-incidents` | [`data/incident_cases.json`](file:///c:/Users/ASus/Desktop/AeroTrust/data/incident_cases.json) |
 
 ---
 
-## 7. Safety and ethics guardrails
+## Known Weaknesses
 
-- Detection only. Never write how to spoof or jam.
-- SAR stays aggregate. Do not publish per-aircraft-type or per-configuration weaknesses.
-- The precursor watchlist stays private. Do not publish tail numbers.
-- This is decision support, not a safety-critical system. Say so on the first slide.
-- Respect OpenSky terms (research / non-commercial).
+1. **Altitude-Consistency Only**: The sole active spoofing detector is Check (a), which compares barometric and geometric altitude profiles. Any attack maintaining barometric-geometric synchrony will bypass detection.
+2. **0% Horizontal Spoofing Recall**: Lateral offsets, circular waypoint spoofing, and ground-track translation attacks produce zero altimetry deviation and have 0.0% detection recall.
+3. **Consensus Inactive**: Check (d) multi-aircraft peer consensus is disabled in v0.3 due to self-referential graph loops; peer corroboration does not contribute to v0.3 detection.
+4. **Abstention Exercised Only in Demo**: Commercial airway flight tracks in the benchmark dataset have sufficient point density ($N \ge 68$) and dual sensors, resulting in 0.0% benchmark abstention. Abstention is exercised only in the dedicated rule-trigger demo dataset.
+5. **False Alarms Driven by Assumed Barometric-Fault Rate**: The synthetic generator draws random barometric bias on 2% of points ($U(60, 180)\text{ m}$), causing ~35 false alarms per 3,650 clean legs whenever bias exceeds the 120.0 m threshold.
+6. **Radiation Tables Illustrative**: Solar proton flux and geomagnetic storm data represent environmental background exposure context only; no physical causal link to flight-control software anomalies is claimed.
+7. **All Data Synthetic**: All flights, tracks, and interference scenarios derive from synthetic simulation models; no operational commercial airline records were used.
+8. **Three Incident Cases Awaiting Source Verification**: Presets for the A320 solar incident, A320 panel recall, and A330neo assembly cases require verified primary regulatory documents and currently display "primary source missing" in red with "unchecked" status.
 
 ---
 
-## 8. Interview kit
+## License & Attributions
 
-**One-line pitch:** Airbus has openly named solar radiation and GPS spoofing as threats to aircraft data. AeroTrust scores both, says "unknown" when evidence is weak, measures a new Silent Acceptance Rate, and prices slow incident scoping.
-
-**Questions to ask the interviewer**
-
-1. How does Airbus track fleet-level exposure to data-integrity threats today?
-2. After an incident, where does scoping the affected aircraft take the most time?
-3. What is the policy for sharing aggregate metrics like SAR outside the company?
-
-**Limitations slide (say these yourself before anyone asks)**
-
-- Public data only; validation uses proxies.
-- Radiation index is relative, not a probability.
-- Spoofing ground truth is not public; synthetic injection tests stand in.
-- Airbus likely has internal analysis; this is an outside-in prototype.
+* **License**: [MIT License](file:///c:/Users/ASus/Desktop/AeroTrust/LICENSE)
+* **Attributions**: Full catalog of public datasets, textures, and open-source libraries available in [`docs/ATTRIBUTIONS.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/ATTRIBUTIONS.md).

@@ -1,0 +1,247 @@
+[
+  {
+    "case_id": "A320-SOLAR-2025",
+    "title": "A320 Solar Radiation Single-Event Effect",
+    "event_date": "2025-10-30",
+    "public_statement_date": "2025-11-28",
+    "directive_date": "2025-11-28",
+    "directive_status": "issued",
+    "aircraft_affected_total": 6000,
+    "aircraft_in_service": null,
+    "aircraft_undelivered": null,
+    "deliveries_context": "About 6,000 aircraft, fewer than 100 remaining on 1 Dec 2025.",
+    "in_service_scope_notes": null,
+    "days_event_to_statement": 29,
+    "source_url": null,
+    "source_type": "regulator",
+    "url_status": "unchecked",
+    "sources": [
+      {
+        "url": null,
+        "title": "EASA Emergency Airworthiness Directive",
+        "source_type": "regulator",
+        "fact_referenced": "Emergency AD issued 28 Nov 2025 for ~6,000 aircraft; effective date to be confirmed from AD document.",
+        "url_status": "unchecked"
+      },
+      {
+        "url": null,
+        "title": "Airbus Alert Notification to Operators",
+        "source_type": "manufacturer",
+        "fact_referenced": "Airbus alert issued 28 Nov 2025; stated intense solar radiation may corrupt data critical to flight controls; <100 remaining on 1 Dec 2025.",
+        "url_status": "unchecked"
+      }
+    ],
+    "dated_events": [
+      {
+        "date": "2025-10-30",
+        "label": "Incident Event",
+        "description": "Data corruption event critical to flight controls occurs at cruise altitude. Airbus stated intense solar radiation may corrupt data; independent experts questioned whether radiation level was unusual. Axis B is exposure context, not a cause.",
+        "source_url": null,
+        "source_type": "regulator",
+        "url_status": "unchecked"
+      },
+      {
+        "date": "2025-11-28",
+        "label": "Airbus Alert & EASA Emergency AD Issued",
+        "description": "Airbus alert and EASA emergency directive issued 28 Nov 2025 (effective date to be confirmed from the AD document).",
+        "source_url": null,
+        "source_type": "regulator",
+        "url_status": "unchecked"
+      },
+      {
+        "date": "2025-12-01",
+        "label": "Rectification Progress",
+        "description": "Fewer than 100 aircraft remaining out of ~6,000 affected.",
+        "source_url": null,
+        "source_type": "manufacturer",
+        "url_status": "unchecked"
+      }
+    ],
+    "fleet_breakdowns": [],
+    "verification_status": "needs verification"
+  },
+  {
+    "case_id": "A320-PANEL-2025",
+    "title": "A320 Fuselage Panels Production Discrepancy",
+    "event_date": null,
+    "public_statement_date": "2025-12-02",
+    "directive_date": "2025-12-17",
+    "directive_status": "proposed",
+    "aircraft_affected_total": 628,
+    "aircraft_in_service": 177,
+    "aircraft_undelivered": 451,
+    "deliveries_context": "2025 delivery target cut 820 to 790 on 3 Dec 2025.",
+    "in_service_scope_notes": null,
+    "days_event_to_statement": null,
+    "source_url": null,
+    "source_type": "regulator",
+    "url_status": "unchecked",
+    "sources": [
+      {
+        "url": null,
+        "title": "EASA Proposed Airworthiness Directive (PAD)",
+        "source_type": "regulator",
+        "fact_referenced": "EASA PROPOSED directive published 17 Dec 2025 (177 in service, 451 in production); later final directive to be confirmed.",
+        "url_status": "unchecked"
+      },
+      {
+        "url": null,
+        "title": "Airbus Public Statement on Fuselage Panels",
+        "source_type": "manufacturer",
+        "fact_referenced": "Airbus public statement 2 Dec 2025 confirming 628 in scope; 2025 delivery target cut 820 to 790 on 3 Dec 2025.",
+        "url_status": "unchecked"
+      },
+      {
+        "url": null,
+        "title": "Reuters Industrial Investigation",
+        "source_type": "wire",
+        "fact_referenced": "Reuters breakdown: 168 in service, 245 on assembly lines (about 100 due for delivery in 2025), 215 in earlier production.",
+        "url_status": "unchecked"
+      }
+    ],
+    "dated_events": [
+      {
+        "date": "2025-12-02",
+        "label": "Airbus Public Statement",
+        "description": "Airbus public statement confirming 628 aircraft in scope for fuselage panel discrepancy.",
+        "source_url": null,
+        "source_type": "manufacturer",
+        "url_status": "unchecked"
+      },
+      {
+        "date": "2025-12-03",
+        "label": "Delivery Target Cut",
+        "description": "Airbus officially cuts 2025 delivery target from 820 to 790 aircraft.",
+        "source_url": null,
+        "source_type": "manufacturer",
+        "url_status": "unchecked"
+      },
+      {
+        "date": "2025-12-17",
+        "label": "EASA PROPOSED Directive Published",
+        "description": "EASA publishes PROPOSED directive for 628 aircraft (177 in service, 451 in production); later final directive to be confirmed.",
+        "source_url": null,
+        "source_type": "regulator",
+        "url_status": "unchecked"
+      }
+    ],
+    "fleet_breakdowns": [
+      {
+        "name": "EASA Proposed Directive (17 Dec 2025)",
+        "source_url": null,
+        "source_type": "regulator",
+        "in_service": 177,
+        "undelivered_or_production": 451,
+        "customer_allocated_or_other": null,
+        "total": 628,
+        "notes": "Official EASA Proposed Directive regulatory scope: 177 in service, 451 in production.",
+        "url_status": "unchecked"
+      },
+      {
+        "name": "Reuters Sourced Breakdown",
+        "source_url": null,
+        "source_type": "wire",
+        "in_service": 168,
+        "undelivered_or_production": 245,
+        "customer_allocated_or_other": 215,
+        "total": 628,
+        "notes": "168 in service, 245 on assembly lines (about 100 due for delivery in 2025), 215 in earlier production.",
+        "url_status": "unchecked"
+      }
+    ],
+    "verification_status": "needs verification"
+  },
+  {
+    "case_id": "A330NEO-TOOL-2026",
+    "title": "A330neo Stray Assembly Tool Inspection",
+    "event_date": null,
+    "public_statement_date": null,
+    "directive_date": null,
+    "directive_status": "none_published_or_unknown",
+    "aircraft_affected_total": null,
+    "aircraft_in_service": null,
+    "aircraft_undelivered": null,
+    "deliveries_context": "Zero deliveries in June and July 2026; 3, 2, 4 in March, April, May; one on 11 Aug 2026; number of aircraft inspected not disclosed; policy to the regulator due mid-November 2026.",
+    "in_service_scope_notes": "Reports conflict: one says no retroactive fix is required for in-service aircraft, another says inspections are recommended for aircraft delivered from early 2021 to end of May 2026, with final requirements under discussion with the regulator. Needs verification.",
+    "days_event_to_statement": null,
+    "source_url": null,
+    "source_type": "manufacturer",
+    "url_status": "unchecked",
+    "sources": [
+      {
+        "url": null,
+        "title": "Airbus Monthly Orders & Deliveries Files (2026)",
+        "source_type": "manufacturer",
+        "fact_referenced": "Official deliveries: March (3), April (2), May (4); June (0), July (0); 11 Aug 2026 (1).",
+        "url_status": "unchecked"
+      },
+      {
+        "url": null,
+        "title": "Regulator Oversight Discussion",
+        "source_type": "regulator",
+        "fact_referenced": "Inspection policy to the regulator due mid-November 2026; in-service requirements under discussion.",
+        "url_status": "unchecked"
+      }
+    ],
+    "dated_events": [
+      {
+        "date": "2026-03-31",
+        "label": "March Deliveries",
+        "description": "3 A330neo aircraft delivered.",
+        "source_url": null,
+        "source_type": "manufacturer",
+        "url_status": "unchecked"
+      },
+      {
+        "date": "2026-04-30",
+        "label": "April Deliveries",
+        "description": "2 A330neo aircraft delivered.",
+        "source_url": null,
+        "source_type": "manufacturer",
+        "url_status": "unchecked"
+      },
+      {
+        "date": "2026-05-31",
+        "label": "May Deliveries",
+        "description": "4 A330neo aircraft delivered (total 9 in March\u2013May).",
+        "source_url": null,
+        "source_type": "manufacturer",
+        "url_status": "unchecked"
+      },
+      {
+        "date": "2026-06-30",
+        "label": "June Delivery Pause",
+        "description": "Zero A330neo deliveries in June 2026.",
+        "source_url": null,
+        "source_type": "manufacturer",
+        "url_status": "unchecked"
+      },
+      {
+        "date": "2026-07-31",
+        "label": "July Delivery Pause",
+        "description": "Zero A330neo deliveries in July 2026.",
+        "source_url": null,
+        "source_type": "manufacturer",
+        "url_status": "unchecked"
+      },
+      {
+        "date": "2026-08-11",
+        "label": "Deliveries Resume",
+        "description": "One A330neo delivered on 11 Aug 2026.",
+        "source_url": null,
+        "source_type": "manufacturer",
+        "url_status": "unchecked"
+      },
+      {
+        "date": "2026-11-15",
+        "label": "Regulator Policy Filing Milestone",
+        "description": "Inspection policy to the regulator due mid-November 2026.",
+        "source_url": null,
+        "source_type": "regulator",
+        "url_status": "unchecked"
+      }
+    ],
+    "fleet_breakdowns": [],
+    "verification_status": "needs verification"
+  }
+]

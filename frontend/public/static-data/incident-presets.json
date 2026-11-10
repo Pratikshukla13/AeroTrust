@@ -1,0 +1,44 @@
+[
+  {
+    "case_id": "A320-SOLAR-2025",
+    "title": "A320 Solar Radiation (Public Gap 29 Days)",
+    "days_to_scope": null,
+    "aircraft_held_in_service": null,
+    "aircraft_held_undelivered": null,
+    "baseline_handover_rate_per_month": null,
+    "share_recovered_later": null,
+    "value_per_aircraft": null,
+    "days_event_to_public_statement": 29.0,
+    "days_event_to_public_statement_helper": "This is the public gap between the incident and Airbus's statement. It is not a hold period and not a scoping time.",
+    "sourced_fields": []
+  },
+  {
+    "case_id": "A320-PANEL-2025",
+    "title": "A320 Fuselage Panels (177 In-Service, 451 Undelivered)",
+    "days_to_scope": null,
+    "aircraft_held_in_service": 177.0,
+    "aircraft_held_undelivered": 451.0,
+    "baseline_handover_rate_per_month": null,
+    "share_recovered_later": null,
+    "value_per_aircraft": null,
+    "days_event_to_public_statement": null,
+    "days_event_to_public_statement_helper": null,
+    "sourced_fields": [
+      "aircraft_held_in_service",
+      "aircraft_held_undelivered"
+    ]
+  },
+  {
+    "case_id": "A330NEO-TOOL-2026",
+    "title": "A330neo Stray Assembly Tool (Deliveries Context Only)",
+    "days_to_scope": null,
+    "aircraft_held_in_service": null,
+    "aircraft_held_undelivered": null,
+    "baseline_handover_rate_per_month": null,
+    "share_recovered_later": null,
+    "value_per_aircraft": null,
+    "days_event_to_public_statement": null,
+    "days_event_to_public_statement_helper": null,
+    "sourced_fields": []
+  }
+]

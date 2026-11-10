@@ -1,0 +1,1598 @@
+[
+  {
+    "h3_cell": "851e6407fffffff",
+    "time_bucket": 1794074400,
+    "region": "Western Europe",
+    "status": "jamming_degraded",
+    "n_aircraft": 2,
+    "reasons": [
+      "peer_corroborated_jamming: 2 aircraft"
+    ],
+    "lat": 51.9689,
+    "lon": 29.0719,
+    "boundary": [
+      [
+        28.9542,
+        52.0182
+      ],
+      [
+        28.9418,
+        51.9374
+      ],
+      [
+        29.0595,
+        51.888
+      ],
+      [
+        29.1895,
+        51.9194
+      ],
+      [
+        29.2022,
+        52.0002
+      ],
+      [
+        29.0845,
+        52.0497
+      ],
+      [
+        28.9542,
+        52.0182
+      ]
+    ]
+  },
+  {
+    "h3_cell": "851e6433fffffff",
+    "time_bucket": 1794074400,
+    "region": "Western Europe",
+    "status": "jamming_degraded",
+    "n_aircraft": 2,
+    "reasons": [
+      "peer_corroborated_jamming: 2 aircraft"
+    ],
+    "lat": 51.9507,
+    "lon": 29.3197,
+    "boundary": [
+      [
+        29.2022,
+        52.0002
+      ],
+      [
+        29.1895,
+        51.9194
+      ],
+      [
+        29.3069,
+        51.8698
+      ],
+      [
+        29.437,
+        51.901
+      ],
+      [
+        29.4499,
+        51.9817
+      ],
+      [
+        29.3325,
+        52.0314
+      ],
+      [
+        29.2022,
+        52.0002
+      ]
+    ]
+  },
+  {
+    "h3_cell": "851e643bfffffff",
+    "time_bucket": 1794074400,
+    "region": "Western Europe",
+    "status": "jamming_degraded",
+    "n_aircraft": 2,
+    "reasons": [
+      "peer_corroborated_jamming: 2 aircraft"
+    ],
+    "lat": 51.8385,
+    "lon": 29.1769,
+    "boundary": [
+      [
+        29.0595,
+        51.888
+      ],
+      [
+        29.047,
+        51.8071
+      ],
+      [
+        29.1643,
+        51.7575
+      ],
+      [
+        29.2942,
+        51.7889
+      ],
+      [
+        29.3069,
+        51.8698
+      ],
+      [
+        29.1895,
+        51.9194
+      ],
+      [
+        29.0595,
+        51.888
+      ]
+    ]
+  },
+  {
+    "h3_cell": "851e64abfffffff",
+    "time_bucket": 1794074400,
+    "region": "Western Europe",
+    "status": "jamming_degraded",
+    "n_aircraft": 2,
+    "reasons": [
+      "peer_corroborated_jamming: 2 aircraft"
+    ],
+    "lat": 52.0809,
+    "lon": 29.2148,
+    "boundary": [
+      [
+        29.097,
+        52.1303
+      ],
+      [
+        29.0845,
+        52.0497
+      ],
+      [
+        29.2022,
+        52.0002
+      ],
+      [
+        29.3325,
+        52.0314
+      ],
+      [
+        29.3453,
+        52.112
+      ],
+      [
+        29.2275,
+        52.1615
+      ],
+      [
+        29.097,
+        52.1303
+      ]
+    ]
+  },
+  {
+    "h3_cell": "851f4107fffffff",
+    "time_bucket": 1794074400,
+    "region": "Baltic",
+    "status": "jamming_degraded",
+    "n_aircraft": 2,
+    "reasons": [
+      "peer_corroborated_jamming: 2 aircraft"
+    ],
+    "lat": 54.6298,
+    "lon": 26.7662,
+    "boundary": [
+      [
+        26.6414,
+        54.6751
+      ],
+      [
+        26.6313,
+        54.5974
+      ],
+      [
+        26.756,
+        54.552
+      ],
+      [
+        26.8909,
+        54.5844
+      ],
+      [
+        26.9013,
+        54.6621
+      ],
+      [
+        26.7765,
+        54.7075
+      ],
+      [
+        26.6414,
+        54.6751
+      ]
+    ]
+  },
+  {
+    "h3_cell": "851f4117fffffff",
+    "time_bucket": 1794074400,
+    "region": "Baltic",
+    "status": "jamming_degraded",
+    "n_aircraft": 2,
+    "reasons": [
+      "peer_corroborated_jamming: 2 aircraft"
+    ],
+    "lat": 54.7527,
+    "lon": 26.6515,
+    "boundary": [
+      [
+        26.5263,
+        54.7978
+      ],
+      [
+        26.5163,
+        54.7203
+      ],
+      [
+        26.6414,
+        54.6751
+      ],
+      [
+        26.7765,
+        54.7075
+      ],
+      [
+        26.7867,
+        54.7851
+      ],
+      [
+        26.6616,
+        54.8303
+      ],
+      [
+        26.5263,
+        54.7978
+      ]
+    ]
+  },
+  {
+    "h3_cell": "851f413bfffffff",
+    "time_bucket": 1794074400,
+    "region": "Baltic",
+    "status": "jamming_degraded",
+    "n_aircraft": 2,
+    "reasons": [
+      "peer_corroborated_jamming: 2 aircraft"
+    ],
+    "lat": 54.5065,
+    "lon": 26.8806,
+    "boundary": [
+      [
+        26.756,
+        54.552
+      ],
+      [
+        26.7459,
+        54.4742
+      ],
+      [
+        26.8702,
+        54.4286
+      ],
+      [
+        27.0049,
+        54.4609
+      ],
+      [
+        27.0154,
+        54.5387
+      ],
+      [
+        26.8909,
+        54.5844
+      ],
+      [
+        26.756,
+        54.552
+      ]
+    ]
+  },
+  {
+    "h3_cell": "851f45abfffffff",
+    "time_bucket": 1794074400,
+    "region": "Baltic",
+    "status": "jamming_degraded",
+    "n_aircraft": 2,
+    "reasons": [
+      "peer_corroborated_jamming: 2 aircraft"
+    ],
+    "lat": 55.592,
+    "lon": 26.099,
+    "boundary": [
+      [
+        25.9716,
+        55.636
+      ],
+      [
+        25.9622,
+        55.5595
+      ],
+      [
+        26.0895,
+        55.5155
+      ],
+      [
+        26.2262,
+        55.5479
+      ],
+      [
+        26.2359,
+        55.6244
+      ],
+      [
+        26.1086,
+        55.6685
+      ],
+      [
+        25.9716,
+        55.636
+      ]
+    ]
+  },
+  {
+    "h3_cell": "851f45affffffff",
+    "time_bucket": 1794074400,
+    "region": "Baltic",
+    "status": "jamming_degraded",
+    "n_aircraft": 2,
+    "reasons": [
+      "peer_corroborated_jamming: 2 aircraft"
+    ],
+    "lat": 55.5802,
+    "lon": 26.3631,
+    "boundary": [
+      [
+        26.2359,
+        55.6244
+      ],
+      [
+        26.2262,
+        55.5479
+      ],
+      [
+        26.3532,
+        55.5037
+      ],
+      [
+        26.49,
+        55.5358
+      ],
+      [
+        26.5001,
+        55.6123
+      ],
+      [
+        26.373,
+        55.6566
+      ],
+      [
+        26.2359,
+        55.6244
+      ]
+    ]
+  },
+  {
+    "h3_cell": "8508996ffffffff",
+    "time_bucket": 1794074400,
+    "region": "Baltic",
+    "status": "insufficient",
+    "n_aircraft": 1,
+    "reasons": [
+      "insufficient_data_points: 2 < 10"
+    ],
+    "lat": 60.3231,
+    "lon": 24.8338,
+    "boundary": [
+      [
+        24.7134,
+        60.2734
+      ],
+      [
+        24.8452,
+        60.2398
+      ],
+      [
+        24.9658,
+        60.2895
+      ],
+      [
+        24.9547,
+        60.3728
+      ],
+      [
+        24.8223,
+        60.4064
+      ],
+      [
+        24.7017,
+        60.3566
+      ],
+      [
+        24.7134,
+        60.2734
+      ]
+    ]
+  },
+  {
+    "h3_cell": "851b6baffffffff",
+    "time_bucket": 1794074400,
+    "region": "North Atlantic",
+    "status": "insufficient",
+    "n_aircraft": 1,
+    "reasons": [
+      "insufficient_data_points: 2 < 10"
+    ],
+    "lat": 53.8352,
+    "lon": -28.5343,
+    "boundary": [
+      [
+        -28.6025,
+        53.9125
+      ],
+      [
+        -28.6894,
+        53.84
+      ],
+      [
+        -28.6212,
+        53.7627
+      ],
+      [
+        -28.4662,
+        53.7578
+      ],
+      [
+        -28.3791,
+        53.8302
+      ],
+      [
+        -28.4471,
+        53.9076
+      ],
+      [
+        -28.6025,
+        53.9125
+      ]
+    ]
+  },
+  {
+    "h3_cell": "851e669bfffffff",
+    "time_bucket": 1794074400,
+    "region": "Western Europe",
+    "status": "insufficient",
+    "n_aircraft": 1,
+    "reasons": [
+      "insufficient_data_points: 2 < 10"
+    ],
+    "lat": 51.5799,
+    "lon": 27.5161,
+    "boundary": [
+      [
+        27.3975,
+        51.628
+      ],
+      [
+        27.387,
+        51.5464
+      ],
+      [
+        27.5055,
+        51.4983
+      ],
+      [
+        27.6345,
+        51.5316
+      ],
+      [
+        27.6452,
+        51.6132
+      ],
+      [
+        27.5267,
+        51.6614
+      ],
+      [
+        27.3975,
+        51.628
+      ]
+    ]
+  },
+  {
+    "h3_cell": "851f262bfffffff",
+    "time_bucket": 1794074400,
+    "region": "Western Europe",
+    "status": "insufficient",
+    "n_aircraft": 1,
+    "reasons": [
+      "insufficient_data_points: 2 < 10"
+    ],
+    "lat": 56.4458,
+    "lon": 9.5229,
+    "boundary": [
+      [
+        9.388,
+        56.4709
+      ],
+      [
+        9.3994,
+        56.3968
+      ],
+      [
+        9.5342,
+        56.3717
+      ],
+      [
+        9.6577,
+        56.4205
+      ],
+      [
+        9.6466,
+        56.4946
+      ],
+      [
+        9.5115,
+        56.5198
+      ],
+      [
+        9.388,
+        56.4709
+      ]
+    ]
+  },
+  {
+    "h3_cell": "851f264bfffffff",
+    "time_bucket": 1794074400,
+    "region": "Western Europe",
+    "status": "insufficient",
+    "n_aircraft": 1,
+    "reasons": [
+      "insufficient_data_points: 2 < 10"
+    ],
+    "lat": 56.2227,
+    "lon": 8.3843,
+    "boundary": [
+      [
+        8.2501,
+        56.2467
+      ],
+      [
+        8.2629,
+        56.1726
+      ],
+      [
+        8.3969,
+        56.1486
+      ],
+      [
+        8.5184,
+        56.1986
+      ],
+      [
+        8.5059,
+        56.2727
+      ],
+      [
+        8.3716,
+        56.2968
+      ],
+      [
+        8.2501,
+        56.2467
+      ]
+    ]
+  },
+  {
+    "h3_cell": "851f5d83fffffff",
+    "time_bucket": 1794074400,
+    "region": "Baltic",
+    "status": "insufficient",
+    "n_aircraft": 1,
+    "reasons": [
+      "insufficient_data_points: 2 < 10"
+    ],
+    "lat": 53.3514,
+    "lon": 26.2189,
+    "boundary": [
+      [
+        26.096,
+        53.397
+      ],
+      [
+        26.0868,
+        53.3175
+      ],
+      [
+        26.2096,
+        53.2719
+      ],
+      [
+        26.3416,
+        53.3056
+      ],
+      [
+        26.3511,
+        53.3851
+      ],
+      [
+        26.2283,
+        53.4308
+      ],
+      [
+        26.096,
+        53.397
+      ]
+    ]
+  },
+  {
+    "h3_cell": "851f630bfffffff",
+    "time_bucket": 1794074400,
+    "region": "Baltic",
+    "status": "insufficient",
+    "n_aircraft": 1,
+    "reasons": [
+      "insufficient_data_points: 2 < 10"
+    ],
+    "lat": 56.2181,
+    "lon": 24.7024,
+    "boundary": [
+      [
+        24.5725,
+        56.2602
+      ],
+      [
+        24.5648,
+        56.1844
+      ],
+      [
+        24.6945,
+        56.1423
+      ],
+      [
+        24.8321,
+        56.1759
+      ],
+      [
+        24.8401,
+        56.2517
+      ],
+      [
+        24.7103,
+        56.2938
+      ],
+      [
+        24.5725,
+        56.2602
+      ]
+    ]
+  },
+  {
+    "h3_cell": "852da2d7fffffff",
+    "time_bucket": 1794074400,
+    "region": "Eastern Mediterranean",
+    "status": "insufficient",
+    "n_aircraft": 1,
+    "reasons": [
+      "insufficient_data_points: 2 < 10"
+    ],
+    "lat": 34.2288,
+    "lon": 34.8107,
+    "boundary": [
+      [
+        34.7209,
+        34.2883
+      ],
+      [
+        34.7056,
+        34.1944
+      ],
+      [
+        34.7954,
+        34.1349
+      ],
+      [
+        34.9004,
+        34.1694
+      ],
+      [
+        34.9158,
+        34.2632
+      ],
+      [
+        34.826,
+        34.3227
+      ],
+      [
+        34.7209,
+        34.2883
+      ]
+    ]
+  },
+  {
+    "h3_cell": "85385b67fffffff",
+    "time_bucket": 1794074400,
+    "region": "Western Europe",
+    "status": "insufficient",
+    "n_aircraft": 1,
+    "reasons": [
+      "insufficient_data_points: 2 < 10"
+    ],
+    "lat": 30.6038,
+    "lon": 10.5456,
+    "boundary": [
+      [
+        10.4477,
+        30.6454
+      ],
+      [
+        10.4551,
+        30.5501
+      ],
+      [
+        10.5529,
+        30.5085
+      ],
+      [
+        10.6435,
+        30.5622
+      ],
+      [
+        10.6363,
+        30.6575
+      ],
+      [
+        10.5383,
+        30.6992
+      ],
+      [
+        10.4477,
+        30.6454
+      ]
+    ]
+  },
+  {
+    "h3_cell": "853905a3fffffff",
+    "time_bucket": 1794074400,
+    "region": "Western Europe",
+    "status": "insufficient",
+    "n_aircraft": 1,
+    "reasons": [
+      "insufficient_data_points: 2 < 10"
+    ],
+    "lat": 41.0094,
+    "lon": -5.9548,
+    "boundary": [
+      [
+        -5.9814,
+        41.1004
+      ],
+      [
+        -6.0683,
+        41.0388
+      ],
+      [
+        -6.0416,
+        40.9478
+      ],
+      [
+        -5.9284,
+        40.9184
+      ],
+      [
+        -5.8416,
+        40.9799
+      ],
+      [
+        -5.868,
+        41.0709
+      ],
+      [
+        -5.9814,
+        41.1004
+      ]
+    ]
+  },
+  {
+    "h3_cell": "853905a7fffffff",
+    "time_bucket": 1794074400,
+    "region": "Western Europe",
+    "status": "insufficient",
+    "n_aircraft": 1,
+    "reasons": [
+      "insufficient_data_points: 2 < 10"
+    ],
+    "lat": 41.0413,
+    "lon": -5.7548,
+    "boundary": [
+      [
+        -5.781,
+        41.1323
+      ],
+      [
+        -5.868,
+        41.0709
+      ],
+      [
+        -5.8416,
+        40.9799
+      ],
+      [
+        -5.7286,
+        40.9503
+      ],
+      [
+        -5.6417,
+        41.0117
+      ],
+      [
+        -5.6678,
+        41.1026
+      ],
+      [
+        -5.781,
+        41.1323
+      ]
+    ]
+  },
+  {
+    "h3_cell": "853e04cffffffff",
+    "time_bucket": 1794074400,
+    "region": "Western Europe",
+    "status": "insufficient",
+    "n_aircraft": 1,
+    "reasons": [
+      "insufficient_data_points: 2 < 10"
+    ],
+    "lat": 29.2264,
+    "lon": 22.0129,
+    "boundary": [
+      [
+        21.9179,
+        29.2775
+      ],
+      [
+        21.9147,
+        29.1801
+      ],
+      [
+        22.0097,
+        29.1291
+      ],
+      [
+        22.1079,
+        29.1753
+      ],
+      [
+        22.1112,
+        29.2727
+      ],
+      [
+        22.0161,
+        29.3238
+      ],
+      [
+        21.9179,
+        29.2775
+      ]
+    ]
+  },
+  {
+    "h3_cell": "853e308bfffffff",
+    "time_bucket": 1794074400,
+    "region": "Western Europe",
+    "status": "insufficient",
+    "n_aircraft": 1,
+    "reasons": [
+      "insufficient_data_points: 2 < 10"
+    ],
+    "lat": 29.5573,
+    "lon": 19.5047,
+    "boundary": [
+      [
+        19.4084,
+        29.6065
+      ],
+      [
+        19.4076,
+        29.5092
+      ],
+      [
+        19.5038,
+        29.46
+      ],
+      [
+        19.6009,
+        29.508
+      ],
+      [
+        19.6019,
+        29.6053
+      ],
+      [
+        19.5056,
+        29.6546
+      ],
+      [
+        19.4084,
+        29.6065
+      ]
+    ]
+  },
+  {
+    "h3_cell": "853e30affffffff",
+    "time_bucket": 1794074400,
+    "region": "Western Europe",
+    "status": "insufficient",
+    "n_aircraft": 1,
+    "reasons": [
+      "insufficient_data_points: 2 < 10"
+    ],
+    "lat": 29.4056,
+    "lon": 20.1797,
+    "boundary": [
+      [
+        20.0838,
+        29.4553
+      ],
+      [
+        20.0823,
+        29.358
+      ],
+      [
+        20.1782,
+        29.3082
+      ],
+      [
+        20.2756,
+        29.3558
+      ],
+      [
+        20.2772,
+        29.4531
+      ],
+      [
+        20.1813,
+        29.5029
+      ],
+      [
+        20.0838,
+        29.4553
+      ]
+    ]
+  },
+  {
+    "h3_cell": "853e30bbfffffff",
+    "time_bucket": 1794074400,
+    "region": "Western Europe",
+    "status": "insufficient",
+    "n_aircraft": 1,
+    "reasons": [
+      "insufficient_data_points: 2 < 10"
+    ],
+    "lat": 29.5544,
+    "lon": 19.8917,
+    "boundary": [
+      [
+        19.7955,
+        29.6039
+      ],
+      [
+        19.7943,
+        29.5066
+      ],
+      [
+        19.8904,
+        29.4571
+      ],
+      [
+        19.9878,
+        29.5049
+      ],
+      [
+        19.9891,
+        29.6022
+      ],
+      [
+        19.8929,
+        29.6517
+      ],
+      [
+        19.7955,
+        29.6039
+      ]
+    ]
+  },
+  {
+    "h3_cell": "853e30d3fffffff",
+    "time_bucket": 1794074400,
+    "region": "Western Europe",
+    "status": "insufficient",
+    "n_aircraft": 1,
+    "reasons": [
+      "insufficient_data_points: 2 < 10"
+    ],
+    "lat": 29.559,
+    "lon": 19.1179,
+    "boundary": [
+      [
+        19.0215,
+        29.6079
+      ],
+      [
+        19.021,
+        29.5107
+      ],
+      [
+        19.1174,
+        29.4618
+      ],
+      [
+        19.2143,
+        29.5101
+      ],
+      [
+        19.2149,
+        29.6073
+      ],
+      [
+        19.1185,
+        29.6563
+      ],
+      [
+        19.0215,
+        29.6079
+      ]
+    ]
+  },
+  {
+    "h3_cell": "853e3683fffffff",
+    "time_bucket": 1794074400,
+    "region": "Western Europe",
+    "status": "insufficient",
+    "n_aircraft": 1,
+    "reasons": [
+      "insufficient_data_points: 2 < 10"
+    ],
+    "lat": 29.7046,
+    "lon": 18.2484,
+    "boundary": [
+      [
+        18.1516,
+        29.7528
+      ],
+      [
+        18.1519,
+        29.6556
+      ],
+      [
+        18.2486,
+        29.6075
+      ],
+      [
+        18.3451,
+        29.6563
+      ],
+      [
+        18.3449,
+        29.7535
+      ],
+      [
+        18.2481,
+        29.8017
+      ],
+      [
+        18.1516,
+        29.7528
+      ]
+    ]
+  },
+  {
+    "h3_cell": "853e36bbfffffff",
+    "time_bucket": 1794074400,
+    "region": "Western Europe",
+    "status": "insufficient",
+    "n_aircraft": 1,
+    "reasons": [
+      "insufficient_data_points: 2 < 10"
+    ],
+    "lat": 29.5596,
+    "lon": 18.5383,
+    "boundary": [
+      [
+        18.4417,
+        29.608
+      ],
+      [
+        18.4418,
+        29.5108
+      ],
+      [
+        18.5383,
+        29.4624
+      ],
+      [
+        18.6348,
+        29.5111
+      ],
+      [
+        18.6349,
+        29.6082
+      ],
+      [
+        18.5383,
+        29.6567
+      ],
+      [
+        18.4417,
+        29.608
+      ]
+    ]
+  },
+  {
+    "h3_cell": "853f6867fffffff",
+    "time_bucket": 1794074400,
+    "region": "Eastern Mediterranean",
+    "status": "insufficient",
+    "n_aircraft": 1,
+    "reasons": [
+      "insufficient_data_points: 2 < 10"
+    ],
+    "lat": 36.3123,
+    "lon": 31.6846,
+    "boundary": [
+      [
+        31.5896,
+        36.3697
+      ],
+      [
+        31.5769,
+        36.2757
+      ],
+      [
+        31.6719,
+        36.2183
+      ],
+      [
+        31.7795,
+        36.2548
+      ],
+      [
+        31.7924,
+        36.3489
+      ],
+      [
+        31.6975,
+        36.4063
+      ],
+      [
+        31.5896,
+        36.3697
+      ]
+    ]
+  },
+  {
+    "h3_cell": "853fa2d3fffffff",
+    "time_bucket": 1794074400,
+    "region": "Western Europe",
+    "status": "insufficient",
+    "n_aircraft": 1,
+    "reasons": [
+      "insufficient_data_points: 2 < 10"
+    ],
+    "lat": 30.3846,
+    "lon": 11.6997,
+    "boundary": [
+      [
+        11.6019,
+        30.4273
+      ],
+      [
+        11.6082,
+        30.3316
+      ],
+      [
+        11.706,
+        30.2889
+      ],
+      [
+        11.7976,
+        30.3419
+      ],
+      [
+        11.7914,
+        30.4377
+      ],
+      [
+        11.6935,
+        30.4804
+      ],
+      [
+        11.6019,
+        30.4273
+      ]
+    ]
+  },
+  {
+    "h3_cell": "853fa31bfffffff",
+    "time_bucket": 1794074400,
+    "region": "Western Europe",
+    "status": "insufficient",
+    "n_aircraft": 1,
+    "reasons": [
+      "insufficient_data_points: 2 < 10"
+    ],
+    "lat": 30.1785,
+    "lon": 13.4274,
+    "boundary": [
+      [
+        13.3296,
+        30.2226
+      ],
+      [
+        13.3344,
+        30.1264
+      ],
+      [
+        13.4321,
+        30.0823
+      ],
+      [
+        13.5251,
+        30.1342
+      ],
+      [
+        13.5205,
+        30.2305
+      ],
+      [
+        13.4227,
+        30.2747
+      ],
+      [
+        13.3296,
+        30.2226
+      ]
+    ]
+  },
+  {
+    "h3_cell": "853fa3c3fffffff",
+    "time_bucket": 1794074400,
+    "region": "Western Europe",
+    "status": "insufficient",
+    "n_aircraft": 1,
+    "reasons": [
+      "insufficient_data_points: 2 < 10"
+    ],
+    "lat": 30.3107,
+    "lon": 13.134,
+    "boundary": [
+      [
+        13.0361,
+        30.3545
+      ],
+      [
+        13.0412,
+        30.2584
+      ],
+      [
+        13.1389,
+        30.2145
+      ],
+      [
+        13.2318,
+        30.2667
+      ],
+      [
+        13.227,
+        30.3629
+      ],
+      [
+        13.129,
+        30.4068
+      ],
+      [
+        13.0361,
+        30.3545
+      ]
+    ]
+  },
+  {
+    "h3_cell": "853fa847fffffff",
+    "time_bucket": 1794074400,
+    "region": "Western Europe",
+    "status": "insufficient",
+    "n_aircraft": 1,
+    "reasons": [
+      "insufficient_data_points: 2 < 10"
+    ],
+    "lat": 29.9706,
+    "lon": 16.1223,
+    "boundary": [
+      [
+        16.0249,
+        30.017
+      ],
+      [
+        16.0272,
+        29.9202
+      ],
+      [
+        16.1245,
+        29.8737
+      ],
+      [
+        16.2196,
+        29.924
+      ],
+      [
+        16.2175,
+        30.0209
+      ],
+      [
+        16.1201,
+        30.0674
+      ],
+      [
+        16.0249,
+        30.017
+      ]
+    ]
+  },
+  {
+    "h3_cell": "853fa863fffffff",
+    "time_bucket": 1794074400,
+    "region": "Western Europe",
+    "status": "insufficient",
+    "n_aircraft": 1,
+    "reasons": [
+      "insufficient_data_points: 2 < 10"
+    ],
+    "lat": 29.8307,
+    "lon": 16.4142,
+    "boundary": [
+      [
+        16.3169,
+        29.8774
+      ],
+      [
+        16.319,
+        29.7806
+      ],
+      [
+        16.4161,
+        29.7338
+      ],
+      [
+        16.5114,
+        29.7839
+      ],
+      [
+        16.5095,
+        29.8808
+      ],
+      [
+        16.4122,
+        29.9276
+      ],
+      [
+        16.3169,
+        29.8774
+      ]
+    ]
+  },
+  {
+    "h3_cell": "853fae0ffffffff",
+    "time_bucket": 1794074400,
+    "region": "Western Europe",
+    "status": "insufficient",
+    "n_aircraft": 1,
+    "reasons": [
+      "insufficient_data_points: 2 < 10"
+    ],
+    "lat": 30.0901,
+    "lon": 15.0605,
+    "boundary": [
+      [
+        14.9629,
+        30.1356
+      ],
+      [
+        14.9662,
+        30.0391
+      ],
+      [
+        15.0637,
+        29.9935
+      ],
+      [
+        15.1581,
+        30.0445
+      ],
+      [
+        15.155,
+        30.1411
+      ],
+      [
+        15.0573,
+        30.1867
+      ],
+      [
+        14.9629,
+        30.1356
+      ]
+    ]
+  },
+  {
+    "h3_cell": "853fae57fffffff",
+    "time_bucket": 1794074400,
+    "region": "Western Europe",
+    "status": "insufficient",
+    "n_aircraft": 1,
+    "reasons": [
+      "insufficient_data_points: 1 < 10"
+    ],
+    "lat": 30.0787,
+    "lon": 14.6768,
+    "boundary": [
+      [
+        14.5792,
+        30.1239
+      ],
+      [
+        14.5828,
+        30.0274
+      ],
+      [
+        14.6804,
+        29.9822
+      ],
+      [
+        14.7744,
+        30.0334
+      ],
+      [
+        14.771,
+        30.1299
+      ],
+      [
+        14.6733,
+        30.1752
+      ],
+      [
+        14.5792,
+        30.1239
+      ]
+    ]
+  },
+  {
+    "h3_cell": "853faecbfffffff",
+    "time_bucket": 1794074400,
+    "region": "Western Europe",
+    "status": "insufficient",
+    "n_aircraft": 1,
+    "reasons": [
+      "insufficient_data_points: 2 < 10"
+    ],
+    "lat": 30.2141,
+    "lon": 14.3837,
+    "boundary": [
+      [
+        14.2859,
+        30.2591
+      ],
+      [
+        14.2898,
+        30.1626
+      ],
+      [
+        14.3875,
+        30.1177
+      ],
+      [
+        14.4815,
+        30.1691
+      ],
+      [
+        14.4777,
+        30.2655
+      ],
+      [
+        14.3799,
+        30.3106
+      ],
+      [
+        14.2859,
+        30.2591
+      ]
+    ]
+  },
+  {
+    "h3_cell": "853fb5b7fffffff",
+    "time_bucket": 1794074400,
+    "region": "Western Europe",
+    "status": "insufficient",
+    "n_aircraft": 1,
+    "reasons": [
+      "insufficient_data_points: 2 < 10"
+    ],
+    "lat": 30.5122,
+    "lon": 11.4061,
+    "boundary": [
+      [
+        11.3081,
+        30.5546
+      ],
+      [
+        11.3148,
+        30.459
+      ],
+      [
+        11.4126,
+        30.4166
+      ],
+      [
+        11.504,
+        30.4698
+      ],
+      [
+        11.4976,
+        30.5655
+      ],
+      [
+        11.3996,
+        30.6079
+      ],
+      [
+        11.3081,
+        30.5546
+      ]
+    ]
+  },
+  {
+    "h3_cell": "854312cffffffff",
+    "time_bucket": 1794074400,
+    "region": "Middle East",
+    "status": "insufficient",
+    "n_aircraft": 1,
+    "reasons": [
+      "insufficient_data_points: 2 < 10"
+    ],
+    "lat": 25.7428,
+    "lon": 54.4241,
+    "boundary": [
+      [
+        54.329,
+        25.7356
+      ],
+      [
+        54.3905,
+        25.6679
+      ],
+      [
+        54.4855,
+        25.675
+      ],
+      [
+        54.5192,
+        25.75
+      ],
+      [
+        54.4577,
+        25.8178
+      ],
+      [
+        54.3626,
+        25.8106
+      ],
+      [
+        54.329,
+        25.7356
+      ]
+    ]
+  }
+]

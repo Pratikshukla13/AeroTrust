@@ -1,0 +1,34 @@
+{
+  "tag": "v0.3.2-verified",
+  "active_dataset": "benchmark",
+  "available_datasets": [
+    "benchmark",
+    "rule_trigger_demo"
+  ],
+  "fingerprints": {
+    "benchmark": {
+      "tag": "v0.3.2-verified",
+      "name": "Frozen Benchmark Dataset",
+      "seed": "3001-3003 (Pooled Clean)",
+      "flights": 18000,
+      "n_clean": 13410,
+      "n_spoof": 2729,
+      "n_jam": 1861,
+      "config_hash": "b6011043368eca73",
+      "primary_unit": "scheduled leg",
+      "secondary_unit": "continuous flight track (5,225 legs merged)"
+    },
+    "rule_trigger_demo": {
+      "tag": "v0.3.2-verified",
+      "name": "Rule-Trigger Demo (Telemetry Degradation Audit)",
+      "seed": "9999",
+      "flights": 200,
+      "n_clean": 175,
+      "n_spoof": 25,
+      "n_jam": 0,
+      "config_hash": "b6011043368eca73",
+      "primary_unit": "demo flight",
+      "secondary_unit": null
+    }
+  }
+}

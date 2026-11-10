@@ -1,0 +1,14 @@
+{
+  "name": "aerotrust",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Synthetic multi-sensor avionics telemetry trust scoring and spoofing verification framework",
+  "scripts": {
+    "demo": "npm --prefix frontend run demo",
+    "build:static": "npm --prefix frontend run build:static",
+    "preview": "npm --prefix frontend run preview",
+    "test:frontend": "npm --prefix frontend run test",
+    "test:backend": "pytest backend/tests/ -q",
+    "test": "npm run test:frontend && npm run test:backend"
+  }
+}

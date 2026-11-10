@@ -1,0 +1,71 @@
+{
+  "tag": "v0.3.2-verified",
+  "active_dataset": "rule_trigger_demo",
+  "dataset_fingerprint": {
+    "tag": "v0.3.2-verified",
+    "name": "Rule-Trigger Demo (Telemetry Degradation Audit)",
+    "seed": "9999",
+    "flights": 200,
+    "n_clean": 175,
+    "n_spoof": 25,
+    "n_jam": 0,
+    "config_hash": "b6011043368eca73",
+    "primary_unit": "demo flight",
+    "secondary_unit": null
+  },
+  "primary_unit": "demo flight (stress case)",
+  "tier_distribution": {
+    "insufficient": {
+      "count": 125,
+      "share_pct": 62.5,
+      "description": "System abstained under telemetry starvation or sensor conflict (Section 4.3)"
+    },
+    "no_alert": {
+      "count": 50,
+      "share_pct": 25.0,
+      "description": "Nominal flight with dual valid checks and high confidence"
+    },
+    "flagged_altitude_inconsistency": {
+      "count": 25,
+      "share_pct": 12.5,
+      "description": "Genuine altitude offset exceeding 120m threshold"
+    },
+    "jamming_degraded": {
+      "count": 0,
+      "share_pct": 0.0,
+      "description": "Degraded GPS interference environment"
+    }
+  },
+  "secondary_unit": null,
+  "headline_box": {
+    "title": "What this can and cannot do",
+    "bullets": [
+      "Altitude-consistency detector only: evaluates barometric vs geometric altimetry discrepancy (Check a).",
+      "Horizontal spoofing 0% recall: lateral track manipulation is not detected by altitude consistency.",
+      "Multi-aircraft consensus inactive: Check (d) is disabled in v0.3 and does not contribute to detection.",
+      "All results synthetic: benchmark evaluated on simulated ADS-B perturbations, not real-world air traffic."
+    ]
+  },
+  "links": [
+    {
+      "id": "map",
+      "label": "Interference Map",
+      "path": "/map"
+    },
+    {
+      "id": "flight-detail",
+      "label": "Flight Detail",
+      "path": "/flight-detail"
+    },
+    {
+      "id": "sar",
+      "label": "SAR Metrics",
+      "path": "/sar"
+    },
+    {
+      "id": "limitations",
+      "label": "Limitations",
+      "path": "/limitations"
+    }
+  ]
+}

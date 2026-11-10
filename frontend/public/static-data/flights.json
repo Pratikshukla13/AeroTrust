@@ -1,0 +1,542 @@
+[
+  {
+    "flight_id": "x603da7_1794073786",
+    "icao24": "x603da7",
+    "start_ts": 1794073786,
+    "end_ts": 1794081466,
+    "tier": "flagged_altitude_inconsistency",
+    "reasons": [
+      "geo_baro_alt_anomaly",
+      "kinematic_feasibility_supporting_deviation"
+    ]
+  },
+  {
+    "flight_id": "xab3c8f_1794072899",
+    "icao24": "xab3c8f",
+    "start_ts": 1794072899,
+    "end_ts": 1794092669,
+    "tier": "flagged_altitude_inconsistency",
+    "reasons": [
+      "geo_baro_alt_anomaly",
+      "kinematic_feasibility_supporting_deviation",
+      "pos_vel_consistency_supporting_drift"
+    ]
+  },
+  {
+    "flight_id": "x9d1288_1794072663",
+    "icao24": "x9d1288",
+    "start_ts": 1794072663,
+    "end_ts": 1794086793,
+    "tier": "flagged_altitude_inconsistency",
+    "reasons": [
+      "geo_baro_alt_anomaly",
+      "kinematic_feasibility_supporting_deviation"
+    ]
+  },
+  {
+    "flight_id": "xd74f56_1794071617",
+    "icao24": "xd74f56",
+    "start_ts": 1794071617,
+    "end_ts": 1794073687,
+    "tier": "flagged_altitude_inconsistency",
+    "reasons": [
+      "multi_aircraft_consensus_anomaly"
+    ]
+  },
+  {
+    "flight_id": "x749866_1794071590",
+    "icao24": "x749866",
+    "start_ts": 1794071590,
+    "end_ts": 1794073660,
+    "tier": "flagged_altitude_inconsistency",
+    "reasons": [
+      "multi_aircraft_consensus_anomaly"
+    ]
+  },
+  {
+    "flight_id": "xb28718_1794071458",
+    "icao24": "xb28718",
+    "start_ts": 1794071458,
+    "end_ts": 1794080128,
+    "tier": "flagged_altitude_inconsistency",
+    "reasons": [
+      "geo_baro_alt_anomaly",
+      "corroborated_jamming_environment",
+      "kinematic_feasibility_supporting_deviation"
+    ]
+  },
+  {
+    "flight_id": "x518661_1794071125",
+    "icao24": "x518661",
+    "start_ts": 1794071125,
+    "end_ts": 1794073195,
+    "tier": "flagged_altitude_inconsistency",
+    "reasons": [
+      "geo_baro_alt_anomaly",
+      "corroborated_jamming_environment"
+    ]
+  },
+  {
+    "flight_id": "xac481a_1794071058",
+    "icao24": "xac481a",
+    "start_ts": 1794071058,
+    "end_ts": 1794073128,
+    "tier": "flagged_altitude_inconsistency",
+    "reasons": [
+      "geo_baro_alt_anomaly",
+      "corroborated_jamming_environment"
+    ]
+  },
+  {
+    "flight_id": "x679657_1794070421",
+    "icao24": "x679657",
+    "start_ts": 1794070421,
+    "end_ts": 1794074741,
+    "tier": "flagged_altitude_inconsistency",
+    "reasons": [
+      "geo_baro_alt_anomaly",
+      "corroborated_jamming_environment",
+      "kinematic_feasibility_supporting_deviation"
+    ]
+  },
+  {
+    "flight_id": "x92fd19_1794070326",
+    "icao24": "x92fd19",
+    "start_ts": 1794070326,
+    "end_ts": 1794074676,
+    "tier": "flagged_altitude_inconsistency",
+    "reasons": [
+      "geo_baro_alt_anomaly",
+      "corroborated_jamming_environment",
+      "kinematic_feasibility_supporting_deviation"
+    ]
+  },
+  {
+    "flight_id": "xcc3afe_1794070243",
+    "icao24": "xcc3afe",
+    "start_ts": 1794070243,
+    "end_ts": 1794072313,
+    "tier": "flagged_altitude_inconsistency",
+    "reasons": [
+      "geo_baro_alt_anomaly",
+      "corroborated_jamming_environment",
+      "kinematic_feasibility_supporting_deviation",
+      "pos_vel_consistency_supporting_drift"
+    ]
+  },
+  {
+    "flight_id": "xa78e49_1794069396",
+    "icao24": "xa78e49",
+    "start_ts": 1794069396,
+    "end_ts": 1794073866,
+    "tier": "flagged_altitude_inconsistency",
+    "reasons": [
+      "geo_baro_alt_anomaly",
+      "corroborated_jamming_environment",
+      "kinematic_feasibility_supporting_deviation"
+    ]
+  },
+  {
+    "flight_id": "x7cd5c2_1794069349",
+    "icao24": "x7cd5c2",
+    "start_ts": 1794069349,
+    "end_ts": 1794073699,
+    "tier": "flagged_altitude_inconsistency",
+    "reasons": [
+      "geo_baro_alt_anomaly",
+      "corroborated_jamming_environment",
+      "kinematic_feasibility_supporting_deviation"
+    ]
+  },
+  {
+    "flight_id": "x5d3b70_1794069289",
+    "icao24": "x5d3b70",
+    "start_ts": 1794069289,
+    "end_ts": 1794073519,
+    "tier": "flagged_altitude_inconsistency",
+    "reasons": [
+      "geo_baro_alt_anomaly",
+      "corroborated_jamming_environment",
+      "kinematic_feasibility_supporting_deviation"
+    ]
+  },
+  {
+    "flight_id": "x623e35_1794069028",
+    "icao24": "x623e35",
+    "start_ts": 1794069028,
+    "end_ts": 1794072773,
+    "tier": "flagged_altitude_inconsistency",
+    "reasons": [
+      "geo_baro_alt_anomaly",
+      "kinematic_feasibility_supporting_deviation",
+      "pos_vel_consistency_supporting_drift"
+    ]
+  },
+  {
+    "flight_id": "x901283_1794068825",
+    "icao24": "x901283",
+    "start_ts": 1794068825,
+    "end_ts": 1794073445,
+    "tier": "flagged_altitude_inconsistency",
+    "reasons": [
+      "geo_baro_alt_anomaly",
+      "multi_aircraft_consensus_anomaly",
+      "corroborated_jamming_environment",
+      "kinematic_feasibility_supporting_deviation"
+    ]
+  },
+  {
+    "flight_id": "x51acf6_1794068810",
+    "icao24": "x51acf6",
+    "start_ts": 1794068810,
+    "end_ts": 1794073220,
+    "tier": "flagged_altitude_inconsistency",
+    "reasons": [
+      "geo_baro_alt_anomaly",
+      "multi_aircraft_consensus_anomaly",
+      "corroborated_jamming_environment",
+      "kinematic_feasibility_supporting_deviation"
+    ]
+  },
+  {
+    "flight_id": "xc46b37_1794068668",
+    "icao24": "xc46b37",
+    "start_ts": 1794068668,
+    "end_ts": 1794082048,
+    "tier": "flagged_altitude_inconsistency",
+    "reasons": [
+      "geo_baro_alt_anomaly",
+      "kinematic_feasibility_supporting_deviation",
+      "pos_vel_consistency_supporting_drift"
+    ]
+  },
+  {
+    "flight_id": "xd9f46b_1794068639",
+    "icao24": "xd9f46b",
+    "start_ts": 1794068639,
+    "end_ts": 1794088409,
+    "tier": "flagged_altitude_inconsistency",
+    "reasons": [
+      "geo_baro_alt_anomaly",
+      "corroborated_jamming_environment",
+      "kinematic_feasibility_supporting_deviation"
+    ]
+  },
+  {
+    "flight_id": "xf9dfa2_1794068241",
+    "icao24": "xf9dfa2",
+    "start_ts": 1794068241,
+    "end_ts": 1794072501,
+    "tier": "flagged_altitude_inconsistency",
+    "reasons": [
+      "geo_baro_alt_anomaly",
+      "multi_aircraft_consensus_anomaly",
+      "corroborated_jamming_environment",
+      "kinematic_feasibility_supporting_deviation"
+    ]
+  },
+  {
+    "flight_id": "xd21a9d_1794072314",
+    "icao24": "xd21a9d",
+    "start_ts": 1794072314,
+    "end_ts": 1794074384,
+    "tier": "jamming_degraded",
+    "reasons": [
+      "corroborated_jamming_environment"
+    ]
+  },
+  {
+    "flight_id": "x99bce6_1794072222",
+    "icao24": "x99bce6",
+    "start_ts": 1794072222,
+    "end_ts": 1794074832,
+    "tier": "jamming_degraded",
+    "reasons": [
+      "corroborated_jamming_environment"
+    ]
+  },
+  {
+    "flight_id": "x2aca71_1794070924",
+    "icao24": "x2aca71",
+    "start_ts": 1794070924,
+    "end_ts": 1794073594,
+    "tier": "jamming_degraded",
+    "reasons": [
+      "corroborated_jamming_environment"
+    ]
+  },
+  {
+    "flight_id": "xf4d931_1794070781",
+    "icao24": "xf4d931",
+    "start_ts": 1794070781,
+    "end_ts": 1794072851,
+    "tier": "jamming_degraded",
+    "reasons": [
+      "corroborated_jamming_environment"
+    ]
+  },
+  {
+    "flight_id": "x9facec_1794070730",
+    "icao24": "x9facec",
+    "start_ts": 1794070730,
+    "end_ts": 1794073340,
+    "tier": "jamming_degraded",
+    "reasons": [
+      "corroborated_jamming_environment"
+    ]
+  },
+  {
+    "flight_id": "x8ba6dc_1794069903",
+    "icao24": "x8ba6dc",
+    "start_ts": 1794069903,
+    "end_ts": 1794073650,
+    "tier": "jamming_degraded",
+    "reasons": [
+      "corroborated_jamming_environment",
+      "kinematic_feasibility_supporting_deviation",
+      "pos_vel_consistency_supporting_drift"
+    ]
+  },
+  {
+    "flight_id": "x8ab81c_1794069540",
+    "icao24": "x8ab81c",
+    "start_ts": 1794069540,
+    "end_ts": 1794071610,
+    "tier": "jamming_degraded",
+    "reasons": [
+      "corroborated_jamming_environment"
+    ]
+  },
+  {
+    "flight_id": "xd65c5a_1794069269",
+    "icao24": "xd65c5a",
+    "start_ts": 1794069269,
+    "end_ts": 1794071339,
+    "tier": "jamming_degraded",
+    "reasons": [
+      "corroborated_jamming_environment"
+    ]
+  },
+  {
+    "flight_id": "xde7120_1794069242",
+    "icao24": "xde7120",
+    "start_ts": 1794069242,
+    "end_ts": 1794071822,
+    "tier": "jamming_degraded",
+    "reasons": [
+      "corroborated_jamming_environment"
+    ]
+  },
+  {
+    "flight_id": "xd21a9d_1794069221",
+    "icao24": "xd21a9d",
+    "start_ts": 1794069221,
+    "end_ts": 1794071291,
+    "tier": "jamming_degraded",
+    "reasons": [
+      "corroborated_jamming_environment"
+    ]
+  },
+  {
+    "flight_id": "x5260c7_1794069061",
+    "icao24": "x5260c7",
+    "start_ts": 1794069061,
+    "end_ts": 1794071131,
+    "tier": "jamming_degraded",
+    "reasons": [
+      "corroborated_jamming_environment"
+    ]
+  },
+  {
+    "flight_id": "x808726_1794068922",
+    "icao24": "x808726",
+    "start_ts": 1794068922,
+    "end_ts": 1794070992,
+    "tier": "jamming_degraded",
+    "reasons": [
+      "corroborated_jamming_environment"
+    ]
+  },
+  {
+    "flight_id": "xd6737b_1794068860",
+    "icao24": "xd6737b",
+    "start_ts": 1794068860,
+    "end_ts": 1794070930,
+    "tier": "jamming_degraded",
+    "reasons": [
+      "corroborated_jamming_environment"
+    ]
+  },
+  {
+    "flight_id": "x4d2141_1794068809",
+    "icao24": "x4d2141",
+    "start_ts": 1794068809,
+    "end_ts": 1794070879,
+    "tier": "jamming_degraded",
+    "reasons": [
+      "corroborated_jamming_environment"
+    ]
+  },
+  {
+    "flight_id": "x947403_1794068771",
+    "icao24": "x947403",
+    "start_ts": 1794068771,
+    "end_ts": 1794071501,
+    "tier": "jamming_degraded",
+    "reasons": [
+      "corroborated_jamming_environment",
+      "kinematic_feasibility_supporting_deviation",
+      "pos_vel_consistency_supporting_drift"
+    ]
+  },
+  {
+    "flight_id": "xc8a1f8_1794068492",
+    "icao24": "xc8a1f8",
+    "start_ts": 1794068492,
+    "end_ts": 1794071042,
+    "tier": "jamming_degraded",
+    "reasons": [
+      "corroborated_jamming_environment"
+    ]
+  },
+  {
+    "flight_id": "xa4c6e3_1794068408",
+    "icao24": "xa4c6e3",
+    "start_ts": 1794068408,
+    "end_ts": 1794070478,
+    "tier": "jamming_degraded",
+    "reasons": [
+      "corroborated_jamming_environment"
+    ]
+  },
+  {
+    "flight_id": "xf550ea_1794068385",
+    "icao24": "xf550ea",
+    "start_ts": 1794068385,
+    "end_ts": 1794070455,
+    "tier": "jamming_degraded",
+    "reasons": [
+      "corroborated_jamming_environment"
+    ]
+  },
+  {
+    "flight_id": "x18ea6f_1794068345",
+    "icao24": "x18ea6f",
+    "start_ts": 1794068345,
+    "end_ts": 1794071105,
+    "tier": "jamming_degraded",
+    "reasons": [
+      "corroborated_jamming_environment"
+    ]
+  },
+  {
+    "flight_id": "x6a0a95_1794068265",
+    "icao24": "x6a0a95",
+    "start_ts": 1794068265,
+    "end_ts": 1794070965,
+    "tier": "jamming_degraded",
+    "reasons": [
+      "corroborated_jamming_environment"
+    ]
+  },
+  {
+    "flight_id": "x43b80a_1794069761",
+    "icao24": "x43b80a",
+    "start_ts": 1794069761,
+    "end_ts": 1794071831,
+    "tier": "insufficient",
+    "reasons": [
+      "conflicting_sensor_evidence: barometric deviation uncorroborated by peers"
+    ]
+  },
+  {
+    "flight_id": "xec3084_1793726976",
+    "icao24": "xec3084",
+    "start_ts": 1793726976,
+    "end_ts": 1793729046,
+    "tier": "insufficient",
+    "reasons": [
+      "conflicting_sensor_evidence: barometric deviation uncorroborated by peers"
+    ]
+  },
+  {
+    "flight_id": "x2490b1_1794078000",
+    "icao24": "x2490b1",
+    "start_ts": 1794078000,
+    "end_ts": 1794080070,
+    "tier": "no_alert",
+    "reasons": [
+      "corroborated_nominal_integrity_multi_check"
+    ]
+  },
+  {
+    "flight_id": "x6a42c7_1794078000",
+    "icao24": "x6a42c7",
+    "start_ts": 1794078000,
+    "end_ts": 1794080070,
+    "tier": "no_alert",
+    "reasons": [
+      "corroborated_nominal_integrity_multi_check"
+    ]
+  },
+  {
+    "flight_id": "x9a59ae_1794078000",
+    "icao24": "x9a59ae",
+    "start_ts": 1794078000,
+    "end_ts": 1794080070,
+    "tier": "no_alert",
+    "reasons": [
+      "corroborated_nominal_integrity_multi_check"
+    ]
+  },
+  {
+    "flight_id": "xc4588a_1794078000",
+    "icao24": "xc4588a",
+    "start_ts": 1794078000,
+    "end_ts": 1794080070,
+    "tier": "no_alert",
+    "reasons": [
+      "corroborated_nominal_integrity_multi_check"
+    ]
+  },
+  {
+    "flight_id": "x2aca71_1794078000",
+    "icao24": "x2aca71",
+    "start_ts": 1794078000,
+    "end_ts": 1794080100,
+    "tier": "no_alert",
+    "reasons": [
+      "corroborated_nominal_integrity_multi_check"
+    ]
+  },
+  {
+    "flight_id": "xafadde_1794078000",
+    "icao24": "xafadde",
+    "start_ts": 1794078000,
+    "end_ts": 1794080070,
+    "tier": "no_alert",
+    "reasons": [
+      "corroborated_nominal_integrity_multi_check"
+    ]
+  },
+  {
+    "flight_id": "xd3adf2_1794078000",
+    "icao24": "xd3adf2",
+    "start_ts": 1794078000,
+    "end_ts": 1794080070,
+    "tier": "no_alert",
+    "reasons": [
+      "corroborated_nominal_integrity_multi_check"
+    ]
+  },
+  {
+    "flight_id": "x9ee64b_1794078000",
+    "icao24": "x9ee64b",
+    "start_ts": 1794078000,
+    "end_ts": 1794080130,
+    "tier": "no_alert",
+    "reasons": [
+      "corroborated_nominal_integrity_multi_check"
+    ]
+  }
+]

@@ -1,0 +1,75 @@
+{
+  "tag": "v0.3.2-verified",
+  "active_dataset": "benchmark",
+  "dataset_fingerprint": {
+    "tag": "v0.3.2-verified",
+    "name": "Frozen Benchmark Dataset",
+    "seed": "3001-3003 (Pooled Clean)",
+    "flights": 18000,
+    "n_clean": 13410,
+    "n_spoof": 2729,
+    "n_jam": 1861,
+    "config_hash": "b6011043368eca73",
+    "primary_unit": "scheduled leg",
+    "secondary_unit": "continuous flight track (5,225 legs merged)"
+  },
+  "primary_unit": "scheduled leg",
+  "tier_distribution": {
+    "no_alert": {
+      "count": 14654,
+      "share_pct": 81.41,
+      "description": "Nominal trajectory; consistent barometric altimetry"
+    },
+    "flagged_altitude_inconsistency": {
+      "count": 1485,
+      "share_pct": 8.25,
+      "description": "Check (a) altitude discrepancy exceeded; cockpit advisory warranted"
+    },
+    "jamming_degraded": {
+      "count": 1861,
+      "share_pct": 10.34,
+      "description": "Degraded GPS interference environment; caution advisory for position drift"
+    },
+    "insufficient": {
+      "count": 0,
+      "share_pct": 0.0,
+      "description": "Insufficient telemetry points (<10) or checks (<2); system abstains"
+    }
+  },
+  "secondary_unit": {
+    "unit": "continuous flight track (merged segment)",
+    "count": 5225,
+    "note": "Consecutive timetable legs stitched into continuous multi-leg airframe tracks"
+  },
+  "headline_box": {
+    "title": "What this can and cannot do",
+    "bullets": [
+      "Altitude-consistency detector only: evaluates barometric vs geometric altimetry discrepancy (Check a).",
+      "Horizontal spoofing 0% recall: lateral track manipulation is not detected by altitude consistency.",
+      "Multi-aircraft consensus inactive: Check (d) is disabled in v0.3 and does not contribute to detection.",
+      "All results synthetic: benchmark evaluated on simulated ADS-B perturbations, not real-world air traffic."
+    ]
+  },
+  "links": [
+    {
+      "id": "map",
+      "label": "Interference Map",
+      "path": "/map"
+    },
+    {
+      "id": "flight-detail",
+      "label": "Flight Detail",
+      "path": "/flight-detail"
+    },
+    {
+      "id": "sar",
+      "label": "SAR Metrics",
+      "path": "/sar"
+    },
+    {
+      "id": "limitations",
+      "label": "Limitations",
+      "path": "/limitations"
+    }
+  ]
+}

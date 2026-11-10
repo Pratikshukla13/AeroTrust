@@ -1,0 +1,90 @@
+{
+  "tag": "v0.3.2-verified",
+  "dataset_fingerprint": {
+    "tag": "v0.3.2-verified",
+    "name": "Frozen Benchmark Dataset",
+    "seed": "3001-3003 (Pooled Clean)",
+    "flights": 18000,
+    "n_clean": 13410,
+    "n_spoof": 2729,
+    "n_jam": 1861,
+    "config_hash": "b6011043368eca73",
+    "primary_unit": "scheduled leg",
+    "secondary_unit": "continuous flight track (5,225 legs merged)"
+  },
+  "bullets": [
+    "Altitude-consistency detector only: evaluates barometric vs geometric altimetry discrepancy (Check a).",
+    "Horizontal spoofing 0% recall: lateral track manipulation is not detected by altitude consistency.",
+    "Multi-aircraft consensus inactive: Check (d) is disabled in v0.3 and does not contribute to detection.",
+    "All results synthetic: benchmark evaluated on simulated ADS-B perturbations, not real-world air traffic.",
+    "Abstention exercised only in the labelled rule-trigger demo and never in the benchmark: 0.0% of benchmark flights hit an abstention rule because simulated commercial airway tracks have N >= 68 points and dual valid checks.",
+    "False alarms driven by the generator's assumed barometric-fault rate (2% per point, uniform 60 to 180 m): produces ~35 clean false alarms per 3,650 flights when residuals exceed 120.0m.",
+    "Radiation tables are illustrative exposure context, not a cause: Airbus stated that intense solar radiation may corrupt data critical to flight controls. Independent experts have questioned whether the radiation level on that date was unusual. Axis B is exposure context, not a cause.",
+    "Threat base-rate impact: detector precision drops sharply in peacetime low-prevalence airspaces due to the false alarm base rate."
+  ],
+  "base_rate_table": [
+    {
+      "scenario": "0.01% (Normal Peacetime)",
+      "prevalence_pct": 0.01,
+      "precision_pct": 0.2,
+      "ci_low": 0.2,
+      "ci_high": 0.3,
+      "false_alarms_per_10k": 116.9,
+      "guidance": "Corroboration required (do not trigger tactical cockpit warnings without independent sensor)"
+    },
+    {
+      "scenario": "0.10% (Border Zone)",
+      "prevalence_pct": 0.1,
+      "precision_pct": 2.3,
+      "ci_low": 1.8,
+      "ci_high": 2.8,
+      "false_alarms_per_10k": 116.8,
+      "guidance": "Corroboration required (do not trigger tactical cockpit warnings without independent sensor)"
+    },
+    {
+      "scenario": "1.00% (High-Tension Zone)",
+      "prevalence_pct": 1.0,
+      "precision_pct": 18.9,
+      "ci_low": 15.8,
+      "ci_high": 22.4,
+      "false_alarms_per_10k": 115.7,
+      "guidance": "Advisory alerting (surface as degraded confidence in flight management system)"
+    },
+    {
+      "scenario": "5.00% (Contested Airspace)",
+      "prevalence_pct": 5.0,
+      "precision_pct": 54.9,
+      "ci_low": 49.5,
+      "ci_high": 60.1,
+      "false_alarms_per_10k": 111.0,
+      "guidance": "Advisory alerting (surface as degraded confidence in flight management system)"
+    },
+    {
+      "scenario": "17.47% (Benchmark Test Base Rate)",
+      "prevalence_pct": 17.47,
+      "precision_pct": 83.0,
+      "ci_low": 79.7,
+      "ci_high": 85.8,
+      "false_alarms_per_10k": 96.5,
+      "guidance": "High-confidence tactical alerting (direct avoidance advisory warranted)"
+    },
+    {
+      "scenario": "23.00% (High-Intensity Airspace)",
+      "prevalence_pct": 23.0,
+      "precision_pct": 87.3,
+      "ci_low": 84.7,
+      "ci_high": 89.5,
+      "false_alarms_per_10k": 90.0,
+      "guidance": "High-confidence tactical alerting (direct avoidance advisory warranted)"
+    },
+    {
+      "scenario": "50.00% (Active Electronic Warfare)",
+      "prevalence_pct": 50.0,
+      "precision_pct": 95.8,
+      "ci_low": 94.9,
+      "ci_high": 96.6,
+      "false_alarms_per_10k": 58.4,
+      "guidance": "High-confidence tactical alerting (direct avoidance advisory warranted)"
+    }
+  ]
+}
