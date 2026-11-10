@@ -150,6 +150,7 @@ async function run() {
     // 3. Generate One-Page PDF: "AeroTrust at a glance"
     console.log('\n--- Generating One-Page PDF: AeroTrust at a glance ---')
     const pdfPage = await browser.newPage()
+    const claimsTableHtml = fs.readFileSync(path.join(docsDir, 'generated', 'claims_table.html'), 'utf-8')
     const pdfHtml = `
 <!DOCTYPE html>
 <html>
@@ -255,7 +256,7 @@ async function run() {
   table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 7.5pt;
+    font-size: 7pt;
     margin-top: 4px;
   }
   th {
@@ -302,7 +303,7 @@ async function run() {
   </div>
   <div style="text-align: right;">
     <div class="badge-tag">Eval Tag: v0.3.2-verified</div>
-    <div class="badge-tag" style="margin-top: 2px;">App Tag: v1.0.3-demo</div>
+    <div class="badge-tag" style="margin-top: 2px;">App Tag: v1.0.4-demo</div>
   </div>
 </div>
 
@@ -327,7 +328,7 @@ async function run() {
         <li><strong>Interference Clustering:</strong> Aggregates multi-aircraft NIC/NACp/SIL drops into H3 spatial cells for regional jamming detection.</li>
         <li><strong>Evidence-Tiered Output:</strong> Never exposes uncalibrated probabilities or claims flights are &quot;safe&quot;; uses standardized evidence tiers.</li>
         <li><strong>Privacy-Preserving SAR:</strong> Evaluates Silent Acceptance Rate with cell suppression for cohorts where N &lt; 30.</li>
-        <li><strong>Incident Scenario Calculator:</strong> Models fleet scoping delay sensitivity under airworthiness directives using transparent parameters.</li>
+        <li><strong>Incident Scenario Calculator:</strong> Scenario arithmetic over public cases: aircraft-days held; money appears only if you enter a value.</li>
       </ul>
     </div>
     <div class="box-cannot">
@@ -344,57 +345,7 @@ async function run() {
   </div>
 </div>
 
-<div class="section">
-  <div class="section-title">3. Verified Benchmark Evidence &amp; Performance Metrics</div>
-  <table>
-    <thead>
-      <tr>
-        <th>Metric / Capability</th>
-        <th>Verified Result</th>
-        <th>Baseline &amp; Operational Evaluation Scope</th>
-        <th>Tag &amp; Status</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><strong>Spoofing Precision (Check a)</strong></td>
-        <td><strong>83.0%</strong> (79.7% &ndash; 85.8%)</td>
-        <td>Test Base Rate = 17.47% (5,225 segmented tracks)</td>
-        <td><code>v0.3.2-verified</code> (Frozen)</td>
-      </tr>
-      <tr>
-        <td><strong>Spoofing Recall (Check a)</strong></td>
-        <td><strong>40.8%</strong> (37.6% &ndash; 44.0%)</td>
-        <td>Altimetry consistency detector (|Geo - Baro| &gt; 120 m)</td>
-        <td><code>v0.3.2-verified</code> (Frozen)</td>
-      </tr>
-      <tr>
-        <td><strong>Horizontal Spoofing Recall</strong></td>
-        <td><strong>0.0%</strong></td>
-        <td>Lateral displacements produce 0 altitude residual</td>
-        <td><code>v0.3.2-verified</code> (Known Limit)</td>
-      </tr>
-      <tr>
-        <td><strong>Clean False Positives (Legs)</strong></td>
-        <td><strong>42 to 52</strong> per seed</td>
-        <td>~35-36 baro-bias draws + 7-16 boundary leg splits</td>
-        <td><code>v0.3.2-verified</code> (Documented)</td>
-      </tr>
-      <tr>
-        <td><strong>Multi-Aircraft Consensus</strong></td>
-        <td><strong>0.0% (Inactive)</strong></td>
-        <td>Check (d) disabled; needs re-validation in v0.4</td>
-        <td><code>v0.3.1-claims</code> (Disabled)</td>
-      </tr>
-      <tr>
-        <td><strong>SAR Suppression Threshold</strong></td>
-        <td><strong>N &ge; 30 enforced</strong></td>
-        <td>Sub-threshold cells suppressed; no marginal leakage</td>
-        <td><code>v0.3.2-verified</code> (Enforced)</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+${claimsTableHtml}
 
 <div class="section">
   <div class="section-title">4. Plain-Language Disclaimers &amp; Known Weaknesses</div>
@@ -407,7 +358,7 @@ async function run() {
 </div>
 
 <div class="footer">
-  <div>Eval Tag: v0.3.2-verified &bull; App Tag: v1.0.3-demo &bull; Independent personal project, not affiliated with or endorsed by Airbus. Uses public information only.</div>
+  <div>Eval Tag: v0.3.2-verified &bull; App Tag: v1.0.4-demo &bull; Independent personal project, not affiliated with or endorsed by Airbus. Uses public information only.</div>
   <div>Page 1 of 1</div>
 </div>
 

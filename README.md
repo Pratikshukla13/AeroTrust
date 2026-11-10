@@ -1,6 +1,6 @@
 # AeroTrust: Avionics Telemetry Integrity Observatory
 
-**Evaluation Tag**: `v0.3.2-verified` | **App Tag**: `v1.0.3-demo`
+**Evaluation Tag**: `v0.3.2-verified` | **App Tag**: `v1.0.4-demo`
 
 > **Disclaimer**: Independent personal project, not affiliated with or endorsed by Airbus. Uses public information only.
 
@@ -17,7 +17,7 @@ AeroTrust is an avionics data-integrity observatory designed to evaluate aircraf
 * **Jamming Environment Mapping**: Aggregates multi-aircraft ADS-B radio-frequency degradation indicators (NIC, NACp, SIL drops) into spatial H3 hexagons to map interference corridors.
 * **Evidence-Tiered Scoring**: Classifies telemetry into four strict operational tiers (`no_alert`, `flagged_altitude_inconsistency`, `jamming_degraded`, `insufficient`) without presenting uncalibrated model probabilities as ground truth.
 * **Privacy-Preserving SAR Auditing**: Reports Silent Acceptance Rate ($\hat{\text{SAR}}$) metrics across aircraft families and geographic regions under strict minimum cohort thresholds ($N \ge 30$) with cell suppression.
-* **Scoping Cost Sensitivity Modeling**: Provides a transparent calculator to model the financial holding cost of delayed fleet scoping during airworthiness directives using user-verified parameters.
+* Scenario arithmetic over public cases: aircraft-days held; money appears only if you enter a value.
 
 ### What this CANNOT do:
 * **Detect Horizontal / Lateral Spoofing**: Produces **0.0% recall** on lateral track offsets or waypoint substitutions, as only vertical altimetry consistency is active in v0.3.
@@ -79,7 +79,7 @@ flowchart TD
         UI_MAP["Interference Map<br/>(3D Globe & H3 Interference Hexagons)"]
         UI_FLIGHT["Flight Detail Inspector<br/>(Check Breakdown & Altimetry Plot)"]
         UI_SAR["SAR Privacy Auditor<br/>(Family & Regional Aggregates)"]
-        UI_INCIDENT["Incident Scenario Calculator<br/>(Directive Scoping Costs)"]
+        UI_INCIDENT["Incident Scenario Calculator<br/>(Directive Days & Arithmetic)"]
     end
 
     ADS_B --> CHECK_A & CHECK_C & ABSTAIN
@@ -97,15 +97,14 @@ flowchart TD
 
 ## Claims and Evidence
 
-| Claim | Verified Metric | Baseline / Context | Frozen Tag | Supporting Artifact / Report |
-| :--- | :---: | :---: | :---: | :--- |
-| **Altitude Spoofing Precision** | **83.0%** (79.7%–85.8%) | Test Base Rate = 17.47% ($N=5,225$) | `v0.3.2-verified` | [`docs/INJECTION_REPORT.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/INJECTION_REPORT.md#2-multi-level-performance-benchmarks) |
-| **Altitude Spoofing Recall** | **40.8%** (37.6%–44.0%) | Check (a) vertical discrepancy | `v0.3.2-verified` | [`docs/INJECTION_REPORT.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/INJECTION_REPORT.md#2-multi-level-performance-benchmarks) |
-| **Horizontal Spoofing Recall** | **0.0%** | Lateral manipulation undetectable | `v0.3.2-verified` | [`docs/INJECTION_REPORT.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/INJECTION_REPORT.md#horizontal-spoofing-recall) |
-| **Clean False Positives (Leg-Level)**| **42 to 52** per seed | $\approx 35\text{--}36$ baro bias + $7\text{--}16$ boundary | `v0.3.2-verified` | [`docs/INJECTION_REPORT.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/INJECTION_REPORT.md#leg-level-vs-segment-level) |
-| **Multi-Aircraft Consensus** | **Inactive** (0% contribution) | Disabled in v0.3 release | `v0.3.1-claims` | [`docs/INJECTION_REPORT.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/INJECTION_REPORT.md#naming--consensus-notice) |
-| **SAR Privacy Suppression** | **$N \ge 30$** strictly enforced | Marginal & family views masked | `v0.3.2-verified` | [`backend/tests/test_sar_privacy.py`](file:///c:/Users/ASus/Desktop/AeroTrust/backend/tests/test_sar_privacy.py) |
-| **Incident Presets Veracity** | **Needs Verification** | Primary URLs null; status unchecked | `v0.3.4-incidents` | [`data/incident_cases.json`](file:///c:/Users/ASus/Desktop/AeroTrust/data/incident_cases.json) |
+| Claim | Reported value (synthetic data) | Unit and seeds | Source table |
+| :--- | :--- | :--- | :--- |
+| **Recall on all spoofed legs (pooled)** | 26.98% ([25.77%, 28.23%]) | Scheduled flight legs, pooled seeds 3001–3003 (N = 5,014 spoofed legs / 18,000 legs) | [`docs/generated/base_rate_honesty_table.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/generated/base_rate_honesty_table.md) & [`leg_level_metrics.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/generated/leg_level_metrics.md) |
+| **Recall by attack type** | Altitude offset: 37.7%–51.6%; Combined: 34.0%–43.5%; Horizontal offset: 0.0%; Horizontal drift: 0.0% (Note: 40.8% [37.6%, 44.0%] was the altitude-attack-only figure from dev/test seeds 1337/2024) | Scheduled flight legs per attack subtype, seeds 3001, 3002, 3003 | [`docs/generated/event_type_honesty_table.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/generated/event_type_honesty_table.md) |
+| **Observed leg-level precision per seed** | Seed 3001: 90.1% (TP=401, FP=44); Seed 3002: 91.6% (TP=482, FP=44); Seed 3003: 91.4% (TP=470, FP=44) at benchmark attack share 26.6%–29.4% (1,595–1,763 spoofed legs / 6,001 legs per seed) | Scheduled flight legs per seed, unpooled | [`docs/generated/leg_level_metrics.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/generated/leg_level_metrics.md) |
+| **Expected precision at assumed threat prevalence (derived, assumed prevalence)** | p=0.01%: 0.2% ([0.2%, 0.3%]); p=0.1%: 2.3% ([1.8%, 2.8%]); p=1%: 18.9% ([15.8%, 22.4%]); p=5%: 54.9% ([49.5%, 60.1%]); p=17.47%: 83.0% ([79.7%, 85.8%]) (Derived via Bayes rule from pooled TPR 26.98% and clean FPR 1.17%; 83.0% belongs here) | Derived via Bayes rule over scheduled flight legs (pooled seeds 3001–3003) | [`docs/generated/base_rate_honesty_table.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/generated/base_rate_honesty_table.md) |
+| **Clean false positives per seed (v0.3.2 reproduced counts)** | 44, 44, 44 per seed (superseded '42 to 52' range removed). Breakdown: Seed 3001: 35 baro drift, 8 boundary truncation, 1 jamming; Seed 3002: 35 baro drift, 8 boundary truncation, 1 jamming; Seed 3003: 36 baro drift, 8 boundary truncation, 0 jamming | Clean scheduled flight legs per seed (TN: 4,193, 4,361, 4,300 across 6,001 legs per seed) | [`docs/generated/fp_leg_audit_table.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/generated/fp_leg_audit_table.md) |
+| **Suppression and inactive/demo capabilities** | SAR suppression: N >= 30 strictly enforced (20/24 regional cells masked); Horizontal recall: 0.0%; Consensus: Inactive (0% contribution, disabled in v0.3); Abstention: 0.0% on benchmark seeds, exercised only in demo (62.5%, 125/200) | Regional/family cohorts and demo flights (seeds 3001–3003, demo seed 9999) | [`docs/generated/sar_cell_suppression_table.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/generated/sar_cell_suppression_table.md) & [`abstention_demo_table.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/generated/abstention_demo_table.md) |
 
 ---
 
@@ -124,7 +123,7 @@ flowchart TD
 
 ## License & Attributions
 
-* **Evaluation Tag**: `v0.3.2-verified` | **App Tag**: `v1.0.3-demo`
+* **Evaluation Tag**: `v0.3.2-verified` | **App Tag**: `v1.0.4-demo`
 * **Disclaimer**: Independent personal project, not affiliated with or endorsed by Airbus. Uses public information only.
 * **License**: [MIT License](file:///c:/Users/ASus/Desktop/AeroTrust/LICENSE)
 * **Attributions**: Full catalog of public datasets, textures, and open-source libraries available in [`docs/ATTRIBUTIONS.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/ATTRIBUTIONS.md).

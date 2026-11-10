@@ -1,0 +1,51 @@
+<div class="section">
+  <div class="section-title">3. Benchmark results (synthetic data)</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 24%;">Claim</th>
+        <th style="width: 36%;">Reported value</th>
+        <th style="width: 24%;">Unit and seeds</th>
+        <th style="width: 16%;">Source table</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Recall on all spoofed legs (pooled)</strong></td>
+        <td>26.98% ([25.77%, 28.23%])</td>
+        <td>Scheduled flight legs, pooled seeds 3001–3003 (N = 5,014 spoofed legs / 18,000 legs)</td>
+        <td><code>docs/generated/base_rate_honesty_table.md & leg_level_metrics.md</code></td>
+      </tr>
+      <tr>
+        <td><strong>Recall by attack type</strong></td>
+        <td>Altitude offset: 37.7%–51.6%; Combined: 34.0%–43.5%; Horizontal offset: 0.0%; Horizontal drift: 0.0% (Note: 40.8% [37.6%, 44.0%] was the altitude-attack-only figure from dev/test seeds 1337/2024)</td>
+        <td>Scheduled flight legs per attack subtype, seeds 3001, 3002, 3003</td>
+        <td><code>docs/generated/event_type_honesty_table.md</code></td>
+      </tr>
+      <tr>
+        <td><strong>Observed leg-level precision per seed</strong></td>
+        <td>Seed 3001: 90.1% (TP=401, FP=44); Seed 3002: 91.6% (TP=482, FP=44); Seed 3003: 91.4% (TP=470, FP=44) at benchmark attack share 26.6%–29.4% (1,595–1,763 spoofed legs / 6,001 legs per seed)</td>
+        <td>Scheduled flight legs per seed, unpooled</td>
+        <td><code>docs/generated/leg_level_metrics.md</code></td>
+      </tr>
+      <tr>
+        <td><strong>Expected precision at assumed threat prevalence (derived, assumed prevalence)</strong></td>
+        <td>p=0.01%: 0.2% ([0.2%, 0.3%]); p=0.1%: 2.3% ([1.8%, 2.8%]); p=1%: 18.9% ([15.8%, 22.4%]); p=5%: 54.9% ([49.5%, 60.1%]); p=17.47%: 83.0% ([79.7%, 85.8%]) (Derived via Bayes rule from pooled TPR 26.98% and clean FPR 1.17%; 83.0% belongs here)</td>
+        <td>Derived via Bayes rule over scheduled flight legs (pooled seeds 3001–3003)</td>
+        <td><code>docs/generated/base_rate_honesty_table.md</code></td>
+      </tr>
+      <tr>
+        <td><strong>Clean false positives per seed (v0.3.2 reproduced counts)</strong></td>
+        <td>44, 44, 44 per seed (superseded '42 to 52' range removed). Breakdown: Seed 3001: 35 baro drift, 8 boundary truncation, 1 jamming; Seed 3002: 35 baro drift, 8 boundary truncation, 1 jamming; Seed 3003: 36 baro drift, 8 boundary truncation, 0 jamming</td>
+        <td>Clean scheduled flight legs per seed (TN: 4,193, 4,361, 4,300 across 6,001 legs per seed)</td>
+        <td><code>docs/generated/fp_leg_audit_table.md</code></td>
+      </tr>
+      <tr>
+        <td><strong>Suppression and inactive/demo capabilities</strong></td>
+        <td>SAR suppression: N >= 30 strictly enforced (20/24 regional cells masked); Horizontal recall: 0.0%; Consensus: Inactive (0% contribution, disabled in v0.3); Abstention: 0.0% on benchmark seeds, exercised only in demo (62.5%, 125/200)</td>
+        <td>Regional/family cohorts and demo flights (seeds 3001–3003, demo seed 9999)</td>
+        <td><code>docs/generated/sar_cell_suppression_table.md & abstention_demo_table.md</code></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
