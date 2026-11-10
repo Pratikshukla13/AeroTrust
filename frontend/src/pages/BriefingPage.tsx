@@ -8,7 +8,7 @@ export default function BriefingPage() {
           Autonomous Observatory Briefing
         </h2>
         <p style={{ margin: 0, fontSize: 'var(--text-sm)', color: '#94a3b8' }}>
-          Executive synthesis of 24h interference events and radiation exposure with 100% deterministic number verification.
+          Executive synthesis of 24h interference events and radiation exposure context with 100% deterministic number verification.
         </p>
       </div>
 

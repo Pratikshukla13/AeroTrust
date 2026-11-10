@@ -18,24 +18,27 @@ export interface DatedEvent {
   description: string
   source_url?: string | null
   source_type?: string | null
+  url_status?: 'unchecked' | 'verified by user'
 }
 
 export interface SourceItem {
-  url: string
+  url?: string | null
   title: string
   source_type: string
   fact_referenced: string
+  url_status?: 'unchecked' | 'verified by user'
 }
 
 export interface FleetBreakdown {
   name: string
-  source_url: string
+  source_url?: string | null
   source_type: string
   in_service?: number | null
   undelivered_or_production?: number | null
   customer_allocated_or_other?: number | null
   total: number
   notes?: string | null
+  url_status?: 'unchecked' | 'verified by user'
 }
 
 export interface IncidentCase {
@@ -44,15 +47,16 @@ export interface IncidentCase {
   event_date: string | null
   public_statement_date: string | null
   directive_date: string | null
-  directive_status?: 'issued' | 'effective' | 'proposed' | 'final' | null
+  directive_status?: 'issued' | 'effective' | 'proposed' | 'final' | 'none_published_or_unknown' | null
   aircraft_affected_total: number | null
   aircraft_in_service: number | null
   aircraft_undelivered: number | null
   deliveries_context: string | null
   in_service_scope_notes?: string | null
   days_event_to_statement: number | null
-  source_url: string
+  source_url: string | null
   source_type?: string
+  url_status?: 'unchecked' | 'verified by user'
   sources?: SourceItem[]
   dated_events?: DatedEvent[]
   fleet_breakdowns?: FleetBreakdown[]
@@ -68,6 +72,8 @@ export interface IncidentCasePreset {
   baseline_handover_rate_per_month: number | null
   share_recovered_later: number | null
   value_per_aircraft: number | null
+  days_event_to_public_statement?: number | null
+  days_event_to_public_statement_helper?: string | null
   sourced_fields: string[]
 }
 
@@ -85,20 +91,23 @@ const DEFAULT_CASES: IncidentCase[] = [
     deliveries_context: 'About 6,000 aircraft, fewer than 100 remaining on 1 Dec 2025.',
     in_service_scope_notes: null,
     days_event_to_statement: 29,
-    source_url: 'https://ad.easa.europa.eu/ad/2025-XXXX-E',
+    source_url: null,
     source_type: 'regulator',
+    url_status: 'unchecked',
     verification_status: 'needs verification',
     sources: [
       {
-        url: 'https://ad.easa.europa.eu/ad/2025-XXXX-E',
+        url: null,
         title: 'EASA Emergency Airworthiness Directive',
         source_type: 'regulator',
+        url_status: 'unchecked',
         fact_referenced: 'Emergency AD issued 28 Nov 2025 for ~6,000 aircraft; effective date to be confirmed from AD document.',
       },
       {
-        url: 'https://www.airbus.com/en/newsroom/press-releases/2025-11-alert-a320-flight-controls',
+        url: null,
         title: 'Airbus Alert Notification to Operators',
         source_type: 'manufacturer',
+        url_status: 'unchecked',
         fact_referenced: 'Airbus alert issued 28 Nov 2025; stated intense solar radiation may corrupt data critical to flight controls; <100 remaining on 1 Dec 2025.',
       },
     ],
@@ -106,23 +115,26 @@ const DEFAULT_CASES: IncidentCase[] = [
       {
         date: '2025-10-30',
         label: 'Incident Event',
-        description: 'Flight controls data corruption event occurs at cruise altitude. Airbus stated that intense solar radiation may corrupt data critical to flight controls. Independent experts have questioned whether the radiation level on that date was unusual.',
-        source_url: 'https://ad.easa.europa.eu/ad/2025-XXXX-E',
+        description: 'Flight controls data corruption event occurs at cruise altitude. Airbus stated that intense solar radiation may corrupt data critical to flight controls. Independent experts have questioned whether the radiation level on that date was unusual. Axis B is exposure context, not a cause.',
+        source_url: null,
         source_type: 'regulator',
+        url_status: 'unchecked',
       },
       {
         date: '2025-11-28',
         label: 'Airbus Alert & EASA Emergency AD Issued',
         description: 'Airbus alert and EASA emergency directive issued 28 Nov 2025 (effective date to be confirmed from the AD document).',
-        source_url: 'https://ad.easa.europa.eu/ad/2025-XXXX-E',
+        source_url: null,
         source_type: 'regulator',
+        url_status: 'unchecked',
       },
       {
         date: '2025-12-01',
         label: 'Rectification Milestone',
         description: 'Fewer than 100 aircraft remaining out of ~6,000 affected.',
-        source_url: 'https://www.airbus.com/en/newsroom/press-releases/2025-11-alert-a320-flight-controls',
+        source_url: null,
         source_type: 'manufacturer',
+        url_status: 'unchecked',
       },
     ],
     fleet_breakdowns: [],
@@ -140,27 +152,31 @@ const DEFAULT_CASES: IncidentCase[] = [
     deliveries_context: '2025 delivery target cut 820 to 790 on 3 Dec 2025.',
     in_service_scope_notes: null,
     days_event_to_statement: null,
-    source_url: 'https://ad.easa.europa.eu/pad/PAD-2025-XXXX',
+    source_url: null,
     source_type: 'regulator',
+    url_status: 'unchecked',
     verification_status: 'needs verification',
     sources: [
       {
-        url: 'https://ad.easa.europa.eu/pad/PAD-2025-XXXX',
+        url: null,
         title: 'EASA Proposed Airworthiness Directive (PAD)',
         source_type: 'regulator',
+        url_status: 'unchecked',
         fact_referenced: 'EASA PROPOSED directive published 17 Dec 2025 (177 in service, 451 in production); later final directive to be confirmed.',
       },
       {
-        url: 'https://www.airbus.com/en/newsroom/press-releases/2025-12-a320-quality-update',
+        url: null,
         title: 'Airbus Statement on Fuselage Panels',
         source_type: 'manufacturer',
+        url_status: 'unchecked',
         fact_referenced: 'Airbus public statement 2 Dec 2025 confirming 628 in scope; 2025 delivery target cut 820 to 790 on 3 Dec 2025.',
       },
       {
-        url: 'https://www.reuters.com/business/aerospace-defense/airbus-fuselage-panels-breakdown-2025-12',
+        url: null,
         title: 'Reuters Investigation & Fleet Breakdown',
         source_type: 'wire',
-        fact_referenced: 'Reuters-based fleet split of 628 aircraft: 168 in airline service, 245 at Airbus facilities, 215 customer-allocated.',
+        url_status: 'unchecked',
+        fact_referenced: 'Reuters breakdown: 168 in service, 245 on assembly lines (about 100 due for delivery in 2025), 215 in earlier production.',
       },
     ],
     dated_events: [
@@ -168,43 +184,48 @@ const DEFAULT_CASES: IncidentCase[] = [
         date: '2025-12-02',
         label: 'Airbus Public Statement',
         description: 'Airbus public statement confirming 628 aircraft in scope for fuselage panel discrepancy.',
-        source_url: 'https://www.airbus.com/en/newsroom/press-releases/2025-12-a320-quality-update',
+        source_url: null,
         source_type: 'manufacturer',
+        url_status: 'unchecked',
       },
       {
         date: '2025-12-03',
         label: 'Delivery Target Cut',
         description: 'Airbus officially cuts 2025 delivery target from 820 to 790 aircraft.',
-        source_url: 'https://www.airbus.com/en/newsroom/press-releases/2025-12-a320-quality-update',
+        source_url: null,
         source_type: 'manufacturer',
+        url_status: 'unchecked',
       },
       {
         date: '2025-12-17',
         label: 'EASA PROPOSED Directive Published',
         description: 'EASA publishes PROPOSED directive for 628 aircraft (177 in service, 451 in production; later final directive to be confirmed).',
-        source_url: 'https://ad.easa.europa.eu/pad/PAD-2025-XXXX',
+        source_url: null,
         source_type: 'regulator',
+        url_status: 'unchecked',
       },
     ],
     fleet_breakdowns: [
       {
         name: 'EASA Proposed Directive (17 Dec 2025)',
-        source_url: 'https://ad.easa.europa.eu/pad/PAD-2025-XXXX',
+        source_url: null,
         source_type: 'regulator',
+        url_status: 'unchecked',
         in_service: 177,
         undelivered_or_production: 451,
         total: 628,
         notes: 'Official EASA Proposed Directive regulatory scope: 177 in service, 451 in production.',
       },
       {
-        name: 'Reuters Sourced Breakdown (Dec 2025)',
-        source_url: 'https://www.reuters.com/business/aerospace-defense/airbus-fuselage-panels-breakdown-2025-12',
+        name: 'Reuters Sourced Breakdown',
+        source_url: null,
         source_type: 'wire',
+        url_status: 'unchecked',
         in_service: 168,
         undelivered_or_production: 245,
         customer_allocated_or_other: 215,
         total: 628,
-        notes: 'Reuters investigative report split: 168 in service, 245 stored/in production, 215 customer-allocated.',
+        notes: '168 in service, 245 on assembly lines (about 100 due for delivery in 2025), 215 in earlier production.',
       },
     ],
   },
@@ -214,29 +235,33 @@ const DEFAULT_CASES: IncidentCase[] = [
     event_date: null,
     public_statement_date: null,
     directive_date: null,
-    directive_status: null,
+    directive_status: 'none_published_or_unknown',
     aircraft_affected_total: null,
     aircraft_in_service: null,
     aircraft_undelivered: null,
     deliveries_context:
       'Zero deliveries in June and July 2026; 3, 2, 4 in March, April, May; one on 11 Aug 2026; number of aircraft inspected not disclosed; policy to the regulator due mid-November 2026.',
-    in_service_scope_notes: 'conflicting reports, needs verification',
+    in_service_scope_notes:
+      'Reports conflict: one says no retroactive fix is required for in-service aircraft, another says inspections are recommended for aircraft delivered from early 2021 to end of May 2026, with final requirements under discussion with the regulator. Needs verification.',
     days_event_to_statement: null,
-    source_url: 'https://www.airbus.com/en/investors/commercial-aircraft-deliveries-2026',
+    source_url: null,
     source_type: 'manufacturer',
+    url_status: 'unchecked',
     verification_status: 'needs verification',
     sources: [
       {
-        url: 'https://www.airbus.com/en/investors/commercial-aircraft-deliveries-2026',
+        url: null,
         title: 'Airbus Monthly Orders & Deliveries Files (2026)',
         source_type: 'manufacturer',
+        url_status: 'unchecked',
         fact_referenced: 'Official deliveries: March (3), April (2), May (4); June (0), July (0); 11 Aug 2026 (1).',
       },
       {
-        url: 'https://www.easa.europa.eu/en/newsroom-and-events/press-releases/airbus-a330neo-tool-inspection-filing',
-        title: 'EASA Regulatory Filing Notice',
+        url: null,
+        title: 'Regulator Oversight Discussion',
         source_type: 'regulator',
-        fact_referenced: 'Inspection policy to the regulator due mid-November 2026; scope of in-service inspections subject to conflicting reports, needs verification.',
+        url_status: 'unchecked',
+        fact_referenced: 'Inspection policy to the regulator due mid-November 2026; in-service requirements under discussion.',
       },
     ],
     dated_events: [
@@ -244,50 +269,57 @@ const DEFAULT_CASES: IncidentCase[] = [
         date: '2026-03-31',
         label: 'March Deliveries',
         description: '3 A330neo aircraft delivered.',
-        source_url: 'https://www.airbus.com/en/investors/commercial-aircraft-deliveries-2026',
+        source_url: null,
         source_type: 'manufacturer',
+        url_status: 'unchecked',
       },
       {
         date: '2026-04-30',
         label: 'April Deliveries',
         description: '2 A330neo aircraft delivered.',
-        source_url: 'https://www.airbus.com/en/investors/commercial-aircraft-deliveries-2026',
+        source_url: null,
         source_type: 'manufacturer',
+        url_status: 'unchecked',
       },
       {
         date: '2026-05-31',
         label: 'May Deliveries',
         description: '4 A330neo aircraft delivered (total 9 in March–May).',
-        source_url: 'https://www.airbus.com/en/investors/commercial-aircraft-deliveries-2026',
+        source_url: null,
         source_type: 'manufacturer',
+        url_status: 'unchecked',
       },
       {
         date: '2026-06-30',
         label: 'June Delivery Pause',
         description: 'Zero A330neo deliveries during assembly tool inspection pause.',
-        source_url: 'https://www.airbus.com/en/investors/commercial-aircraft-deliveries-2026',
+        source_url: null,
         source_type: 'manufacturer',
+        url_status: 'unchecked',
       },
       {
         date: '2026-07-31',
         label: 'July Delivery Pause',
         description: 'Zero A330neo deliveries during continued tool inspection.',
-        source_url: 'https://www.airbus.com/en/investors/commercial-aircraft-deliveries-2026',
+        source_url: null,
         source_type: 'manufacturer',
+        url_status: 'unchecked',
       },
       {
         date: '2026-08-11',
         label: 'Deliveries Resume',
         description: 'One A330neo delivered on 11 Aug 2026.',
-        source_url: 'https://www.airbus.com/en/investors/commercial-aircraft-deliveries-2026',
+        source_url: null,
         source_type: 'manufacturer',
+        url_status: 'unchecked',
       },
       {
         date: '2026-11-15',
-        label: 'Regulator Filing Milestone',
-        description: 'Policy to the regulator due mid-November 2026.',
-        source_url: 'https://www.easa.europa.eu/en/newsroom-and-events/press-releases/airbus-a330neo-tool-inspection-filing',
+        label: 'Regulator Policy Filing Milestone',
+        description: 'Inspection policy to the regulator due mid-November 2026.',
+        source_url: null,
         source_type: 'regulator',
+        url_status: 'unchecked',
       },
     ],
     fleet_breakdowns: [],
@@ -298,6 +330,7 @@ export default function IncidentClockPage() {
   const [cases, setCases] = useState<IncidentCase[]>(DEFAULT_CASES)
   const [activePreset, setActivePreset] = useState<string | null>(null)
   const [sourcedFields, setSourcedFields] = useState<string[]>([])
+  const [displayOnlyPublicGap, setDisplayOnlyPublicGap] = useState<number | null>(null)
 
   // User-editable inputs (all blank by default unless loaded from sourced preset)
   const [daysToScope, setDaysToScope] = useState<string>('')
@@ -324,13 +357,17 @@ export default function IncidentClockPage() {
   const handleApplyPreset = (presetId: string) => {
     setActivePreset(presetId)
     if (presetId === 'A320-SOLAR-2025') {
-      setDaysToScope('29')
+      // Phase 7.2 rule: Remove days_to_scope = 29 from the preset.
+      // Store it as a separate display-only field that cannot feed the calculator.
+      // The preset leaves days_to_scope empty.
+      setDaysToScope('')
       setInService('')
       setUndelivered('')
       setBaselineRate('')
       setShareRecovered('')
       setValuePerAircraft('')
-      setSourcedFields(['days_to_scope'])
+      setSourcedFields([])
+      setDisplayOnlyPublicGap(29)
     } else if (presetId === 'A320-PANEL-2025') {
       setDaysToScope('')
       setInService('177')
@@ -339,6 +376,7 @@ export default function IncidentClockPage() {
       setShareRecovered('')
       setValuePerAircraft('')
       setSourcedFields(['aircraft_held_in_service', 'aircraft_held_undelivered'])
+      setDisplayOnlyPublicGap(null)
     } else if (presetId === 'A330NEO-TOOL-2026' || presetId === 'A330-TOOL-2026') {
       setDaysToScope('')
       setInService('')
@@ -347,6 +385,7 @@ export default function IncidentClockPage() {
       setShareRecovered('')
       setValuePerAircraft('')
       setSourcedFields([])
+      setDisplayOnlyPublicGap(null)
     } else {
       handleReset()
     }
@@ -361,112 +400,120 @@ export default function IncidentClockPage() {
     setShareRecovered('')
     setValuePerAircraft('')
     setSourcedFields([])
+    setDisplayOnlyPublicGap(null)
   }
 
-  // Reactive calculations
+  // Parse numeric values
   const parsedDays = daysToScope.trim() !== '' ? parseFloat(daysToScope) : null
   const parsedInService = inService.trim() !== '' ? parseFloat(inService) : null
   const parsedUndelivered = undelivered.trim() !== '' ? parseFloat(undelivered) : null
-  const parsedBaselineRate = baselineRate.trim() !== '' ? parseFloat(baselineRate) : null
-  const parsedShareRecovered = shareRecovered.trim() !== '' ? parseFloat(shareRecovered) / 100.0 : null
+  const parsedRate = baselineRate.trim() !== '' ? parseFloat(baselineRate) : null
+  const parsedShare = shareRecovered.trim() !== '' ? parseFloat(shareRecovered) / 100.0 : null
   const parsedValue = valuePerAircraft.trim() !== '' ? parseFloat(valuePerAircraft) : null
 
-  const hasHeld = parsedInService !== null || parsedUndelivered !== null
-  const totalHeld = hasHeld ? (parsedInService || 0) + (parsedUndelivered || 0) : null
+  // Calculations (strict formula enforcement from Phase 7)
+  const calcResults = useMemo(() => {
+    const hasHeld = parsedInService !== null || parsedUndelivered !== null
+    const totalHeld = hasHeld ? (parsedInService || 0) + (parsedUndelivered || 0) : null
 
-  // a. aircraft_days_held = held aircraft x days
-  const aircraftDaysHeld = totalHeld !== null && parsedDays !== null ? totalHeld * parsedDays : null
+    // a. Total Aircraft-Days Held = total held * days
+    const aircraftDaysHeld = totalHeld !== null && parsedDays !== null ? totalHeld * parsedDays : null
 
-  // b. Model A (line stop): handovers_lost = baseline_rate x days / 30, net of recovered share
-  const modelAGross = parsedBaselineRate !== null && parsedDays !== null ? parsedBaselineRate * (parsedDays / 30.0) : null
-  const recFactor = parsedShareRecovered !== null ? 1.0 - parsedShareRecovered : 1.0
-  const modelANet = modelAGross !== null ? modelAGross * recFactor : null
+    // b. Model A (Line Stop): gross = baseline_rate * (days / 30), net = gross * (1 - share_recovered)
+    let modelAGross: number | null = null
+    let modelANet: number | null = null
+    if (parsedRate !== null && parsedDays !== null) {
+      modelAGross = parsedRate * (parsedDays / 30.0)
+      const rec = parsedShare !== null ? parsedShare : 0.0
+      modelANet = modelAGross * (1.0 - rec)
+    }
 
-  // c. Model B (hold of finished aircraft): handover delay in aircraft-days only
-  const modelBAircraftDays =
-    parsedUndelivered !== null && parsedDays !== null
-      ? parsedUndelivered * parsedDays
-      : totalHeld !== null && parsedDays !== null && parsedUndelivered === null
-      ? totalHeld * parsedDays
-      : null
+    // c. Model B (Hold of Finished Aircraft): handover delay in aircraft-days = undelivered * days
+    let modelBAircraftDays: number | null = null
+    if (parsedUndelivered !== null && parsedDays !== null) {
+      modelBAircraftDays = parsedUndelivered * parsedDays
+    } else if (totalHeld !== null && parsedDays !== null && parsedUndelivered === null) {
+      modelBAircraftDays = totalHeld * parsedDays
+    }
 
-  // One-day cost of delay (aircraft-days per day)
-  const oneDayAircraftDays = totalHeld !== null ? totalHeld : null
+    // One-Day Cost of Delay (aircraft-days / day) = 1 day * total held
+    const oneDayAircraftDays = totalHeld !== null ? totalHeld : null
 
-  // Financial figures: ONLY if valuePerAircraft is provided (> 0)
-  const financialImpactTotal = parsedValue !== null && parsedValue > 0 && modelANet !== null ? modelANet * parsedValue : null
-  const oneDayCostMoney =
-    parsedValue !== null && parsedValue > 0 && parsedBaselineRate !== null
-      ? (parsedBaselineRate / 30.0) * recFactor * parsedValue
-      : null
+    // Financial calculations: STRICTLY null if value_per_aircraft is blank
+    let financialImpact: number | null = null
+    let oneDayMoney: number | null = null
+    if (parsedValue !== null) {
+      if (modelANet !== null) {
+        financialImpact = modelANet * parsedValue
+      }
+      if (parsedRate !== null) {
+        const rec = parsedShare !== null ? parsedShare : 0.0
+        const dailyNetLost = (parsedRate / 30.0) * (1.0 - rec)
+        oneDayMoney = dailyNetLost * parsedValue
+      }
+    }
 
-  // Sensitivity table over days (0.5x, 1x, 2x)
-  const sensitivityRows = useMemo(() => {
-    const mults = [
-      { label: '0.5x', factor: 0.5 },
-      { label: '1.0x', factor: 1.0 },
-      { label: '2.0x', factor: 2.0 },
-    ]
-
-    return mults.map(({ label, factor }) => {
-      const sDays = parsedDays !== null ? parsedDays * factor : null
-      const sHeldDays = totalHeld !== null && sDays !== null ? totalHeld * sDays : null
-      const sModelANet =
-        parsedBaselineRate !== null && sDays !== null ? parsedBaselineRate * (sDays / 30.0) * recFactor : null
-      const sModelBDays =
-        parsedUndelivered !== null && sDays !== null
-          ? parsedUndelivered * sDays
-          : totalHeld !== null && sDays !== null && parsedUndelivered === null
-          ? totalHeld * sDays
-          : null
-      const sMoney =
-        parsedValue !== null && parsedValue > 0 && sModelANet !== null ? sModelANet * parsedValue : null
-
+    // Sensitivity Matrix over duration multipliers: 0.5x, 1.0x, 2.0x
+    const sensitivity = [0.5, 1.0, 2.0].map((mult) => {
+      const d = parsedDays !== null ? parsedDays * mult : null
+      const adh = totalHeld !== null && d !== null ? totalHeld * d : null
+      let mANet: number | null = null
+      if (parsedRate !== null && d !== null) {
+        const gross = parsedRate * (d / 30.0)
+        const rec = parsedShare !== null ? parsedShare : 0.0
+        mANet = gross * (1.0 - rec)
+      }
+      let mB: number | null = null
+      if (parsedUndelivered !== null && d !== null) {
+        mB = parsedUndelivered * d
+      } else if (totalHeld !== null && d !== null && parsedUndelivered === null) {
+        mB = totalHeld * d
+      }
+      let fImpact: number | null = null
+      if (parsedValue !== null && mANet !== null) {
+        fImpact = mANet * parsedValue
+      }
       return {
-        label,
-        factor,
-        days: sDays,
-        heldDays: sHeldDays,
-        modelANet: sModelANet,
-        modelBDays: sModelBDays,
-        money: sMoney,
+        multiplier: mult,
+        days: d,
+        aircraftDaysHeld: adh,
+        modelANet: mANet,
+        modelB: mB,
+        financialImpact: fImpact,
       }
     })
-  }, [parsedDays, totalHeld, parsedBaselineRate, recFactor, parsedUndelivered, parsedValue])
 
-  // Helper for unsourced highlight border
-  const getFieldStyle = (fieldName: string) => {
-    const isSourced = sourcedFields.includes(fieldName)
-    if (activePreset && !isSourced) {
-      return {
-        border: '1px dashed #fbbf24',
-        backgroundColor: 'rgba(251, 191, 36, 0.05)',
-      }
-    }
     return {
-      border: '1px solid #334155',
-      backgroundColor: '#0f172a',
+      totalHeld,
+      aircraftDaysHeld,
+      modelAGross,
+      modelANet,
+      modelBAircraftDays,
+      financialImpact,
+      oneDayAircraftDays,
+      oneDayMoney,
+      sensitivity,
     }
-  }
+  }, [parsedDays, parsedInService, parsedUndelivered, parsedRate, parsedShare, parsedValue])
 
-  const formatCurrency = (val: number | null) => {
+  const formatMoney = (val: number | null): string => {
     if (val === null) return '--'
-    if (val >= 1_000_000_000) {
-      return `$${(val / 1_000_000_000).toFixed(2)} B`
+    if (val >= 1e9) {
+      return `$${(val / 1e9).toFixed(2)} B`
     }
-    if (val >= 1_000_000) {
-      return `$${(val / 1_000_000).toFixed(2)} M`
+    if (val >= 1e6) {
+      return `$${(val / 1e6).toFixed(2)} M`
     }
-    return `$${val.toLocaleString()}`
+    return `$${val.toLocaleString(undefined, { maximumFractionDigits: 0 })}`
   }
 
   const getSourceTypeBadge = (sourceType?: string | null) => {
     if (!sourceType) return null
     const map: Record<string, { bg: string; text: string; border: string; label: string }> = {
-      regulator: { bg: 'rgba(56, 189, 248, 0.15)', text: '#38bdf8', border: '#0284c7', label: 'EASA / REGULATOR' },
-      manufacturer: { bg: 'rgba(168, 85, 247, 0.15)', text: '#c084fc', border: '#9333ea', label: 'AIRBUS / OEM' },
-      wire: { bg: 'rgba(251, 146, 60, 0.15)', text: '#fb923c', border: '#ea580c', label: 'WIRE / REUTERS' },
-      media: { bg: 'rgba(148, 163, 184, 0.15)', text: '#cbd5e1', border: '#64748b', label: 'PRESS' },
+      regulator: { bg: 'rgba(56, 189, 248, 0.15)', text: '#38bdf8', border: '#0284c7', label: 'REGULATOR' },
+      manufacturer: { bg: 'rgba(168, 85, 247, 0.15)', text: '#c084fc', border: '#9333ea', label: 'MANUFACTURER' },
+      wire: { bg: 'rgba(251, 191, 36, 0.15)', text: '#fbbf24', border: '#d97706', label: 'NEWS WIRE' },
+      media: { bg: 'rgba(148, 163, 184, 0.15)', text: '#cbd5e1', border: '#475569', label: 'MEDIA' },
     }
     const conf = map[sourceType] || map.media
     return (
@@ -494,8 +541,14 @@ export default function IncidentClockPage() {
       effective: { bg: 'rgba(34, 197, 94, 0.15)', text: '#4ade80', border: '#16a34a', label: 'EFFECTIVE' },
       proposed: { bg: 'rgba(234, 179, 8, 0.15)', text: '#fde047', border: '#ca8a04', label: 'PROPOSED' },
       final: { bg: 'rgba(168, 85, 247, 0.15)', text: '#c084fc', border: '#9333ea', label: 'FINAL' },
+      none_published_or_unknown: {
+        bg: 'rgba(148, 163, 184, 0.15)',
+        text: '#94a3b8',
+        border: '#475569',
+        label: 'NONE PUBLISHED / UNKNOWN',
+      },
     }
-    const conf = map[status] || map.proposed
+    const conf = map[status] || map.none_published_or_unknown
     return (
       <span
         data-testid={`badge-directive-status-${status}`}
@@ -511,6 +564,27 @@ export default function IncidentClockPage() {
         }}
       >
         DIRECTIVE: {conf.label}
+      </span>
+    )
+  }
+
+  const getUrlStatusBadge = (status?: string | null) => {
+    const isVerified = status === 'verified by user'
+    return (
+      <span
+        data-testid={`badge-url-status-${status || 'unchecked'}`}
+        style={{
+          fontSize: '0.625rem',
+          fontWeight: 600,
+          padding: '2px 5px',
+          borderRadius: '3px',
+          backgroundColor: isVerified ? 'rgba(34, 197, 94, 0.15)' : 'rgba(100, 116, 139, 0.2)',
+          color: isVerified ? '#4ade80' : '#94a3b8',
+          border: `1px solid ${isVerified ? '#16a34a' : '#475569'}`,
+          letterSpacing: '0.02em',
+        }}
+      >
+        {status || 'unchecked'}
       </span>
     )
   }
@@ -560,7 +634,7 @@ export default function IncidentClockPage() {
           using public regulatory milestones. All inputs are editable; presets fill only sourced facts.
         </p>
 
-        {/* Phase 7.1 Mandatory Radiation Context Box */}
+        {/* Phase 7.1/7.2 Mandatory Radiation Exposure Context Box */}
         <div
           data-testid="radiation-mandatory-copy"
           style={{
@@ -575,57 +649,58 @@ export default function IncidentClockPage() {
         >
           <ShieldAlert size={18} style={{ color: '#fbbf24', flexShrink: 0, marginTop: '2px' }} aria-hidden="true" />
           <p style={{ margin: 0, fontSize: 'var(--text-xs)', color: '#f8fafc', lineHeight: 1.6 }}>
-            <strong>Radiation Disclosure &amp; Scope:</strong> Airbus stated that intense solar radiation may corrupt
+            <strong>Radiation Exposure Context &amp; Scope:</strong> Airbus stated that intense solar radiation may corrupt
             data critical to flight controls. Independent experts have questioned whether the radiation level on that
             date was unusual. Axis B is exposure context, not a cause.
           </p>
         </div>
       </div>
 
-      {/* 2. Public Seed Cases Grid with Dated Events & Sourced Breakdowns */}
+      {/* 2. Public Case Ground Truth Display */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
           <h3 style={{ margin: 0, fontSize: 'var(--text-base)', fontWeight: 700, color: '#f8fafc' }}>
             Public Incident Ground Truth Cases
           </h3>
           <span style={{ fontSize: 'var(--text-xs)', color: '#94a3b8' }}>
-            All cases tagged &quot;needs verification&quot; until URLs are user-confirmed.
+            All cases tagged "needs verification" until URLs are user-confirmed.
           </span>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '16px' }}>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+            gap: '16px',
+          }}
+        >
           {cases.map((c) => (
             <div
               key={c.case_id}
-              className="glass-card"
+              className="glass-panel"
+              data-testid={`case-card-${c.case_id}`}
               style={{
                 padding: '20px',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
-                gap: '16px',
-                border: '1px solid rgba(148, 163, 184, 0.15)',
+                borderLeft: '4px solid #38bdf8',
               }}
             >
               <div>
-                {/* Header row: Case ID + Badges */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '6px', marginBottom: '8px' }}>
-                  <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#94a3b8' }}>{c.case_id}</span>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
+                  <code style={{ fontSize: 'var(--text-xs)', color: '#38bdf8', fontWeight: 700 }}>{c.case_id}</code>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
                     {getDirectiveStatusBadge(c.directive_status)}
                     <span
                       data-testid={`badge-verification-${c.case_id}`}
                       style={{
                         fontSize: '0.625rem',
                         fontWeight: 700,
+                        textTransform: 'uppercase',
                         padding: '2px 6px',
                         borderRadius: '3px',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.04em',
-                        backgroundColor:
-                          c.verification_status === 'sourced'
-                            ? 'rgba(34, 197, 94, 0.15)'
-                            : 'rgba(251, 191, 36, 0.15)',
+                        backgroundColor: c.verification_status === 'sourced' ? 'rgba(34, 197, 94, 0.15)' : 'rgba(245, 158, 11, 0.15)',
                         color: c.verification_status === 'sourced' ? '#4ade80' : '#fbbf24',
                         border: `1px solid ${c.verification_status === 'sourced' ? '#22c55e' : '#f59e0b'}`,
                       }}
@@ -670,25 +745,27 @@ export default function IncidentClockPage() {
                     </div>
                   )}
                   {c.in_service_scope_notes && (
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
                       <span style={{ color: '#94a3b8' }}>In-Service Scope:</span>
-                      <span style={{ color: '#fbbf24', fontWeight: 600 }}>{c.in_service_scope_notes}</span>
+                      <span style={{ color: '#fbbf24', fontWeight: 600, fontSize: '0.6875rem', lineHeight: 1.4 }}>
+                        {c.in_service_scope_notes}
+                      </span>
                     </div>
                   )}
                   {c.days_event_to_statement !== null && (
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                       <span style={{ color: '#94a3b8' }}>Event-to-Statement Gap:</span>
-                      <span style={{ fontWeight: 700, color: '#38bdf8' }}>{c.days_event_to_statement} days</span>
+                      <span style={{ color: '#38bdf8', fontWeight: 700 }}>{c.days_event_to_statement} days</span>
                     </div>
                   )}
                   {c.deliveries_context && (
-                    <div style={{ marginTop: '4px', padding: '6px 8px', borderRadius: '4px', backgroundColor: 'rgba(30, 41, 59, 0.6)' }}>
-                      <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>{c.deliveries_context}</span>
-                    </div>
+                    <p style={{ margin: '6px 0 0', fontSize: '0.6875rem', color: '#94a3b8', fontStyle: 'italic', lineHeight: 1.4 }}>
+                      {c.deliveries_context}
+                    </p>
                   )}
                 </div>
 
-                {/* Alternate Sourced Fleet Breakdowns (e.g. for A320 Panels) */}
+                {/* Sourced Fleet Breakdowns */}
                 {c.fleet_breakdowns && c.fleet_breakdowns.length > 0 && (
                   <div style={{ marginTop: '12px', borderTop: '1px solid #1e293b', paddingTop: '10px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
@@ -711,15 +788,16 @@ export default function IncidentClockPage() {
                         >
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
                             <strong style={{ color: '#f8fafc' }}>{b.name}</strong>
-                            {getSourceTypeBadge(b.source_type)}
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                              {getSourceTypeBadge(b.source_type)}
+                              {getUrlStatusBadge(b.url_status)}
+                            </div>
                           </div>
-                          <div style={{ color: '#cbd5e1' }}>
-                            {b.in_service !== null && <span>{b.in_service} in service | </span>}
-                            {b.undelivered_or_production !== null && <span>{b.undelivered_or_production} production/undelivered</span>}
-                            {b.customer_allocated_or_other !== null && <span> | {b.customer_allocated_or_other} customer-allocated</span>}
-                            <span> (Total: {b.total})</span>
-                          </div>
-                          {b.notes && <div style={{ fontSize: '0.6875rem', color: '#94a3b8', marginTop: '3px' }}>{b.notes}</div>}
+                          {b.notes && (
+                            <div style={{ fontSize: '0.75rem', color: '#e2e8f0', marginTop: '2px', fontWeight: 500 }}>
+                              {b.notes}
+                            </div>
+                          )}
                         </div>
                       ))}
                     </div>
@@ -729,10 +807,13 @@ export default function IncidentClockPage() {
                 {/* Dated Events Milestone List */}
                 {c.dated_events && c.dated_events.length > 0 && (
                   <div style={{ marginTop: '12px', borderTop: '1px solid #1e293b', paddingTop: '10px' }}>
-                    <span style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase' }}>
-                      Dated Timeline Milestones
-                    </span>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginTop: '6px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                      <Calendar size={13} style={{ color: '#38bdf8' }} aria-hidden="true" />
+                      <span style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase' }}>
+                        Dated Chronology
+                      </span>
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                       {c.dated_events.map((evt, idx) => (
                         <div
                           key={idx}
@@ -749,6 +830,7 @@ export default function IncidentClockPage() {
                             <code style={{ color: '#38bdf8', fontSize: '0.6875rem' }}>{evt.date}</code>
                             <strong style={{ color: '#f8fafc' }}>{evt.label}</strong>
                             {getSourceTypeBadge(evt.source_type)}
+                            {getUrlStatusBadge(evt.url_status)}
                           </div>
                           <span style={{ color: '#cbd5e1', fontSize: '0.6875rem' }}>{evt.description}</span>
                         </div>
@@ -759,7 +841,7 @@ export default function IncidentClockPage() {
               </div>
 
               {/* Sourced URLs Section */}
-              <div style={{ borderTop: '1px solid #1e293b', paddingTop: '10px' }}>
+              <div style={{ borderTop: '1px solid #1e293b', paddingTop: '10px', marginTop: '12px' }}>
                 <div style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#94a3b8', marginBottom: '6px' }}>
                   REGULATORY &amp; PRIMARY SOURCES
                 </div>
@@ -767,8 +849,47 @@ export default function IncidentClockPage() {
                   {c.sources && c.sources.length > 0 ? (
                     c.sources.map((src, idx) => (
                       <div key={idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '6px' }}>
+                        {src.url ? (
+                          <a
+                            href={src.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '4px',
+                              fontSize: 'var(--text-xs)',
+                              color: '#38bdf8',
+                              textDecoration: 'none',
+                              fontWeight: 600,
+                            }}
+                          >
+                            <span>{src.title}</span>
+                            <ExternalLink size={11} aria-hidden="true" />
+                          </a>
+                        ) : (
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <span style={{ fontSize: 'var(--text-xs)', color: '#cbd5e1' }}>{src.title}</span>
+                            <span style={{ color: '#ef4444', fontWeight: 600, fontSize: 'var(--text-xs)' }}>
+                              primary source missing
+                            </span>
+                          </div>
+                        )}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          {getSourceTypeBadge(src.source_type)}
+                          {getUrlStatusBadge(src.url_status)}
+                        </div>
+                      </div>
+                    ))
+                  ) : null}
+
+                  {/* Primary URL display rule */}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '4px' }}>
+                    <span style={{ color: '#94a3b8', fontSize: 'var(--text-xs)' }}>Primary Document:</span>
+                    {c.source_url ? (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                         <a
-                          href={src.url}
+                          href={c.source_url}
                           target="_blank"
                           rel="noopener noreferrer"
                           style={{
@@ -781,31 +902,20 @@ export default function IncidentClockPage() {
                             fontWeight: 600,
                           }}
                         >
-                          <span>{src.title}</span>
+                          <span>Primary Link</span>
                           <ExternalLink size={11} aria-hidden="true" />
                         </a>
-                        {getSourceTypeBadge(src.source_type)}
+                        {getUrlStatusBadge(c.url_status)}
                       </div>
-                    ))
-                  ) : (
-                    <a
-                      href={c.source_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '4px',
-                        fontSize: 'var(--text-xs)',
-                        color: '#38bdf8',
-                        textDecoration: 'none',
-                        fontWeight: 600,
-                      }}
-                    >
-                      <span>Primary Source Document</span>
-                      <ExternalLink size={11} aria-hidden="true" />
-                    </a>
-                  )}
+                    ) : (
+                      <span
+                        data-testid={`primary-source-missing-${c.case_id}`}
+                        style={{ color: '#ef4444', fontWeight: 600, fontSize: 'var(--text-xs)' }}
+                      >
+                        primary source missing
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -901,7 +1011,7 @@ export default function IncidentClockPage() {
                 border: activePreset === 'A320-SOLAR-2025' ? '1px solid #38bdf8' : '1px solid #475569',
               }}
             >
-              Preset: A320 Solar (29 Days)
+              Preset: A320 Solar (Public Gap 29d)
             </button>
             <button
               type="button"
@@ -961,6 +1071,45 @@ export default function IncidentClockPage() {
           </div>
         </div>
 
+        {/* Phase 7.2 Separate Display-Only Field for Public Gap */}
+        {displayOnlyPublicGap !== null && (
+          <div
+            data-testid="public-statement-gap-callout"
+            style={{
+              padding: '12px 16px',
+              borderRadius: '6px',
+              backgroundColor: 'rgba(56, 189, 248, 0.1)',
+              border: '1px solid rgba(56, 189, 248, 0.35)',
+              marginBottom: '16px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '4px',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: 'var(--text-xs)', fontWeight: 700, color: '#38bdf8' }}>
+                Separate Display-Only Field: days_event_to_public_statement = {displayOnlyPublicGap} Days
+              </span>
+              <span
+                style={{
+                  fontSize: '0.6875rem',
+                  padding: '1px 6px',
+                  borderRadius: '4px',
+                  backgroundColor: 'rgba(239, 68, 68, 0.15)',
+                  color: '#fca5a5',
+                  border: '1px solid #ef4444',
+                  fontWeight: 600,
+                }}
+              >
+                Does Not Feed Calculator
+              </span>
+            </div>
+            <p style={{ margin: 0, fontSize: 'var(--text-xs)', color: '#cbd5e1', lineHeight: 1.5 }}>
+              This is the public gap between the incident and Airbus's statement. It is not a hold period and not a scoping time.
+            </p>
+          </div>
+        )}
+
         {/* Inputs Grid */}
         <div
           style={{
@@ -970,44 +1119,57 @@ export default function IncidentClockPage() {
             marginBottom: '24px',
           }}
         >
-          {/* Days to Scope */}
+          {/* 1. Days to Scope */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <label htmlFor="input-days-to-scope" style={{ fontSize: 'var(--text-xs)', fontWeight: 600, color: '#f8fafc' }}>
                 Days to Scope
               </label>
-              {activePreset && !sourcedFields.includes('days_to_scope') && (
-                <span style={{ fontSize: '0.6875rem', color: '#fbbf24', fontWeight: 600 }}>Empty (unsourced)</span>
+              {sourcedFields.includes('days_to_scope') ? (
+                <span style={{ fontSize: '0.625rem', padding: '1px 5px', borderRadius: '3px', backgroundColor: 'rgba(34, 197, 94, 0.15)', color: '#4ade80' }}>
+                  SOURCED
+                </span>
+              ) : (
+                <span style={{ fontSize: '0.625rem', padding: '1px 5px', borderRadius: '3px', backgroundColor: 'rgba(245, 158, 11, 0.15)', color: '#fbbf24' }}>
+                  SCENARIO / UNVERIFIED
+                </span>
               )}
             </div>
             <input
               id="input-days-to-scope"
               data-testid="input-days-to-scope"
               type="number"
-              placeholder="e.g. 29"
+              placeholder="e.g. 30"
               value={daysToScope}
               onChange={(e) => setDaysToScope(e.target.value)}
               style={{
-                width: '100%',
                 padding: '8px 12px',
                 borderRadius: '6px',
+                border: sourcedFields.includes('days_to_scope') ? '1px solid #22c55e' : '1px solid #475569',
+                backgroundColor: 'rgba(15, 23, 42, 0.8)',
                 color: '#f8fafc',
                 fontSize: 'var(--text-sm)',
-                outline: 'none',
-                ...getFieldStyle('days_to_scope'),
               }}
             />
-            <span style={{ fontSize: '0.6875rem', color: '#94a3b8' }}>Elapsed duration of technical or regulatory scoping.</span>
+            <span style={{ fontSize: '0.6875rem', color: '#94a3b8' }}>
+              Duration required to identify and isolate affected aircraft.
+            </span>
           </div>
 
-          {/* Aircraft Held In Service */}
+          {/* 2. Aircraft Held In-Service */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <label htmlFor="input-in-service" style={{ fontSize: 'var(--text-xs)', fontWeight: 600, color: '#f8fafc' }}>
                 Aircraft Held In-Service
               </label>
-              {activePreset && !sourcedFields.includes('aircraft_held_in_service') && (
-                <span style={{ fontSize: '0.6875rem', color: '#fbbf24', fontWeight: 600 }}>Empty (unsourced)</span>
+              {sourcedFields.includes('aircraft_held_in_service') ? (
+                <span style={{ fontSize: '0.625rem', padding: '1px 5px', borderRadius: '3px', backgroundColor: 'rgba(34, 197, 94, 0.15)', color: '#4ade80' }}>
+                  SOURCED
+                </span>
+              ) : (
+                <span style={{ fontSize: '0.625rem', padding: '1px 5px', borderRadius: '3px', backgroundColor: 'rgba(245, 158, 11, 0.15)', color: '#fbbf24' }}>
+                  SCENARIO / UNVERIFIED
+                </span>
               )}
             </div>
             <input
@@ -1018,26 +1180,33 @@ export default function IncidentClockPage() {
               value={inService}
               onChange={(e) => setInService(e.target.value)}
               style={{
-                width: '100%',
                 padding: '8px 12px',
                 borderRadius: '6px',
+                border: sourcedFields.includes('aircraft_held_in_service') ? '1px solid #22c55e' : '1px solid #475569',
+                backgroundColor: 'rgba(15, 23, 42, 0.8)',
                 color: '#f8fafc',
                 fontSize: 'var(--text-sm)',
-                outline: 'none',
-                ...getFieldStyle('aircraft_held_in_service'),
               }}
             />
-            <span style={{ fontSize: '0.6875rem', color: '#94a3b8' }}>Active fleet units undergoing mandatory inspection.</span>
+            <span style={{ fontSize: '0.6875rem', color: '#94a3b8' }}>
+              Delivered aircraft requiring operational hold or inspection.
+            </span>
           </div>
 
-          {/* Aircraft Held Undelivered */}
+          {/* 3. Aircraft Held Undelivered */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <label htmlFor="input-undelivered" style={{ fontSize: 'var(--text-xs)', fontWeight: 600, color: '#f8fafc' }}>
                 Aircraft Held Undelivered
               </label>
-              {activePreset && !sourcedFields.includes('aircraft_held_undelivered') && (
-                <span style={{ fontSize: '0.6875rem', color: '#fbbf24', fontWeight: 600 }}>Empty (unsourced)</span>
+              {sourcedFields.includes('aircraft_held_undelivered') ? (
+                <span style={{ fontSize: '0.625rem', padding: '1px 5px', borderRadius: '3px', backgroundColor: 'rgba(34, 197, 94, 0.15)', color: '#4ade80' }}>
+                  SOURCED
+                </span>
+              ) : (
+                <span style={{ fontSize: '0.625rem', padding: '1px 5px', borderRadius: '3px', backgroundColor: 'rgba(245, 158, 11, 0.15)', color: '#fbbf24' }}>
+                  SCENARIO / UNVERIFIED
+                </span>
               )}
             </div>
             <input
@@ -1048,275 +1217,255 @@ export default function IncidentClockPage() {
               value={undelivered}
               onChange={(e) => setUndelivered(e.target.value)}
               style={{
-                width: '100%',
                 padding: '8px 12px',
                 borderRadius: '6px',
+                border: sourcedFields.includes('aircraft_held_undelivered') ? '1px solid #22c55e' : '1px solid #475569',
+                backgroundColor: 'rgba(15, 23, 42, 0.8)',
                 color: '#f8fafc',
                 fontSize: 'var(--text-sm)',
-                outline: 'none',
-                ...getFieldStyle('aircraft_held_undelivered'),
               }}
             />
-            <span style={{ fontSize: '0.6875rem', color: '#94a3b8' }}>Produced airframes paused before customer handover.</span>
+            <span style={{ fontSize: '0.6875rem', color: '#94a3b8' }}>
+              Finished aircraft paused at delivery center or FAL.
+            </span>
           </div>
 
-          {/* Baseline Handover Rate Per Month (Blank by default) */}
+          {/* 4. Baseline Monthly Handover Rate */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <label htmlFor="input-baseline-rate" style={{ fontSize: 'var(--text-xs)', fontWeight: 600, color: '#f8fafc' }}>
                 Baseline Handover Rate / Month
               </label>
-              <span style={{ fontSize: '0.6875rem', color: '#94a3b8' }}>Optional</span>
+              <span style={{ fontSize: '0.625rem', padding: '1px 5px', borderRadius: '3px', backgroundColor: 'rgba(245, 158, 11, 0.15)', color: '#fbbf24' }}>
+                USER INPUT (OPTIONAL)
+              </span>
             </div>
             <input
               id="input-baseline-rate"
               data-testid="input-baseline-rate"
               type="number"
-              placeholder="Blank by default (e.g. 60)"
+              placeholder="e.g. 60 (Model A)"
               value={baselineRate}
               onChange={(e) => setBaselineRate(e.target.value)}
               style={{
-                width: '100%',
                 padding: '8px 12px',
                 borderRadius: '6px',
-                backgroundColor: '#0f172a',
-                border: '1px solid #334155',
+                border: '1px solid #475569',
+                backgroundColor: 'rgba(15, 23, 42, 0.8)',
                 color: '#f8fafc',
                 fontSize: 'var(--text-sm)',
-                outline: 'none',
               }}
             />
-            <span style={{ fontSize: '0.6875rem', color: '#94a3b8' }}>Expected monthly factory production cadence.</span>
+            <span style={{ fontSize: '0.6875rem', color: '#94a3b8' }}>
+              Normal monthly output required for Model A line-stop impact.
+            </span>
           </div>
 
-          {/* Share Recovered Later (Blank by default) */}
+          {/* 5. Share Recovered Later (%) */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <label htmlFor="input-share-recovered" style={{ fontSize: 'var(--text-xs)', fontWeight: 600, color: '#f8fafc' }}>
                 Share Recovered Later (%)
               </label>
-              <span style={{ fontSize: '0.6875rem', color: '#94a3b8' }}>Optional</span>
+              <span style={{ fontSize: '0.625rem', padding: '1px 5px', borderRadius: '3px', backgroundColor: 'rgba(245, 158, 11, 0.15)', color: '#fbbf24' }}>
+                USER INPUT (OPTIONAL)
+              </span>
             </div>
             <input
               id="input-share-recovered"
               data-testid="input-share-recovered"
               type="number"
-              placeholder="Blank by default (e.g. 20%)"
+              placeholder="e.g. 20 (Model A Net)"
               value={shareRecovered}
               onChange={(e) => setShareRecovered(e.target.value)}
               style={{
-                width: '100%',
                 padding: '8px 12px',
                 borderRadius: '6px',
-                backgroundColor: '#0f172a',
-                border: '1px solid #334155',
+                border: '1px solid #475569',
+                backgroundColor: 'rgba(15, 23, 42, 0.8)',
                 color: '#f8fafc',
                 fontSize: 'var(--text-sm)',
-                outline: 'none',
               }}
             />
-            <span style={{ fontSize: '0.6875rem', color: '#94a3b8' }}>Fraction of delayed deliveries recouped via post-incident overtime.</span>
+            <span style={{ fontSize: '0.6875rem', color: '#94a3b8' }}>
+              Percentage of delayed handovers caught up in later quarters.
+            </span>
           </div>
 
-          {/* Value Per Aircraft (Blank by default, optional) */}
+          {/* 6. Value per Aircraft ($) */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <label htmlFor="input-value-per-aircraft" style={{ fontSize: 'var(--text-xs)', fontWeight: 600, color: '#f8fafc' }}>
-                Value Per Aircraft ($)
+                Value per Aircraft ($)
               </label>
-              <span style={{ fontSize: '0.6875rem', color: '#94a3b8' }}>Optional (Financial)</span>
+              <span style={{ fontSize: '0.625rem', padding: '1px 5px', borderRadius: '3px', backgroundColor: 'rgba(245, 158, 11, 0.15)', color: '#fbbf24' }}>
+                NO DEFAULT (LEAVE BLANK FOR NO $)
+              </span>
             </div>
             <input
               id="input-value-per-aircraft"
               data-testid="input-value-per-aircraft"
               type="number"
-              placeholder="Blank by default (no money shown)"
+              placeholder="Leave blank for no money figure"
               value={valuePerAircraft}
               onChange={(e) => setValuePerAircraft(e.target.value)}
               style={{
-                width: '100%',
                 padding: '8px 12px',
                 borderRadius: '6px',
-                backgroundColor: '#0f172a',
-                border: '1px solid #334155',
+                border: '1px solid #475569',
+                backgroundColor: 'rgba(15, 23, 42, 0.8)',
                 color: '#f8fafc',
                 fontSize: 'var(--text-sm)',
-                outline: 'none',
               }}
             />
-            <span style={{ fontSize: '0.6875rem', color: '#94a3b8' }}>If left blank, zero financial numbers will be displayed.</span>
+            <span style={{ fontSize: '0.6875rem', color: '#94a3b8' }}>
+              Net delivery value. If blank, no financial figures appear anywhere.
+            </span>
           </div>
         </div>
 
-        {/* 5. Outputs Section */}
-        <h3 style={{ margin: '0 0 14px', fontSize: 'var(--text-base)', fontWeight: 700, color: '#f8fafc' }}>
-          Scenario Outputs &amp; Mathematical Formulations
-        </h3>
+        {/* 5. Four Core Outputs Display */}
+        <div style={{ marginBottom: '24px' }}>
+          <h4 style={{ margin: '0 0 12px', fontSize: 'var(--text-base)', fontWeight: 700, color: '#f8fafc' }}>
+            Modelled Scoping Consequences
+          </h4>
 
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: '16px',
-            marginBottom: '24px',
-          }}
-        >
-          {/* Output A: Aircraft-Days Held */}
           <div
-            data-testid="output-card-aircraft-days-held"
             style={{
-              padding: '18px',
-              borderRadius: '8px',
-              backgroundColor: 'rgba(15, 23, 42, 0.75)',
-              border: '1px solid #334155',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+              gap: '16px',
             }}
           >
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+            {/* Output a: Total Aircraft-Days Held */}
+            <div
+              className="glass-panel"
+              data-testid="card-aircraft-days-held"
+              style={{
+                padding: '16px',
+                borderLeft: '4px solid #38bdf8',
+                backgroundColor: 'rgba(15, 23, 42, 0.7)',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
                 <Layers size={16} style={{ color: '#38bdf8' }} aria-hidden="true" />
-                <span style={{ fontSize: 'var(--text-xs)', fontWeight: 700, color: '#94a3b8' }}>Output (a)</span>
+                <span style={{ fontSize: 'var(--text-xs)', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase' }}>
+                  Output a: Fleet Holding Exposure
+                </span>
               </div>
-              <div style={{ fontSize: 'var(--text-sm)', fontWeight: 600, color: '#cbd5e1' }}>Total Aircraft-Days Held</div>
               <div
                 data-testid="val-aircraft-days-held"
-                style={{ fontSize: '1.75rem', fontWeight: 800, color: '#f8fafc', margin: '8px 0' }}
+                style={{ fontSize: '1.5rem', fontWeight: 800, color: '#f8fafc', margin: '4px 0' }}
               >
-                {aircraftDaysHeld !== null ? `${aircraftDaysHeld.toLocaleString()} days` : '--'}
+                {calcResults.aircraftDaysHeld !== null ? calcResults.aircraftDaysHeld.toLocaleString() : '--'}
               </div>
+              <span style={{ fontSize: 'var(--text-xs)', color: '#38bdf8' }}>Aircraft-Days Held</span>
+              <p style={{ margin: '8px 0 0', fontSize: '0.6875rem', color: '#94a3b8', lineHeight: 1.4 }}>
+                Formula: (aircraft_held_in_service + aircraft_held_undelivered) × days_to_scope
+              </p>
             </div>
-            <div style={{ fontSize: '0.6875rem', color: '#94a3b8', borderTop: '1px solid #1e293b', paddingTop: '8px' }}>
-              <div><strong>Formula:</strong> <code>held_aircraft × days_to_scope</code></div>
-              <div style={{ marginTop: '2px' }}><strong>Assumption:</strong> Assumes all held aircraft remain unavailable for full duration.</div>
-            </div>
-          </div>
 
-          {/* Output B: Model A (Line Stop) */}
-          <div
-            data-testid="output-card-model-a"
-            style={{
-              padding: '18px',
-              borderRadius: '8px',
-              backgroundColor: 'rgba(15, 23, 42, 0.75)',
-              border: '1px solid #334155',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-            }}
-          >
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
-                <TrendingDown size={16} style={{ color: '#f59e0b' }} aria-hidden="true" />
-                <span style={{ fontSize: 'var(--text-xs)', fontWeight: 700, color: '#94a3b8' }}>Output (b): Model A</span>
+            {/* Output b: Model A - Line Stop */}
+            <div
+              className="glass-panel"
+              data-testid="card-model-a"
+              style={{
+                padding: '16px',
+                borderLeft: '4px solid #f59e0b',
+                backgroundColor: 'rgba(15, 23, 42, 0.7)',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                <TrendingDown size={16} style={{ color: '#fbbf24' }} aria-hidden="true" />
+                <span style={{ fontSize: 'var(--text-xs)', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase' }}>
+                  Output b: Model A (Line Stop)
+                </span>
               </div>
-              <div style={{ fontSize: 'var(--text-sm)', fontWeight: 600, color: '#cbd5e1' }}>Handovers Lost (Line Stop)</div>
               <div
                 data-testid="val-model-a-net"
-                style={{ fontSize: '1.75rem', fontWeight: 800, color: '#f59e0b', margin: '8px 0' }}
+                style={{ fontSize: '1.5rem', fontWeight: 800, color: '#f8fafc', margin: '4px 0' }}
               >
-                {modelANet !== null ? `${modelANet.toFixed(1)} aircraft` : '--'}
+                {calcResults.modelANet !== null ? calcResults.modelANet.toFixed(1) : '--'}
               </div>
-              {modelAGross !== null && parsedShareRecovered !== null && (
-                <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginBottom: '4px' }}>
-                  Gross: {modelAGross.toFixed(1)} | Recovered: {(parsedShareRecovered * 100).toFixed(0)}%
-                </div>
-              )}
+              <span style={{ fontSize: 'var(--text-xs)', color: '#fbbf24' }}>
+                Net Handovers Lost {calcResults.modelAGross !== null ? `(Gross: ${calcResults.modelAGross.toFixed(1)})` : ''}
+              </span>
+              <p style={{ margin: '8px 0 0', fontSize: '0.6875rem', color: '#94a3b8', lineHeight: 1.4 }}>
+                Formula: baseline_rate × (days / 30) × (1 - share_recovered)
+              </p>
             </div>
-            <div style={{ fontSize: '0.6875rem', color: '#94a3b8', borderTop: '1px solid #1e293b', paddingTop: '8px' }}>
-              <div><strong>Formula:</strong> <code>(rate × days / 30) × (1 - share_recovered)</code></div>
-              <div style={{ marginTop: '2px' }}><strong>Assumption:</strong> 30 days/month even cadence. Requires baseline rate input.</div>
-            </div>
-          </div>
 
-          {/* Output C: Model B (Hold of Finished Aircraft) */}
-          <div
-            data-testid="output-card-model-b"
-            style={{
-              padding: '18px',
-              borderRadius: '8px',
-              backgroundColor: 'rgba(15, 23, 42, 0.75)',
-              border: '1px solid #334155',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-            }}
-          >
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
-                <Clock size={16} style={{ color: '#a855f7' }} aria-hidden="true" />
-                <span style={{ fontSize: 'var(--text-xs)', fontWeight: 700, color: '#94a3b8' }}>Output (c): Model B</span>
+            {/* Output c: Model B - Finished Aircraft Hold */}
+            <div
+              className="glass-panel"
+              data-testid="card-model-b"
+              style={{
+                padding: '16px',
+                borderLeft: '4px solid #a855f7',
+                backgroundColor: 'rgba(15, 23, 42, 0.7)',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                <Clock size={16} style={{ color: '#c084fc' }} aria-hidden="true" />
+                <span style={{ fontSize: 'var(--text-xs)', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase' }}>
+                  Output c: Model B (Finished Hold)
+                </span>
               </div>
-              <div style={{ fontSize: 'var(--text-sm)', fontWeight: 600, color: '#cbd5e1' }}>Handover Delay (Finished Aircraft)</div>
               <div
                 data-testid="val-model-b-days"
-                style={{ fontSize: '1.75rem', fontWeight: 800, color: '#c084fc', margin: '8px 0' }}
+                style={{ fontSize: '1.5rem', fontWeight: 800, color: '#f8fafc', margin: '4px 0' }}
               >
-                {modelBAircraftDays !== null ? `${modelBAircraftDays.toLocaleString()} a/c-days` : '--'}
+                {calcResults.modelBAircraftDays !== null ? calcResults.modelBAircraftDays.toLocaleString() : '--'}
               </div>
+              <span style={{ fontSize: 'var(--text-xs)', color: '#c084fc' }}>Delivery Delay (Aircraft-Days)</span>
+              <p style={{ margin: '8px 0 0', fontSize: '0.6875rem', color: '#94a3b8', lineHeight: 1.4 }}>
+                Formula: aircraft_held_undelivered × days_to_scope (measured only in aircraft-days)
+              </p>
             </div>
-            <div style={{ fontSize: '0.6875rem', color: '#94a3b8', borderTop: '1px solid #1e293b', paddingTop: '8px' }}>
-              <div><strong>Formula:</strong> <code>aircraft_held_undelivered × days_to_scope</code></div>
-              <div style={{ marginTop: '2px' }}><strong>Assumption:</strong> Delivery slippage measured in aircraft-days only.</div>
-            </div>
-          </div>
 
-          {/* Output D: Financial Impact (Only shown if value_per_aircraft is provided) */}
-          <div
-            data-testid="output-card-financial"
-            style={{
-              padding: '18px',
-              borderRadius: '8px',
-              backgroundColor: 'rgba(15, 23, 42, 0.75)',
-              border: '1px solid #334155',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-            }}
-          >
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
-                <DollarSign size={16} style={{ color: parsedValue ? '#4ade80' : '#94a3b8' }} aria-hidden="true" />
-                <span style={{ fontSize: 'var(--text-xs)', fontWeight: 700, color: '#94a3b8' }}>Output (d): Valuation Impact</span>
+            {/* Output d: Valuation Impact */}
+            <div
+              className="glass-panel"
+              data-testid="card-valuation-impact"
+              style={{
+                padding: '16px',
+                borderLeft: '4px solid #10b981',
+                backgroundColor: 'rgba(15, 23, 42, 0.7)',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                <DollarSign size={16} style={{ color: '#34d399' }} aria-hidden="true" />
+                <span style={{ fontSize: 'var(--text-xs)', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase' }}>
+                  Output d: Valuation Impact
+                </span>
               </div>
-              <div style={{ fontSize: 'var(--text-sm)', fontWeight: 600, color: '#cbd5e1' }}>Total Financial Impact</div>
               <div
                 data-testid="val-financial-impact"
-                style={{
-                  fontSize: '1.75rem',
-                  fontWeight: 800,
-                  color: parsedValue ? '#4ade80' : '#94a3b8',
-                  margin: '8px 0',
-                }}
+                style={{ fontSize: '1.5rem', fontWeight: 800, color: '#f8fafc', margin: '4px 0' }}
               >
-                {formatCurrency(financialImpactTotal)}
+                {formatMoney(calcResults.financialImpact)}
               </div>
-            </div>
-            <div style={{ fontSize: '0.6875rem', color: '#94a3b8', borderTop: '1px solid #1e293b', paddingTop: '8px' }}>
-              <div><strong>Formula:</strong> <code>net_handovers_lost × value_per_aircraft</code></div>
-              <div style={{ marginTop: '2px' }}>
-                {parsedValue ? (
-                  <span style={{ color: '#4ade80' }}>Based on user-entered aircraft valuation.</span>
-                ) : (
-                  <span>No value entered. Per Phase 7 rule, no money figure is shown without user input.</span>
-                )}
-              </div>
+              <span style={{ fontSize: 'var(--text-xs)', color: '#34d399' }}>
+                {calcResults.financialImpact !== null ? 'Model A Financial Slippage' : 'No value per aircraft entered'}
+              </span>
+              <p style={{ margin: '8px 0 0', fontSize: '0.6875rem', color: '#94a3b8', lineHeight: 1.4 }}>
+                If value is blank, no money figure is shown (Phase 7 rule).
+              </p>
             </div>
           </div>
         </div>
 
-        {/* One-Day Cost of Delay Callout */}
+        {/* 6. One-Day Cost of Delay Callout */}
         <div
-          data-testid="callout-one-day-cost"
+          data-testid="panel-one-day-cost"
           style={{
-            padding: '14px 18px',
+            padding: '16px 20px',
             borderRadius: '8px',
-            backgroundColor: 'rgba(30, 41, 59, 0.6)',
-            border: '1px solid #475569',
+            backgroundColor: 'rgba(30, 41, 59, 0.8)',
+            border: '1px solid #334155',
             display: 'flex',
-            alignItems: 'center',
             justifyContent: 'space-between',
+            alignItems: 'center',
             flexWrap: 'wrap',
             gap: '12px',
             marginBottom: '24px',
@@ -1326,25 +1475,39 @@ export default function IncidentClockPage() {
             <span style={{ fontSize: 'var(--text-xs)', fontWeight: 700, color: '#38bdf8', textTransform: 'uppercase' }}>
               One-Day Cost of Delay
             </span>
-            <div style={{ fontSize: 'var(--text-sm)', color: '#f8fafc', marginTop: '2px' }}>
-              Incremental delay added for every additional 24 hours of scoping:
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginTop: '2px' }}>
+              <span
+                data-testid="val-one-day-aircraft-days"
+                style={{ fontSize: '1.25rem', fontWeight: 800, color: '#f8fafc' }}
+              >
+                {calcResults.oneDayAircraftDays !== null
+                  ? `${calcResults.oneDayAircraftDays.toLocaleString()} aircraft-days / day`
+                  : '--'}
+              </span>
+              <span
+                data-testid="val-one-day-money"
+                style={{ fontSize: 'var(--text-sm)', color: '#94a3b8', fontWeight: 600 }}
+              >
+                {calcResults.oneDayMoney !== null
+                  ? `(${formatMoney(calcResults.oneDayMoney)} / day net line loss)`
+                  : '(No money figure: value per aircraft blank)'}
+              </span>
             </div>
           </div>
-          <div style={{ textAlign: 'right' }}>
-            <div data-testid="val-one-day-aircraft-days" style={{ fontSize: '1.25rem', fontWeight: 800, color: '#f8fafc' }}>
-              {oneDayAircraftDays !== null ? `${oneDayAircraftDays.toLocaleString()} aircraft-days / day` : '--'}
-            </div>
-            <div data-testid="val-one-day-money" style={{ fontSize: 'var(--text-xs)', color: parsedValue ? '#4ade80' : '#94a3b8' }}>
-              {parsedValue ? `Financial rate: ${formatCurrency(oneDayCostMoney)} / day` : 'No money figure (enter value per aircraft to view)'}
-            </div>
-          </div>
+          <span style={{ fontSize: 'var(--text-xs)', color: '#94a3b8', maxWidth: '380px', textAlign: 'right' }}>
+            Marginal operational holding exposure added for every additional day spent scoping before containment.
+          </span>
         </div>
 
-        {/* 6. Sensitivity Table over Days (0.5x, 1x, 2x) */}
-        <div>
-          <h4 style={{ margin: '0 0 10px', fontSize: 'var(--text-sm)', fontWeight: 700, color: '#f8fafc' }}>
-            Days to Scope Sensitivity Matrix (0.5x, 1x, 2x)
+        {/* 7. Sensitivity Matrix (0.5x, 1.0x, 2.0x) */}
+        <div style={{ marginBottom: '24px' }}>
+          <h4 style={{ margin: '0 0 10px', fontSize: 'var(--text-base)', fontWeight: 700, color: '#f8fafc' }}>
+            Duration Sensitivity Matrix
           </h4>
+          <p style={{ margin: '0 0 14px', fontSize: 'var(--text-xs)', color: '#94a3b8' }}>
+            Evaluating scoping duration impacts at 0.5x, 1.0x, and 2.0x of the entered baseline duration.
+          </p>
+
           <div style={{ overflowX: 'auto' }}>
             <table
               data-testid="sensitivity-table"
@@ -1356,39 +1519,91 @@ export default function IncidentClockPage() {
               }}
             >
               <thead>
-                <tr style={{ borderBottom: '1px solid #334155', color: '#94a3b8' }}>
+                <tr style={{ borderBottom: '2px solid #334155', color: '#94a3b8' }}>
                   <th style={{ padding: '8px 12px' }}>Multiplier</th>
                   <th style={{ padding: '8px 12px' }}>Scoping Duration</th>
-                  <th style={{ padding: '8px 12px' }}>Aircraft-Days Held</th>
-                  <th style={{ padding: '8px 12px' }}>Model A: Net Lost</th>
-                  <th style={{ padding: '8px 12px' }}>Model B: Handover Delay</th>
-                  <th style={{ padding: '8px 12px' }}>Financial Impact</th>
+                  <th style={{ padding: '8px 12px' }}>Output a: Aircraft-Days Held</th>
+                  <th style={{ padding: '8px 12px' }}>Output b: Model A Net Lost</th>
+                  <th style={{ padding: '8px 12px' }}>Output c: Model B Delay (Aircraft-Days)</th>
+                  <th style={{ padding: '8px 12px' }}>Output d: Financial Impact</th>
                 </tr>
               </thead>
               <tbody>
-                {sensitivityRows.map((row) => (
-                  <tr key={row.label} style={{ borderBottom: '1px solid #1e293b' }}>
-                    <td style={{ padding: '10px 12px', fontWeight: 700, color: '#38bdf8' }}>{row.label}</td>
+                {calcResults.sensitivity.map((row) => (
+                  <tr
+                    key={row.multiplier}
+                    style={{
+                      borderBottom: '1px solid #1e293b',
+                      backgroundColor: row.multiplier === 1.0 ? 'rgba(56, 189, 248, 0.08)' : 'transparent',
+                    }}
+                  >
+                    <td style={{ padding: '10px 12px', fontWeight: 700, color: '#38bdf8' }}>
+                      {row.multiplier.toFixed(1)}x {row.multiplier === 1.0 ? '(Base)' : ''}
+                    </td>
                     <td style={{ padding: '10px 12px', color: '#f8fafc' }}>
                       {row.days !== null ? `${row.days.toFixed(1)} days` : '--'}
                     </td>
-                    <td style={{ padding: '10px 12px', color: '#cbd5e1' }}>
-                      {row.heldDays !== null ? `${row.heldDays.toLocaleString()} a/c-days` : '--'}
+                    <td style={{ padding: '10px 12px', color: '#f8fafc' }}>
+                      {row.aircraftDaysHeld !== null ? row.aircraftDaysHeld.toLocaleString() : '--'}
                     </td>
-                    <td style={{ padding: '10px 12px', color: '#f59e0b' }}>
-                      {row.modelANet !== null ? `${row.modelANet.toFixed(1)} a/c` : '--'}
+                    <td style={{ padding: '10px 12px', color: '#fbbf24' }}>
+                      {row.modelANet !== null ? row.modelANet.toFixed(1) : '--'}
                     </td>
                     <td style={{ padding: '10px 12px', color: '#c084fc' }}>
-                      {row.modelBDays !== null ? `${row.modelBDays.toLocaleString()} a/c-days` : '--'}
+                      {row.modelB !== null ? row.modelB.toLocaleString() : '--'}
                     </td>
-                    <td style={{ padding: '10px 12px', color: row.money ? '#4ade80' : '#94a3b8' }}>
-                      {formatCurrency(row.money)}
+                    <td style={{ padding: '10px 12px', color: '#34d399', fontWeight: 600 }}>
+                      {formatMoney(row.financialImpact)}
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
+        </div>
+
+        {/* 8. Disclosed Formulas and Engineering Assumptions */}
+        <div style={{ borderTop: '1px solid #334155', paddingTop: '16px' }}>
+          <span style={{ fontSize: 'var(--text-xs)', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase' }}>
+            Transparent Formulas &amp; Scenario Assumptions
+          </span>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              gap: '12px',
+              marginTop: '8px',
+            }}
+          >
+            <div style={{ padding: '10px 12px', borderRadius: '4px', backgroundColor: 'rgba(15, 23, 42, 0.6)', border: '1px solid #1e293b' }}>
+              <div style={{ fontSize: '0.6875rem', color: '#38bdf8', fontWeight: 700 }}>Formula a (Aircraft-Days Held)</div>
+              <code style={{ fontSize: 'var(--text-xs)', color: '#cbd5e1' }}>
+                aircraft_days_held = (in_service + undelivered) × days_to_scope
+              </code>
+            </div>
+
+            <div style={{ padding: '10px 12px', borderRadius: '4px', backgroundColor: 'rgba(15, 23, 42, 0.6)', border: '1px solid #1e293b' }}>
+              <div style={{ fontSize: '0.6875rem', color: '#fbbf24', fontWeight: 700 }}>Formula b (Model A Net Lost)</div>
+              <code style={{ fontSize: 'var(--text-xs)', color: '#cbd5e1' }}>
+                rate × (days / 30) × (1 - share_recovered)
+              </code>
+            </div>
+
+            <div style={{ padding: '10px 12px', borderRadius: '4px', backgroundColor: 'rgba(15, 23, 42, 0.6)', border: '1px solid #1e293b' }}>
+              <div style={{ fontSize: '0.6875rem', color: '#c084fc', fontWeight: 700 }}>Formula c (Model B Delay)</div>
+              <code style={{ fontSize: 'var(--text-xs)', color: '#cbd5e1' }}>
+                handover_delay_aircraft_days = aircraft_held_undelivered × days_to_scope
+              </code>
+            </div>
+          </div>
+
+          <ul style={{ margin: '12px 0 0', paddingLeft: '18px', fontSize: '0.6875rem', color: '#94a3b8', lineHeight: 1.5 }}>
+            <li>Held aircraft count is assumed uniform across the scoping duration.</li>
+            <li>Model A assumes uniform monthly delivery rate across standard 30-day calendar months.</li>
+            <li>Model B measures holding duration of finished aircraft exclusively in aircraft-days.</li>
+            <li>Financial impact is completely withheld unless value per aircraft is explicitly specified.</li>
+            <li>Scenario calculations reflect user inputs and public disclosures only, not internal manufacturer records.</li>
+          </ul>
         </div>
       </div>
     </div>

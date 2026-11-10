@@ -26,8 +26,10 @@ def compute_days_event_to_statement(
         return None
 
 
-# Phase 7.1 Corrected Public Facts.
-# All cases remain verification_status: "needs verification" until user replaces URLs.
+# Phase 7.2 Corrected Public Facts.
+# Rule 4: Every URL must be either a real URL provided by user or null. All invented/placeholder
+# URLs (including ad.easa.europa.eu patterns) are removed (set to None). Cases with null source_url
+# show 'primary source missing' in red. url_status is 'unchecked'.
 INCIDENT_CASES: List[IncidentCase] = [
     IncidentCase(
         case_id="A320-SOLAR-2025",
@@ -42,20 +44,23 @@ INCIDENT_CASES: List[IncidentCase] = [
         deliveries_context="About 6,000 aircraft, fewer than 100 remaining on 1 Dec 2025.",
         in_service_scope_notes=None,
         days_event_to_statement=compute_days_event_to_statement("2025-10-30", "2025-11-28"),
-        source_url="https://ad.easa.europa.eu/ad/2025-XXXX-E",
+        source_url=None,  # Placeholder deleted; awaits user-provided URL
         source_type="regulator",
+        url_status="unchecked",
         verification_status="needs verification",
         sources=[
             SourceItem(
-                url="https://ad.easa.europa.eu/ad/2025-XXXX-E",
+                url=None,
                 title="EASA Emergency Airworthiness Directive",
                 source_type="regulator",
+                url_status="unchecked",
                 fact_referenced="Emergency AD issued 28 Nov 2025 for ~6,000 aircraft; effective date to be confirmed from AD document.",
             ),
             SourceItem(
-                url="https://www.airbus.com/en/newsroom/press-releases/2025-11-alert-a320-flight-controls",
+                url=None,
                 title="Airbus Alert Notification to Operators",
                 source_type="manufacturer",
+                url_status="unchecked",
                 fact_referenced="Airbus alert issued 28 Nov 2025; stated intense solar radiation may corrupt data critical to flight controls; <100 remaining on 1 Dec 2025.",
             ),
         ],
@@ -63,23 +68,26 @@ INCIDENT_CASES: List[IncidentCase] = [
             DatedEvent(
                 date="2025-10-30",
                 label="Incident Event",
-                description="Data corruption event critical to flight controls occurs at cruise altitude. Airbus stated intense solar radiation may corrupt data; independent experts questioned whether radiation level was unusual.",
-                source_url="https://ad.easa.europa.eu/ad/2025-XXXX-E",
+                description="Data corruption event critical to flight controls occurs at cruise altitude. Airbus stated intense solar radiation may corrupt data; independent experts questioned whether radiation level was unusual. Axis B is exposure context, not a cause.",
+                source_url=None,
                 source_type="regulator",
+                url_status="unchecked",
             ),
             DatedEvent(
                 date="2025-11-28",
                 label="Airbus Alert & EASA Emergency AD Issued",
                 description="Airbus alert and EASA emergency directive issued 28 Nov 2025 (effective date to be confirmed from the AD document).",
-                source_url="https://ad.easa.europa.eu/ad/2025-XXXX-E",
+                source_url=None,
                 source_type="regulator",
+                url_status="unchecked",
             ),
             DatedEvent(
                 date="2025-12-01",
                 label="Rectification Progress",
                 description="Fewer than 100 aircraft remaining out of ~6,000 affected.",
-                source_url="https://www.airbus.com/en/newsroom/press-releases/2025-11-alert-a320-flight-controls",
+                source_url=None,
                 source_type="manufacturer",
+                url_status="unchecked",
             ),
         ],
         fleet_breakdowns=[],
@@ -97,27 +105,31 @@ INCIDENT_CASES: List[IncidentCase] = [
         deliveries_context="2025 delivery target cut 820 to 790 on 3 Dec 2025.",
         in_service_scope_notes=None,
         days_event_to_statement=None,
-        source_url="https://ad.easa.europa.eu/pad/PAD-2025-XXXX",
+        source_url=None,  # Placeholder deleted; awaits user-provided URL
         source_type="regulator",
+        url_status="unchecked",
         verification_status="needs verification",
         sources=[
             SourceItem(
-                url="https://ad.easa.europa.eu/pad/PAD-2025-XXXX",
+                url=None,
                 title="EASA Proposed Airworthiness Directive (PAD)",
                 source_type="regulator",
+                url_status="unchecked",
                 fact_referenced="EASA PROPOSED directive published 17 Dec 2025 (177 in service, 451 in production); later final directive to be confirmed.",
             ),
             SourceItem(
-                url="https://www.airbus.com/en/newsroom/press-releases/2025-12-a320-quality-update",
+                url=None,
                 title="Airbus Public Statement on Fuselage Panels",
                 source_type="manufacturer",
+                url_status="unchecked",
                 fact_referenced="Airbus public statement 2 Dec 2025 confirming 628 in scope; 2025 delivery target cut 820 to 790 on 3 Dec 2025.",
             ),
             SourceItem(
-                url="https://www.reuters.com/business/aerospace-defense/airbus-fuselage-panels-breakdown-2025-12",
+                url=None,
                 title="Reuters Industrial Investigation",
                 source_type="wire",
-                fact_referenced="Reuters-based fleet split of 628 aircraft: 168 in airline service, 245 at Airbus facilities, 215 customer-allocated/assembled.",
+                url_status="unchecked",
+                fact_referenced="Reuters breakdown: 168 in service, 245 on assembly lines (about 100 due for delivery in 2025), 215 in earlier production.",
             ),
         ],
         dated_events=[
@@ -125,29 +137,33 @@ INCIDENT_CASES: List[IncidentCase] = [
                 date="2025-12-02",
                 label="Airbus Public Statement",
                 description="Airbus public statement confirming 628 aircraft in scope for fuselage panel discrepancy.",
-                source_url="https://www.airbus.com/en/newsroom/press-releases/2025-12-a320-quality-update",
+                source_url=None,
                 source_type="manufacturer",
+                url_status="unchecked",
             ),
             DatedEvent(
                 date="2025-12-03",
                 label="Delivery Target Cut",
                 description="Airbus officially cuts 2025 delivery target from 820 to 790 aircraft.",
-                source_url="https://www.airbus.com/en/newsroom/press-releases/2025-12-a320-quality-update",
+                source_url=None,
                 source_type="manufacturer",
+                url_status="unchecked",
             ),
             DatedEvent(
                 date="2025-12-17",
                 label="EASA PROPOSED Directive Published",
                 description="EASA publishes PROPOSED directive for 628 aircraft (177 in service, 451 in production); later final directive to be confirmed.",
-                source_url="https://ad.easa.europa.eu/pad/PAD-2025-XXXX",
+                source_url=None,
                 source_type="regulator",
+                url_status="unchecked",
             ),
         ],
         fleet_breakdowns=[
             FleetBreakdown(
                 name="EASA Proposed Directive (17 Dec 2025)",
-                source_url="https://ad.easa.europa.eu/pad/PAD-2025-XXXX",
+                source_url=None,
                 source_type="regulator",
+                url_status="unchecked",
                 in_service=177,
                 undelivered_or_production=451,
                 customer_allocated_or_other=None,
@@ -155,14 +171,15 @@ INCIDENT_CASES: List[IncidentCase] = [
                 notes="Official EASA Proposed Directive regulatory scope: 177 in service, 451 in production.",
             ),
             FleetBreakdown(
-                name="Reuters Sourced Breakdown (Dec 2025)",
-                source_url="https://www.reuters.com/business/aerospace-defense/airbus-fuselage-panels-breakdown-2025-12",
+                name="Reuters Sourced Breakdown",
+                source_url=None,
                 source_type="wire",
+                url_status="unchecked",
                 in_service=168,
                 undelivered_or_production=245,
                 customer_allocated_or_other=215,
                 total=628,
-                notes="Reuters investigative report split: 168 in service, 245 stored/in production, 215 customer-allocated.",
+                notes="168 in service, 245 on assembly lines (about 100 due for delivery in 2025), 215 in earlier production.",
             ),
         ],
     ),
@@ -172,28 +189,31 @@ INCIDENT_CASES: List[IncidentCase] = [
         event_date=None,  # event date unknown
         public_statement_date=None,  # unknown
         directive_date=None,  # policy due mid-Nov 2026, no directive published
-        directive_status=None,
+        directive_status="none_published_or_unknown",  # Phase 7.2: none_published_or_unknown (not proposed)
         aircraft_affected_total=None,  # number inspected not disclosed
         aircraft_in_service=None,  # not disclosed
         aircraft_undelivered=None,  # not disclosed
         deliveries_context="Zero deliveries in June and July 2026; 3, 2, 4 in March, April, May; one on 11 Aug 2026; number of aircraft inspected not disclosed; policy to the regulator due mid-November 2026.",
-        in_service_scope_notes="conflicting reports, needs verification",
+        in_service_scope_notes="Reports conflict: one says no retroactive fix is required for in-service aircraft, another says inspections are recommended for aircraft delivered from early 2021 to end of May 2026, with final requirements under discussion with the regulator. Needs verification.",
         days_event_to_statement=None,
-        source_url="https://www.airbus.com/en/investors/commercial-aircraft-deliveries-2026",
+        source_url=None,  # Placeholder deleted; awaits user-provided URL
         source_type="manufacturer",
+        url_status="unchecked",
         verification_status="needs verification",
         sources=[
             SourceItem(
-                url="https://www.airbus.com/en/investors/commercial-aircraft-deliveries-2026",
+                url=None,
                 title="Airbus Monthly Orders & Deliveries Files (2026)",
                 source_type="manufacturer",
+                url_status="unchecked",
                 fact_referenced="Official deliveries: March (3), April (2), May (4); June (0), July (0); 11 Aug 2026 (1).",
             ),
             SourceItem(
-                url="https://www.easa.europa.eu/en/newsroom-and-events/press-releases/airbus-a330neo-tool-inspection-filing",
-                title="EASA Oversight Briefing",
+                url=None,
+                title="Regulator Oversight Discussion",
                 source_type="regulator",
-                fact_referenced="Inspection policy to the regulator due mid-November 2026; scope of in-service inspections subject to conflicting reports, needs verification.",
+                url_status="unchecked",
+                fact_referenced="Inspection policy to the regulator due mid-November 2026; in-service requirements under discussion.",
             ),
         ],
         dated_events=[
@@ -201,50 +221,57 @@ INCIDENT_CASES: List[IncidentCase] = [
                 date="2026-03-31",
                 label="March Deliveries",
                 description="3 A330neo aircraft delivered.",
-                source_url="https://www.airbus.com/en/investors/commercial-aircraft-deliveries-2026",
+                source_url=None,
                 source_type="manufacturer",
+                url_status="unchecked",
             ),
             DatedEvent(
                 date="2026-04-30",
                 label="April Deliveries",
                 description="2 A330neo aircraft delivered.",
-                source_url="https://www.airbus.com/en/investors/commercial-aircraft-deliveries-2026",
+                source_url=None,
                 source_type="manufacturer",
+                url_status="unchecked",
             ),
             DatedEvent(
                 date="2026-05-31",
                 label="May Deliveries",
                 description="4 A330neo aircraft delivered (total 9 in March–May).",
-                source_url="https://www.airbus.com/en/investors/commercial-aircraft-deliveries-2026",
+                source_url=None,
                 source_type="manufacturer",
+                url_status="unchecked",
             ),
             DatedEvent(
                 date="2026-06-30",
                 label="June Delivery Pause",
                 description="Zero A330neo deliveries in June 2026.",
-                source_url="https://www.airbus.com/en/investors/commercial-aircraft-deliveries-2026",
+                source_url=None,
                 source_type="manufacturer",
+                url_status="unchecked",
             ),
             DatedEvent(
                 date="2026-07-31",
                 label="July Delivery Pause",
                 description="Zero A330neo deliveries in July 2026.",
-                source_url="https://www.airbus.com/en/investors/commercial-aircraft-deliveries-2026",
+                source_url=None,
                 source_type="manufacturer",
+                url_status="unchecked",
             ),
             DatedEvent(
                 date="2026-08-11",
                 label="Deliveries Resume",
                 description="One A330neo delivered on 11 Aug 2026.",
-                source_url="https://www.airbus.com/en/investors/commercial-aircraft-deliveries-2026",
+                source_url=None,
                 source_type="manufacturer",
+                url_status="unchecked",
             ),
             DatedEvent(
                 date="2026-11-15",
                 label="Regulator Policy Filing Milestone",
                 description="Inspection policy to the regulator due mid-November 2026.",
-                source_url="https://www.easa.europa.eu/en/newsroom-and-events/press-releases/airbus-a330neo-tool-inspection-filing",
+                source_url=None,
                 source_type="regulator",
+                url_status="unchecked",
             ),
         ],
         fleet_breakdowns=[],
@@ -256,14 +283,16 @@ INCIDENT_CASES: List[IncidentCase] = [
 PRESETS: List[IncidentCasePreset] = [
     IncidentCasePreset(
         case_id="A320-SOLAR-2025",
-        title="A320 Solar Radiation (29 Days Scoping)",
-        days_to_scope=29.0,  # 30 Oct to 28 Nov 2025 = 29 days
+        title="A320 Solar Radiation (Public Gap 29 Days)",
+        days_to_scope=None,  # Phase 7.2 rule: removed from preset; leaves days_to_scope empty
         aircraft_held_in_service=None,  # unsourced
         aircraft_held_undelivered=None,  # unsourced
         baseline_handover_rate_per_month=None,
         share_recovered_later=None,
         value_per_aircraft=None,
-        sourced_fields=["days_to_scope"],
+        days_event_to_public_statement=29.0,  # Separate display-only field that cannot feed the calculator
+        days_event_to_public_statement_helper="This is the public gap between the incident and Airbus's statement. It is not a hold period and not a scoping time.",
+        sourced_fields=[],  # days_to_scope removed, cannot feed calculator
     ),
     IncidentCasePreset(
         case_id="A320-PANEL-2025",
@@ -274,6 +303,8 @@ PRESETS: List[IncidentCasePreset] = [
         baseline_handover_rate_per_month=None,
         share_recovered_later=None,
         value_per_aircraft=None,
+        days_event_to_public_statement=None,
+        days_event_to_public_statement_helper=None,
         sourced_fields=["aircraft_held_in_service", "aircraft_held_undelivered"],
     ),
     IncidentCasePreset(
@@ -285,6 +316,8 @@ PRESETS: List[IncidentCasePreset] = [
         baseline_handover_rate_per_month=None,
         share_recovered_later=None,
         value_per_aircraft=None,
+        days_event_to_public_statement=None,
+        days_event_to_public_statement_helper=None,
         sourced_fields=[],  # All calculator numeric inputs unsourced
     ),
 ]
@@ -308,19 +341,18 @@ def run_calculator(inputs: CalculatorInputs) -> CalculatorOutputs:
 
     # Compute Total Held Aircraft
     has_held = (in_service is not None) or (undelivered is not None)
-    total_held = ((in_service or 0.0) + (undelivered or 0.0)) if has_held else None
+    total_held: Optional[float] = None
+    if has_held:
+        total_held = float((in_service or 0.0) + (undelivered or 0.0))
 
-    # a. aircraft_days_held = held aircraft x days
+    # a. Total Aircraft-Days Held
     aircraft_days_held: Optional[float] = None
     if total_held is not None and days is not None:
         aircraft_days_held = float(total_held * days)
 
     formula_a = "aircraft_days_held = (aircraft_held_in_service + aircraft_held_undelivered) × days_to_scope"
-    assumption_a = (
-        "Assumes all scoped aircraft remain unavailable or paused for the entire scoping duration."
-    )
 
-    # b. Model A (line stop): handovers_lost = baseline_rate x days / 30, net of recovered share
+    # b. Model A (line stop): handovers lost = baseline_rate x days / 30, net of recovered share
     model_a_gross: Optional[float] = None
     model_a_net: Optional[float] = None
     if rate is not None and days is not None:
@@ -330,11 +362,7 @@ def run_calculator(inputs: CalculatorInputs) -> CalculatorOutputs:
 
     formula_b = (
         "gross_handovers_lost = baseline_handover_rate_per_month × (days_to_scope / 30); "
-        "net_handovers_lost = gross × (1 - share_recovered_later)"
-    )
-    assumption_b = (
-        "Assumes monthly production capacity is evenly distributed over 30 days per month. "
-        "Recovery share accounts for post-incident overtime/surge catch-up."
+        "net_handovers_lost = gross_handovers_lost × (1 - share_recovered_later)"
     )
 
     # c. Model B (hold of finished aircraft): handover delay in aircraft-days only
@@ -345,9 +373,6 @@ def run_calculator(inputs: CalculatorInputs) -> CalculatorOutputs:
         model_b_aircraft_days = float(total_held * days)
 
     formula_c = "handover_delay_aircraft_days = aircraft_held_undelivered × days_to_scope"
-    assumption_c = (
-        "Measures cumulative delivery delay for finished airframes awaiting inspection or regulatory clearance."
-    )
 
     # One-day cost of delay (aircraft-days per day)
     one_day_aircraft_days: Optional[float] = None
@@ -357,8 +382,7 @@ def run_calculator(inputs: CalculatorInputs) -> CalculatorOutputs:
     # Financial calculations: STRICTLY None if value_per_aircraft is blank
     financial_impact: Optional[float] = None
     one_day_money: Optional[float] = None
-
-    if val is not None and val > 0:
+    if val is not None:
         if model_a_net is not None:
             financial_impact = float(model_a_net * val)
         if rate is not None:
@@ -366,55 +390,60 @@ def run_calculator(inputs: CalculatorInputs) -> CalculatorOutputs:
             daily_net_lost = (rate / 30.0) * rec_factor
             one_day_money = float(daily_net_lost * val)
 
-    # Sensitivity Table over days (0.5x, 1x, 2x)
-    sensitivity_rows: List[SensitivityRow] = []
-    multipliers = [("0.5x", 0.5), ("1.0x", 1.0), ("2.0x", 2.0)]
-    for label, mult in multipliers:
-        sens_days = (days * mult) if days is not None else None
-        sens_held_days = (total_held * sens_days) if (total_held is not None and sens_days is not None) else None
+    # Sensitivity matrix over duration multipliers: 0.5x, 1.0x, 2.0x
+    sensitivity_table: List[SensitivityRow] = []
+    if days is not None and days > 0:
+        for mult in [0.5, 1.0, 2.0]:
+            d = days * mult
+            adh = (total_held * d) if total_held is not None else 0.0
 
-        sens_model_a_net: Optional[float] = None
-        if rate is not None and sens_days is not None:
-            gross = rate * (sens_days / 30.0)
-            rec_factor = (1.0 - share_rec) if share_rec is not None else 1.0
-            sens_model_a_net = float(gross * rec_factor)
+            m_a_net: Optional[float] = None
+            if rate is not None:
+                m_a_gross = rate * (d / 30.0)
+                rec = (1.0 - share_rec) if share_rec is not None else 1.0
+                m_a_net = m_a_gross * rec
 
-        sens_model_b_days: Optional[float] = None
-        if undelivered is not None and sens_days is not None:
-            sens_model_b_days = float(undelivered * sens_days)
-        elif total_held is not None and sens_days is not None and undelivered is None:
-            sens_model_b_days = float(total_held * sens_days)
+            m_b: Optional[float] = None
+            if undelivered is not None:
+                m_b = undelivered * d
+            elif total_held is not None and undelivered is None:
+                m_b = total_held * d
 
-        sens_money: Optional[float] = None
-        if val is not None and val > 0 and sens_model_a_net is not None:
-            sens_money = float(sens_model_a_net * val)
+            f_impact: Optional[float] = None
+            if val is not None and m_a_net is not None:
+                f_impact = m_a_net * val
 
-        sensitivity_rows.append(
-            SensitivityRow(
-                multiplier_label=label,
-                multiplier=mult,
-                days=sens_days,
-                aircraft_days_held=sens_held_days,
-                model_a_net_handovers_lost=sens_model_a_net,
-                model_b_aircraft_days=sens_model_b_days,
-                financial_impact=sens_money,
+            sensitivity_table.append(
+                SensitivityRow(
+                    multiplier=mult,
+                    duration_days=d,
+                    aircraft_days_held=adh,
+                    model_a_net_handovers_lost=m_a_net,
+                    model_b_aircraft_days=m_b,
+                    financial_impact=f_impact,
+                )
             )
-        )
+
+    assumptions = [
+        "Aircraft held count applies uniformly across the scoping duration.",
+        "Model A assumes uniform monthly delivery rate across standard 30-day calendar months.",
+        "Model B measures holding duration of finished aircraft exclusively in aircraft-days.",
+        "Financial figures are withheld unless value per aircraft is explicitly specified.",
+        "Scenario calculations reflect user inputs and public disclosures only, not internal manufacturer records.",
+    ]
 
     return CalculatorOutputs(
         total_held_aircraft=total_held,
         aircraft_days_held=aircraft_days_held,
-        aircraft_days_held_formula=formula_a,
-        aircraft_days_held_assumption=assumption_a,
         model_a_gross_handovers_lost=model_a_gross,
         model_a_net_handovers_lost=model_a_net,
-        model_a_formula=formula_b,
-        model_a_assumption=assumption_b,
         model_b_aircraft_days=model_b_aircraft_days,
-        model_b_formula=formula_c,
-        model_b_assumption=assumption_c,
+        financial_impact_total=financial_impact,
         one_day_cost_aircraft_days=one_day_aircraft_days,
         one_day_cost_money=one_day_money,
-        financial_impact_total=financial_impact,
-        sensitivity_table=sensitivity_rows,
+        formula_a_aircraft_days=formula_a,
+        formula_b_model_a=formula_b,
+        formula_c_model_b=formula_c,
+        assumptions_applied=assumptions,
+        sensitivity_table=sensitivity_table,
     )

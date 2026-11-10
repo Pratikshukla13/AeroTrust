@@ -236,7 +236,7 @@ export default function FlightDetailPage() {
             {/* Radiation Tier (illustrative placeholder) */}
             <div data-testid="radiation-exposure-container">
               <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#94a3b8', fontWeight: 600 }}>
-                Natural Radiation Exposure
+                Natural Radiation Exposure Context
               </span>
               <div style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Sun size={18} style={{ color: '#fbbf24' }} aria-hidden="true" />

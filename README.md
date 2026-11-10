@@ -122,7 +122,7 @@ Relative exposure index = altitude factor x geomagnetic-latitude factor x space-
 - **Radiation Causality Notice:** Airbus stated that intense solar radiation may corrupt data critical to flight controls. Independent experts have questioned whether the radiation level on that date was unusual. Axis B is exposure context, not a cause.
 - For the shape of each factor, use a documented published model or tables (for example FAA CARI-7 or NAIRAS publications), and **cite the source in your README**. Do not invent constants.
 
-### 4.6 Incident Clock & Scoping Calculator (Phase 7 & 7.1)
+### 4.6 Incident Clock & Scoping Calculator (Phase 7, 7.1 & 7.2)
 
 **Inputs (all user-editable):** days to scope, aircraft held in-service, aircraft held undelivered, baseline monthly handover rate (optional), share recovered later (optional), value per aircraft (optional).
 
@@ -134,14 +134,16 @@ Relative exposure index = altitude factor x geomagnetic-latitude factor x space-
 - **One-Day Cost of Delay:** Stated in `aircraft-days / day`, with financial rate shown only if valuation is provided.
 - **Sensitivity Matrix:** Sensitivity over scoping duration (0.5x, 1x, 2x).
 - **Public Disclosure Timeline:** A320 solar radiation timeline (30 Oct 2025 event -> 28 Nov 2025 statement -> 28 Nov 2025 AD issued -> 1 Dec 2025 remediation), detailing the computed 29-day public gap with public-only disclosure caveat.
+- **A320 Radiation Preset:** Leaves `days_to_scope` empty. Stores `days_event_to_public_statement` (29) as a separate display-only field with helper text: *"This is the public gap between the incident and Airbus's statement. It is not a hold period and not a scoping time."*
+- **URL Verification Guardrail:** Every URL must be either a real user-provided URL or null. Cases without a primary URL show "primary source missing" in red. All URLs show status "unchecked". A case can become "sourced" only when it has a primary URL with status "verified by user".
 
 **Seed Cases (Strictly public facts; all marked "needs verification" until source URL is confirmed and marked sourced):**
 
 | Case ID | Title | Directive Status | Sourced Public Facts | Verification Status |
 | --- | --- | --- | --- | --- |
-| `A320-SOLAR-2025` | A320 Solar Radiation Single-Event Effect | `issued` | Airbus alert and EASA emergency directive issued 28 Nov 2025 (effective date to be confirmed from the AD document); about 6,000 aircraft affected; fewer than 100 remaining on 1 Dec 2025. Computed gap: 29 days. | `needs verification` |
-| `A320-PANEL-2025` | A320 Fuselage Panels Production Discrepancy | `proposed` | Airbus public statement 2 Dec 2025 (628 in scope); 2025 delivery target cut 820 to 790 on 3 Dec 2025; EASA proposed directive published 17 Dec 2025 (177 in service, 451 in production); later final directive to be confirmed. Dual sourced breakdowns: EASA proposed (177 in-service / 451 production) vs Reuters investigation (168 airline / 245 plant / 215 supplier). | `needs verification` |
-| `A330NEO-TOOL-2026` | A330neo Stray Assembly Tool Inspection | `proposed` | Zero deliveries in June and July 2026; 3, 2, 4 in March, April, May; one on 11 Aug 2026; number of aircraft inspected not disclosed; policy to regulator due mid-November 2026; scope of in-service inspections has conflicting reports (some say 24, some say 4), shown as `conflicting reports, needs verification`. | `needs verification` |
+| `A320-SOLAR-2025` | A320 Solar Radiation Single-Event Effect | `issued` | Airbus alert and EASA emergency directive issued 28 Nov 2025 (effective date to be confirmed from the AD document); about 6,000 aircraft affected; fewer than 100 remaining on 1 Dec 2025. Computed statement gap: 29 days (display-only, leaves days_to_scope empty). Primary source awaits user URL. | `needs verification` |
+| `A320-PANEL-2025` | A320 Fuselage Panels Production Discrepancy | `proposed` | Airbus public statement 2 Dec 2025 (628 in scope); 2025 delivery target cut 820 to 790 on 3 Dec 2025; EASA proposed directive published 17 Dec 2025 (177 in service, 451 in production); later final directive to be confirmed. Dual sourced breakdowns: EASA proposed (177 in-service / 451 production) vs Reuters investigation (168 in service, 245 on assembly lines [about 100 due for delivery in 2025], 215 in earlier production). Primary source awaits user URL. | `needs verification` |
+| `A330NEO-TOOL-2026` | A330neo Stray Assembly Tool Inspection | `none_published_or_unknown` | Zero deliveries in June and July 2026; 3, 2, 4 in March, April, May; one on 11 Aug 2026; number of aircraft inspected not disclosed; policy to regulator due mid-November 2026; scope note: "Reports conflict: one says no retroactive fix is required for in-service aircraft, another says inspections are recommended for aircraft delivered from early 2021 to end of May 2026, with final requirements under discussion with the regulator. Needs verification." Primary source awaits user URL. | `needs verification` |
 
 *Mandatory Scenario Notice:* "This calculator turns public information into a scenario. It does not describe Airbus internal data or decisions. Scenario outputs depend on the inputs you enter."
 
