@@ -118,12 +118,12 @@ export default function FlightDetailPage() {
       <div className="glass-panel" style={{ padding: '20px 24px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
           <div>
-            <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: '#f8fafc' }}>
+            <h1 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: '#f8fafc' }}>
               Flight Telemetry &amp; Detector Inspection:{' '}
               <span data-testid="header-flight-id" style={{ fontFamily: 'monospace', color: '#38bdf8' }}>
                 {flightData ? flightData.flight_id : selectedFlightId}
               </span>
-            </h2>
+            </h1>
             <p style={{ margin: '4px 0 0', fontSize: '0.8125rem', color: '#94a3b8' }}>
               Single-flight telemetry: Check (a) primary altitude discrepancy, supporting checks, inactive consensus, and relative radiation tier.
             </p>
@@ -164,7 +164,7 @@ export default function FlightDetailPage() {
 
       {/* Visible Fallback Banner for Static Demo Mode */}
       {!loading && flightData?._demo_fallback && (
-        <aside
+        <div
           role="alert"
           aria-label="Static Demo Flight Fallback Notice"
           data-testid="static-demo-fallback-banner"
@@ -186,7 +186,7 @@ export default function FlightDetailPage() {
             Not available in the static demo. Showing example flight{' '}
             <strong style={{ fontFamily: 'monospace', color: '#ffffff' }}>{flightData.flight_id}</strong> instead.
           </span>
-        </aside>
+        </div>
       )}
 
       {loading && (
@@ -297,9 +297,9 @@ export default function FlightDetailPage() {
 
           {/* 4 Checks Grid: Check (a) primary, (b) supporting, (c) supporting, (d) inactive */}
           <div>
-            <h3 style={{ margin: '0 0 14px', fontSize: '1.125rem', fontWeight: 700, color: '#f8fafc' }}>
+            <h2 style={{ margin: '0 0 14px', fontSize: '1.125rem', fontWeight: 700, color: '#f8fafc' }}>
               Integrity Checks &amp; Detector Breakdown
-            </h3>
+            </h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
               {/* Check a: Primary */}
               <div
@@ -325,9 +325,9 @@ export default function FlightDetailPage() {
                     {flightData.check_a.flag ? 'FLAGGED' : 'NOMINAL'}
                   </span>
                 </div>
-                <h4 style={{ margin: '0 0 6px', fontSize: '0.9375rem', color: '#f8fafc', fontWeight: 700 }}>
+                <h3 style={{ margin: '0 0 6px', fontSize: '0.9375rem', color: '#f8fafc', fontWeight: 700 }}>
                   {flightData.check_a.label}
-                </h4>
+                </h3>
                 <div style={{ fontSize: '0.8125rem', color: '#cbd5e1', marginBottom: '8px' }}>
                   Max Residual: <strong>{flightData.check_a.residual ? `${flightData.check_a.residual.toFixed(1)} m` : 'N/A'}</strong> (threshold: 120.0 m)
                 </div>
@@ -366,9 +366,9 @@ export default function FlightDetailPage() {
                     SUPPORTING ONLY
                   </span>
                 </div>
-                <h4 style={{ margin: '0 0 6px', fontSize: '0.9375rem', color: '#f8fafc', fontWeight: 700 }}>
+                <h3 style={{ margin: '0 0 6px', fontSize: '0.9375rem', color: '#f8fafc', fontWeight: 700 }}>
                   {flightData.check_b.label}
-                </h4>
+                </h3>
                 <div style={{ fontSize: '0.8125rem', color: '#cbd5e1', marginBottom: '8px' }}>
                   Residual: {flightData.check_b.residual ? `${flightData.check_b.residual.toFixed(3)} m/s²` : 'N/A'}
                 </div>
@@ -401,9 +401,9 @@ export default function FlightDetailPage() {
                     SUPPORTING ONLY
                   </span>
                 </div>
-                <h4 style={{ margin: '0 0 6px', fontSize: '0.9375rem', color: '#f8fafc', fontWeight: 700 }}>
+                <h3 style={{ margin: '0 0 6px', fontSize: '0.9375rem', color: '#f8fafc', fontWeight: 700 }}>
                   {flightData.check_c.label}
-                </h4>
+                </h3>
                 <div style={{ fontSize: '0.8125rem', color: '#cbd5e1', marginBottom: '8px' }}>
                   Residual: {flightData.check_c.residual ? `${flightData.check_c.residual.toFixed(1)} m` : 'N/A'}
                 </div>
@@ -438,9 +438,9 @@ export default function FlightDetailPage() {
                     INACTIVE
                   </span>
                 </div>
-                <h4 style={{ margin: '0 0 6px', fontSize: '0.9375rem', color: '#f8fafc', fontWeight: 700 }}>
+                <h3 style={{ margin: '0 0 6px', fontSize: '0.9375rem', color: '#f8fafc', fontWeight: 700 }}>
                   {flightData.check_d.label}
-                </h4>
+                </h3>
                 <p style={{ margin: '6px 0 0', fontSize: '0.75rem', color: '#cbd5e1', lineHeight: 1.45 }}>
                   {flightData.check_d.note}
                 </p>
@@ -452,9 +452,9 @@ export default function FlightDetailPage() {
           <div className="glass-panel" data-testid="altitude-plot-panel" style={{ padding: '24px 28px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '12px', marginBottom: '16px' }}>
               <div>
-                <h3 style={{ margin: '0 0 4px', fontSize: '1.125rem', fontWeight: 700, color: '#f8fafc' }}>
+                <h2 style={{ margin: '0 0 4px', fontSize: '1.125rem', fontWeight: 700, color: '#f8fafc' }}>
                   Geometric vs Barometric Altitude Telemetry Profile
-                </h3>
+                </h2>
                 <p style={{ margin: 0, fontSize: '0.8125rem', color: '#94a3b8' }}>
                   Continuous trajectory altitude points with flagged discrepancy interval highlighted (|Geo - Baro| &gt; 120.0 m).
                 </p>

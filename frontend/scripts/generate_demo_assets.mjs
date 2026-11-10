@@ -301,7 +301,7 @@ async function run() {
   </div>
   <div style="text-align: right;">
     <div class="badge-tag">Eval Tag: v0.3.2-verified</div>
-    <div class="badge-tag" style="margin-top: 2px;">App Tag: v1.0.1-demo</div>
+    <div class="badge-tag" style="margin-top: 2px;">App Tag: v1.0.2-demo</div>
   </div>
 </div>
 
@@ -406,7 +406,7 @@ async function run() {
 </div>
 
 <div class="footer">
-  <div>Eval Tag: v0.3.2-verified &bull; App Tag: v1.0.1-demo &bull; Independent personal project, not affiliated with or endorsed by Airbus. Uses public information only.</div>
+  <div>Eval Tag: v0.3.2-verified &bull; App Tag: v1.0.2-demo &bull; Independent personal project, not affiliated with or endorsed by Airbus. Uses public information only.</div>
   <div>Page 1 of 1</div>
 </div>
 

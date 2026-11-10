@@ -325,8 +325,10 @@ export default function App() {
         </div>
       </header>
 
-      {/* 4. Subheader: Dataset Fingerprint Bar on EVERY page */}
-      <DatasetFingerprintBar fingerprint={currentFingerprint} tag={releaseTag} />
+      {/* 4. Subheader: Dataset Fingerprint Bar on EVERY page (Enclosed in landmark region) */}
+      <section aria-label="Dataset Metadata and Verification Fingerprint">
+        <DatasetFingerprintBar fingerprint={currentFingerprint} tag={releaseTag} />
+      </section>
 
       {/* 5. Main Application Workspace (Sidebar + Dynamic Page) */}
       <div style={{ display: 'flex', flex: 1, position: 'relative', zIndex: 45 }}>
@@ -461,7 +463,7 @@ export default function App() {
           <span>
             App Tag:{' '}
             <strong data-testid="footer-app-tag" style={{ color: '#a78bfa', fontFamily: 'monospace' }}>
-              v1.0.1-demo
+              v1.0.2-demo
             </strong>
           </span>
         </div>

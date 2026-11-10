@@ -1,6 +1,6 @@
 # AeroTrust: Avionics Telemetry Integrity Observatory
 
-**Evaluation Tag**: `v0.3.2-verified` | **App Tag**: `v1.0.1-demo`
+**Evaluation Tag**: `v0.3.2-verified` | **App Tag**: `v1.0.2-demo`
 
 > **Disclaimer**: Independent personal project, not affiliated with or endorsed by Airbus. Uses public information only.
 
@@ -57,7 +57,7 @@ flowchart TD
     subgraph Data_Sources ["Data & Ingestion Sources"]
         ADS_B["Synthetic ADS-B Generator<br/>(Seeds 3001-3003, N=18,000 Legs)"]
         SWPC["NOAA SWPC Ingestion<br/>(Proton Flux & Kp Indices)"]
-        NE_GEO["Natural Earth & NASA Textures<br/>(Public Domain Cartography)"]
+        NE_GEO["Natural Earth Vector Maps & Earth Texture<br/>(Texture: provenance not yet verified)"]
     end
 
     subgraph Core_Engine ["Detection & Scoring Engine (Frozen v0.3.2)"]
@@ -124,7 +124,7 @@ flowchart TD
 
 ## License & Attributions
 
-* **Evaluation Tag**: `v0.3.2-verified` | **App Tag**: `v1.0.1-demo`
+* **Evaluation Tag**: `v0.3.2-verified` | **App Tag**: `v1.0.2-demo`
 * **Disclaimer**: Independent personal project, not affiliated with or endorsed by Airbus. Uses public information only.
 * **License**: [MIT License](file:///c:/Users/ASus/Desktop/AeroTrust/LICENSE)
 * **Attributions**: Full catalog of public datasets, textures, and open-source libraries available in [`docs/ATTRIBUTIONS.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/ATTRIBUTIONS.md).

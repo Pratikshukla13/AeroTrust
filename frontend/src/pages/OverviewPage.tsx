@@ -153,9 +153,9 @@ export default function OverviewPage({ activeDataset, onNavigate }: Props) {
           <div style={{ padding: '6px', borderRadius: '6px', backgroundColor: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8' }}>
             <AlertTriangle size={18} aria-hidden="true" />
           </div>
-          <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800, color: '#f8fafc', letterSpacing: '-0.02em' }}>
+          <h1 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800, color: '#f8fafc', letterSpacing: '-0.02em' }}>
             {hb.title}
-          </h2>
+          </h1>
         </div>
 
         <ul style={{ margin: 0, paddingLeft: '22px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -219,9 +219,9 @@ export default function OverviewPage({ activeDataset, onNavigate }: Props) {
       {/* 3. Operational Tier Distribution Cards */}
       <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '14px' }}>
-          <h3 style={{ margin: 0, fontSize: '1.125rem', fontWeight: 700, color: '#f8fafc' }}>
+          <h2 style={{ margin: 0, fontSize: '1.125rem', fontWeight: 700, color: '#f8fafc' }}>
             Operational Evidence Tier Distribution
-          </h3>
+          </h2>
           <span style={{ fontSize: '0.8125rem', color: '#94a3b8' }}>
             Primary Accounting Unit: <strong style={{ color: '#cbd5e1' }}>{data.primary_unit}</strong>
           </span>
@@ -321,9 +321,9 @@ export default function OverviewPage({ activeDataset, onNavigate }: Props) {
 
       {/* 5. Navigation Detail Links */}
       <div className="glass-panel" style={{ padding: '24px 28px' }}>
-        <h3 style={{ margin: '0 0 16px', fontSize: '1.125rem', fontWeight: 700, color: '#f8fafc' }}>
+        <h2 style={{ margin: '0 0 16px', fontSize: '1.125rem', fontWeight: 700, color: '#f8fafc' }}>
           Observatory Modules &amp; Detail Pages
-        </h3>
+        </h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '14px' }}>
           <button
             type="button"

@@ -639,9 +639,9 @@ export default function IncidentClockPage() {
       <div className="glass-panel" style={{ padding: '24px 28px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
           <Clock size={24} style={{ color: '#38bdf8' }} aria-hidden="true" />
-          <h2 style={{ margin: 0, fontSize: 'var(--text-xl)', fontWeight: 700, color: '#f8fafc' }}>
+          <h1 style={{ margin: 0, fontSize: 'var(--text-xl)', fontWeight: 700, color: '#f8fafc' }}>
             Incident Clock &amp; Scoping Cost Calculator
-          </h2>
+          </h1>
         </div>
         <p style={{ margin: '0 0 14px', fontSize: 'var(--text-sm)', color: '#94a3b8', lineHeight: 1.5 }}>
           Transparent scenario modeller pricing the operational duration and delivery consequences of slow scoping
@@ -672,8 +672,7 @@ export default function IncidentClockPage() {
 
       {/* Phase 8.1 Work in Progress: Sources Being Verified Header */}
       {hasUnverifiedSources && (
-        <aside
-          role="region"
+        <section
           aria-label="Source Verification Status"
           data-testid="sources-work-in-progress-header"
           style={{
@@ -689,22 +688,22 @@ export default function IncidentClockPage() {
         >
           <AlertTriangle size={24} style={{ color: '#fbbf24', flexShrink: 0 }} aria-hidden="true" />
           <div>
-            <h3 style={{ margin: 0, fontSize: '0.9375rem', fontWeight: 700, color: '#fef3c7' }}>
+            <h2 style={{ margin: 0, fontSize: '0.9375rem', fontWeight: 700, color: '#fef3c7' }}>
               Work in progress: sources being verified
-            </h3>
+            </h2>
             <p style={{ margin: '4px 0 0', fontSize: '0.8125rem', color: '#fde68a', lineHeight: 1.5 }}>
               One or more cases lack a verified primary regulatory URL. Red markers highlight unverified or missing primary documentation.
             </p>
           </div>
-        </aside>
+        </section>
       )}
 
       {/* 2. Public Case Ground Truth Display */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
-          <h3 style={{ margin: 0, fontSize: 'var(--text-base)', fontWeight: 700, color: '#f8fafc' }}>
+          <h2 style={{ margin: 0, fontSize: 'var(--text-base)', fontWeight: 700, color: '#f8fafc' }}>
             Public Incident Ground Truth Cases
-          </h3>
+          </h2>
           <span style={{ fontSize: 'var(--text-xs)', color: '#94a3b8' }}>
             All cases tagged "needs verification" until URLs are user-confirmed.
           </span>
@@ -753,9 +752,9 @@ export default function IncidentClockPage() {
                   </div>
                 </div>
 
-                <h4 style={{ margin: '0 0 10px', color: '#f8fafc', fontSize: 'var(--text-base)', fontWeight: 700 }}>
+                <h3 style={{ margin: '0 0 10px', color: '#f8fafc', fontSize: 'var(--text-base)', fontWeight: 700 }}>
                   {c.title}
-                </h4>
+                </h3>
 
                 {/* Core Facts Summary */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: 'var(--text-xs)', color: '#cbd5e1' }}>
@@ -970,9 +969,9 @@ export default function IncidentClockPage() {
       <div className="glass-panel" style={{ padding: '24px 28px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
           <Calendar size={20} style={{ color: '#fbbf24' }} aria-hidden="true" />
-          <h3 style={{ margin: 0, fontSize: 'var(--text-base)', fontWeight: 700, color: '#f8fafc' }}>
+          <h2 style={{ margin: 0, fontSize: 'var(--text-base)', fontWeight: 700, color: '#f8fafc' }}>
             A320 Solar Radiation Single-Event Effect: Public Disclosure Timeline
-          </h3>
+          </h2>
         </div>
 
         {/* Milestone Steps */}
@@ -1029,9 +1028,9 @@ export default function IncidentClockPage() {
       <div className="glass-panel" style={{ padding: '24px 28px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', marginBottom: '20px' }}>
           <div>
-            <h3 style={{ margin: '0 0 4px', fontSize: 'var(--text-lg)', fontWeight: 700, color: '#f8fafc' }}>
+            <h2 style={{ margin: '0 0 4px', fontSize: 'var(--text-lg)', fontWeight: 700, color: '#f8fafc' }}>
               Scoping Scenario Modeller
-            </h3>
+            </h2>
             <p style={{ margin: 0, fontSize: 'var(--text-xs)', color: '#94a3b8' }}>
               Choose a public preset to fill sourced numbers, or enter custom parameters.
             </p>
@@ -1369,9 +1368,9 @@ export default function IncidentClockPage() {
 
         {/* 5. Four Core Outputs Display */}
         <div style={{ marginBottom: '24px' }}>
-          <h4 style={{ margin: '0 0 12px', fontSize: 'var(--text-base)', fontWeight: 700, color: '#f8fafc' }}>
+          <h3 style={{ margin: '0 0 12px', fontSize: 'var(--text-base)', fontWeight: 700, color: '#f8fafc' }}>
             Modelled Scoping Consequences
-          </h4>
+          </h3>
 
           <div
             style={{
@@ -1544,9 +1543,9 @@ export default function IncidentClockPage() {
 
         {/* 7. Sensitivity Matrix (0.5x, 1.0x, 2.0x) */}
         <div style={{ marginBottom: '24px' }}>
-          <h4 style={{ margin: '0 0 10px', fontSize: 'var(--text-base)', fontWeight: 700, color: '#f8fafc' }}>
+          <h3 style={{ margin: '0 0 10px', fontSize: 'var(--text-base)', fontWeight: 700, color: '#f8fafc' }}>
             Duration Sensitivity Matrix
-          </h4>
+          </h3>
           <p style={{ margin: '0 0 14px', fontSize: 'var(--text-xs)', color: '#94a3b8' }}>
             Evaluating scoping duration impacts at 0.5x, 1.0x, and 2.0x of the entered baseline duration.
           </p>

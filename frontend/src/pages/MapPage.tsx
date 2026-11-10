@@ -252,9 +252,9 @@ export default function MapPage() {
       <div className="glass-panel" style={{ padding: '16px 20px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '14px' }}>
           <div>
-            <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: '#f8fafc' }}>
+            <h1 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: '#f8fafc' }}>
               Interference Observatory Map
-            </h2>
+            </h1>
             <p style={{ margin: '3px 0 0', fontSize: '0.8125rem', color: '#94a3b8' }}>
               MapLibre GL instance powered by local Natural Earth vectors. H3 cells colored strictly by <code>jamming_degraded</code> or <code>insufficient</code>.
             </p>
@@ -405,9 +405,9 @@ export default function MapPage() {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '14px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <MapPin size={18} style={{ color: '#38bdf8' }} aria-hidden="true" />
-                  <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, color: '#f8fafc' }}>
+                  <h2 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, color: '#f8fafc' }}>
                     Cell Inspection
-                  </h3>
+                  </h2>
                 </div>
                 <button
                   type="button"

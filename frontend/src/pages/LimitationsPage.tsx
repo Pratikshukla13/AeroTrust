@@ -54,9 +54,9 @@ export default function LimitationsPage() {
           <div style={{ padding: '6px', borderRadius: '6px', backgroundColor: 'rgba(239, 68, 68, 0.15)', color: '#ef4444' }}>
             <AlertOctagon size={20} aria-hidden="true" />
           </div>
-          <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800, color: '#f8fafc' }}>
+          <h1 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800, color: '#f8fafc' }}>
             Methodology &amp; Engineering Limitations
-          </h2>
+          </h1>
         </div>
         <p style={{ margin: 0, fontSize: '0.875rem', color: '#94a3b8', lineHeight: 1.6 }}>
           Comprehensive engineering boundaries, noise assumptions, abstention scope, and threat base-rate sensitivity disclosures.
@@ -79,9 +79,9 @@ export default function LimitationsPage() {
         <>
           {/* Engineering Boundary Disclosures (8 Core Bullets) */}
           <div className="glass-panel" data-testid="limitations-bullets-panel" style={{ padding: '24px 28px' }}>
-            <h3 style={{ margin: '0 0 16px', fontSize: '1.125rem', fontWeight: 700, color: '#f8fafc' }}>
+            <h2 style={{ margin: '0 0 16px', fontSize: '1.125rem', fontWeight: 700, color: '#f8fafc' }}>
               Operational Boundaries &amp; Caveats
-            </h3>
+            </h2>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               {data.bullets.map((bullet, idx) => {
@@ -122,9 +122,9 @@ export default function LimitationsPage() {
                       {idx + 1}
                     </span>
                     <div>
-                      <h4 style={{ margin: '0 0 4px', fontSize: '0.9375rem', fontWeight: 700, color: '#f8fafc' }}>
+                      <h3 style={{ margin: '0 0 4px', fontSize: '0.9375rem', fontWeight: 700, color: '#f8fafc' }}>
                         {title}
-                      </h4>
+                      </h3>
                       <p style={{ margin: 0, fontSize: '0.8125rem', color: '#cbd5e1', lineHeight: 1.55 }}>
                         {desc.trim()}
                       </p>
@@ -139,9 +139,9 @@ export default function LimitationsPage() {
           <div className="glass-panel" data-testid="base-rate-table-panel" style={{ padding: '24px 28px', overflowX: 'auto' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '12px', marginBottom: '16px' }}>
               <div>
-                <h3 style={{ margin: '0 0 4px', fontSize: '1.125rem', fontWeight: 700, color: '#f8fafc' }}>
+                <h2 style={{ margin: '0 0 4px', fontSize: '1.125rem', fontWeight: 700, color: '#f8fafc' }}>
                   Threat Base-Rate &amp; Precision Sensitivity Table
-                </h3>
+                </h2>
                 <p style={{ margin: 0, fontSize: '0.8125rem', color: '#94a3b8' }}>
                   Demonstrating that detector precision drops sharply in peacetime environments due to the false alarm base rate (Bayes rule).
                 </p>

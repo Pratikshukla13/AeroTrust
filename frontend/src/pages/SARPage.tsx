@@ -40,9 +40,9 @@ export default function SARPage() {
       <div className="glass-panel" style={{ padding: '24px 28px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
           <div>
-            <h2 style={{ margin: '0 0 8px', fontSize: '1.25rem', fontWeight: 700, color: '#f8fafc' }}>
+            <h1 style={{ margin: '0 0 8px', fontSize: '1.25rem', fontWeight: 700, color: '#f8fafc' }}>
               Silent Acceptance Rate (SAR) Observatory
-            </h2>
+            </h1>
             {/* Exactly required one-line explanation */}
             <p
               data-testid="sar-definition-line"
@@ -107,9 +107,9 @@ export default function SARPage() {
 
       {!loading && sarRows.length > 0 && (
         <div className="glass-panel" style={{ padding: '24px 28px', overflowX: 'auto' }}>
-          <h3 style={{ margin: '0 0 16px', fontSize: '1.125rem', fontWeight: 700, color: '#f8fafc' }}>
+          <h2 style={{ margin: '0 0 16px', fontSize: '1.125rem', fontWeight: 700, color: '#f8fafc' }}>
             Privacy-Preserving SAR Regional Breakdown
-          </h3>
+          </h2>
 
           <table
             data-testid="sar-table"

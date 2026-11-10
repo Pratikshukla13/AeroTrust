@@ -2,7 +2,7 @@ import { AlertTriangle } from 'lucide-react'
 
 export default function SyntheticBanner() {
   return (
-    <aside
+    <div
       aria-label="Synthetic Simulation Data Disclosure"
       role="alert"
       data-testid="synthetic-banner"
@@ -29,7 +29,7 @@ export default function SyntheticBanner() {
       <span>
         SYNTHETIC DATA MODE ACTIVE — Results on synthetic data demonstrate the method, not real-world accuracy.
       </span>
-    </aside>
+    </div>
   )
 }
 

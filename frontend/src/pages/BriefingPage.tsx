@@ -4,9 +4,9 @@ export default function BriefingPage() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       <div className="glass-panel" style={{ padding: '24px 28px' }}>
-        <h2 style={{ margin: '0 0 8px', fontSize: 'var(--text-xl)', fontWeight: 700, color: '#f8fafc' }}>
+        <h1 style={{ margin: '0 0 8px', fontSize: 'var(--text-xl)', fontWeight: 700, color: '#f8fafc' }}>
           Autonomous Observatory Briefing
-        </h2>
+        </h1>
         <p style={{ margin: 0, fontSize: 'var(--text-sm)', color: '#94a3b8' }}>
           Executive synthesis of 24h interference events and radiation exposure context with 100% deterministic number verification.
         </p>
@@ -17,9 +17,9 @@ export default function BriefingPage() {
         <div style={{ display: 'inline-flex', padding: '16px', borderRadius: '50%', backgroundColor: 'rgba(52, 211, 153, 0.1)', color: '#34d399', marginBottom: '16px' }}>
           <CheckCircle2 size={32} aria-hidden="true" />
         </div>
-        <h3 style={{ margin: '0 0 8px', color: '#f8fafc', fontSize: 'var(--text-lg)', fontWeight: 700 }}>
+        <h2 style={{ margin: '0 0 8px', color: '#f8fafc', fontSize: 'var(--text-lg)', fontWeight: 700 }}>
           Deterministic Number Verifier Gate
-        </h3>
+        </h2>
         <p style={{ margin: '0 auto 16px', maxWidth: '520px', color: '#94a3b8', fontSize: 'var(--text-sm)', lineHeight: '1.6' }}>
           Per README Section 5: The LLM briefing generator may only use numbers extracted from verified database tables. An automated verifier rejects any ungrounded figures before display.
         </p>
