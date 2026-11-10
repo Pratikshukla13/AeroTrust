@@ -315,9 +315,9 @@ def list_sar_aggregate(
             family=r[0],
             region=r[1],
             month=r[2],
-            n_flights_flagged=r[3],
-            n_silent=r[4],
-            sar=r[5] if not r[8] else None,  # Mask SAR if suppressed
+            n_flights_flagged=r[3] if not r[8] else None,  # Mask count if suppressed (Suppression Leakage Protection)
+            n_silent=r[4] if not r[8] else None,           # Mask count if suppressed
+            sar=r[5] if not r[8] else None,                 # Mask SAR if suppressed
             ci_low=r[6] if not r[8] else None,
             ci_high=r[7] if not r[8] else None,
             suppressed=r[8],

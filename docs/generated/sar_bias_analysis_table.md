@@ -1,14 +1,17 @@
-> **SAR Estimation Bias Analysis: Impact of Clean False Positives (Phase 4.4)**
-> *Clean false positives (~44 per seed) possess nominal avionics integrity and are classified as silent, systematically inflating raw empirical $\widehat{\text{SAR}}$.*
+> **SAR Estimation Bias Analysis: Decomposition with Measured FP Silent Fraction (Phase 4.1 Task 1)**
+> *Clean false positives possess nominal ADS-B integrity (high NIC/NACp, no gaps), but random coverage dropouts (p=0.04) cause ~65% to fail silent criteria.*
+> *Exact Decomposition: $\text{SAR}^* = \frac{\widehat{\text{SAR}} \cdot N - f \cdot FP}{TP}$, where $f$ is the measured silent fraction of false positives.*
+> *Methodological Notice: Because $f$ cannot be directly measured in unlabelled production airspace, this adjustment is illustrative. Raw empirical $\widehat{\text{SAR}}$ is the primary reported operational number.*
 
-| Evaluation Cohort | Flagged Legs ($N$) | True Positives ($TP$) | Clean FPs ($FP$) | Precision (%) | Raw Empirical $\widehat{\text{SAR}}$ (%) | True $\text{SAR}^*$ Among TPs (%) | Precision-Adjusted $\text{SAR}_{adj}$ (%) | Estimation Inflation $\Delta$ (%) |
-|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| Seed 3001 | 445 | 401 | 44 | 90.1% | **26.97%** | **25.94%** | **18.95%** | +1.03% |
-| Seed 3002 | 526 | 482 | 44 | 91.6% | **23.38%** | **23.03%** | **16.39%** | +0.35% |
-| Seed 3003 | 514 | 470 | 44 | 91.4% | **25.10%** | **25.11%** | **18.09%** | +-0.01% |
-| *Synthetic Pooling for Illustration* | **1,485** | **1,353** | **132** | **91.1%** | **25.05%** | **24.61%** | **17.74%** | **+0.44%** |
+| Evaluation Cohort | Flagged Legs ($N$) | True Positives ($TP$) | Clean FPs ($FP$) | Measured FP Silent Fraction $f$ (%) | Raw Empirical $\widehat{\text{SAR}}$ (%) | True $\text{SAR}^*$ Among TPs (%) | Exact Decomposed $\text{SAR}^*$ (%) | Residual Error (%) | Old Invalid $\text{SAR}_{adj}$ (%) |
+|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| Seed 3001 | 466 | 424 | 42 | **35.71%** (15/42) | **26.39%** | **25.47%** | **25.47%** | **0.0000%** | 19.10% |
+| Seed 3002 | 529 | 484 | 45 | **33.33%** (15/45) | **24.20%** | **23.35%** | **23.35%** | **0.0000%** | 17.15% |
+| Seed 3003 | 541 | 489 | 52 | **32.69%** (17/52) | **27.36%** | **26.79%** | **26.79%** | **0.0000%** | 19.63% |
+| *Synthetic Pooling for Illustration* | **1,536** | **1,397** | **139** | **33.81%** (47/139) | **25.98%** | **25.20%** | **25.20%** | **0.0000%** | 18.61% |
 
-> **Critical Methodological Notice on Precision Adjustment**:
-> The algebraic precision adjustment $\text{SAR}_{adj} = \frac{\widehat{\text{SAR}} - (1 - \text{Prec})}{\text{Prec}}$ assumes exact knowledge of the precision of the flagged set.
-> - **In Unlabeled Production Operations, the Adjustment is Unreliable**: Operational airspace does not furnish ground-truth $TP$ and $FP$ labels. Relying on calibrated or model-predicted precision introduces secondary estimation variance that can severely distort or produce negative SAR estimates in sparse regional cells.
-> - **Operational Recommendation**: Raw empirical $\widehat{\text{SAR}}$ should be reported as an upper bound, alongside cell sample size $N$ and Wilson confidence intervals, rather than applying fragile post-hoc algebraic deflators.
+> **Mathematical Reconciliation & Bug Explanation**:
+> 1. **Why the Old Formula Failed**: The previous precision-adjusted formula $\text{SAR}_{adj} = \frac{\widehat{\text{SAR}} - (1 - \text{Prec})}{\text{Prec}}$ mathematically assumed that 100% of false positives are silent ($f = 1.0$).
+> 2. **Measured Silent Fraction**: The actual measured silent fraction among false positives is **$f \approx 33.8\%$** (Seed 3001: 35.7%, Seed 3002: 33.3%, Seed 3003: 32.7%). Clean false positives suffer random sensor dropouts ($p=0.04$) creating gaps $>60\text{s}$, causing `is_silent_flight` to return False.
+> 3. **Exact Residual**: Incorporating $f$ yields exact equality with **zero residual error (0.0000%)** against the empirical ground-truth $\text{SAR}^*$.
+> 4. **Unlabeled Airspace Limitation**: In unlabelled operational airspace, $f$ is unobservable without ground truth, making algebraic adjustments unreliable in production operations. Therefore, adjusted estimates are strictly illustrative, and raw empirical $\widehat{\text{SAR}}$ must be reported as the primary metric.

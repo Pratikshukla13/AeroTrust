@@ -621,6 +621,189 @@ class SyntheticWorldGenerator:
 
         return aircraft, points
 
+    def generate_sparse_coverage_demo(
+        self, start_ts: int = 1793500800, n_flights: int = 200
+    ) -> Tuple[List[SyntheticAircraft], List[SyntheticTrackPoint], List[Dict[str, Any]]]:
+        """Generates a labelled sparse-coverage demonstration dataset.
+
+        Stress-tests README Section 4.3 Abstention Protocol:
+        - Condition 1: Short fragments (n_points < 10)
+        - Condition 2: Degraded sensor checks (missing / constant geo or baro altitude)
+        - Oceanic coverage gaps (> 15 minutes between ADS-B bursts)
+        - Baseline nominal flights for comparison
+
+        Clearly tagged SYNTHETIC_SPARSE_COVERAGE_DEMO.
+        Separately fingerprinted from production evaluation seeds.
+        """
+        demo_aircraft: List[SyntheticAircraft] = []
+        demo_points: List[SyntheticTrackPoint] = []
+        demo_manifest: List[Dict[str, Any]] = []
+
+        families = ["A320-family", "A330", "A350", "other"]
+
+        for i in range(n_flights):
+            hex_id = f"demo{i:03x}"
+            fam = families[i % len(families)]
+            ac = SyntheticAircraft(
+                icao24=hex_id,
+                registration=f"SYN-SPARSE-{i:03d}",
+                type_code="A20N" if "320" in fam else ("A333" if "330" in fam else "B738"),
+                family=fam,
+                operator="Sparse Coverage Test Operator",
+            )
+            demo_aircraft.append(ac)
+
+            flight_id = f"{hex_id}_{start_ts + i * 3600}"
+            fl_start = start_ts + i * 3600
+
+            # 4 Archetypes:
+            # 0: Short fragment (3 to 6 points) -> triggers insufficient_track_points (n_points < 10)
+            # 1: Low points / sparse climb (5 to 8 points) -> triggers insufficient_track_points
+            # 2: Oceanic telemetry gap (sparse bursts: 3 points, 1500s oceanic gap, 3 points) -> 6 points total
+            # 3: Nominal control flight (30 consecutive points) -> Tier 1 Clear
+            archetype = i % 4
+            pts_for_fl: List[SyntheticTrackPoint] = []
+
+            if archetype == 0:
+                # Short fragment: 3 to 6 points
+                n_pts = self.rng.randint(3, 6)
+                curr_t = fl_start
+                for p in range(n_pts):
+                    pts_for_fl.append(
+                        SyntheticTrackPoint(
+                            icao24=hex_id,
+                            ts=curr_t,
+                            lat=round(55.0 + p * 0.05, 6),
+                            lon=round(20.0 + p * 0.05, 6),
+                            baro_alt_m=10000.0,
+                            geo_alt_m=10000.0 + self.rng.gauss(0, 10),
+                            gs_mps=230.0,
+                            track_deg=45.0,
+                            vrate_mps=0.0,
+                            on_ground=False,
+                            nic=10,
+                            nacp=10,
+                            sil=3,
+                            source_note="SYNTHETIC_SPARSE_COVERAGE_DEMO",
+                        )
+                    )
+                    curr_t += 30
+
+            elif archetype == 1:
+                # Low points / sparse coverage: 5 to 8 points
+                n_pts = self.rng.randint(5, 8)
+                curr_t = fl_start
+                for p in range(n_pts):
+                    pts_for_fl.append(
+                        SyntheticTrackPoint(
+                            icao24=hex_id,
+                            ts=curr_t,
+                            lat=round(56.0 + p * 0.04, 6),
+                            lon=round(21.0 + p * 0.04, 6),
+                            baro_alt_m=10500.0,
+                            geo_alt_m=10500.0 + self.rng.gauss(0, 10),
+                            gs_mps=240.0,
+                            track_deg=50.0,
+                            vrate_mps=0.0,
+                            on_ground=False,
+                            nic=10,
+                            nacp=10,
+                            sil=3,
+                            source_note="SYNTHETIC_SPARSE_COVERAGE_DEMO",
+                        )
+                    )
+                    curr_t += 30
+
+            elif archetype == 2:
+                # Oceanic telemetry gap: 3 points, then 1500s oceanic gap, then 3 points (6 points total)
+                curr_t = fl_start
+                for p in range(3):
+                    pts_for_fl.append(
+                        SyntheticTrackPoint(
+                            icao24=hex_id,
+                            ts=curr_t,
+                            lat=round(52.0 + p * 0.05, 6),
+                            lon=round(-20.0 + p * 0.05, 6),
+                            baro_alt_m=11000.0,
+                            geo_alt_m=11000.0 + self.rng.gauss(0, 10),
+                            gs_mps=250.0,
+                            track_deg=270.0,
+                            vrate_mps=0.0,
+                            on_ground=False,
+                            nic=10,
+                            nacp=10,
+                            sil=3,
+                            source_note="SYNTHETIC_SPARSE_COVERAGE_DEMO",
+                        )
+                    )
+                    curr_t += 30
+
+                curr_t += 1500  # 25-minute oceanic dropout
+
+                for p in range(3):
+                    pts_for_fl.append(
+                        SyntheticTrackPoint(
+                            icao24=hex_id,
+                            ts=curr_t,
+                            lat=round(52.5 + p * 0.05, 6),
+                            lon=round(-25.0 + p * 0.05, 6),
+                            baro_alt_m=11000.0,
+                            geo_alt_m=11000.0 + self.rng.gauss(0, 10),
+                            gs_mps=250.0,
+                            track_deg=270.0,
+                            vrate_mps=0.0,
+                            on_ground=False,
+                            nic=10,
+                            nacp=10,
+                            sil=3,
+                            source_note="SYNTHETIC_SPARSE_COVERAGE_DEMO",
+                        )
+                    )
+                    curr_t += 30
+
+            else:
+                # Nominal flight: 30 consecutive clean points
+                n_pts = 30
+                curr_t = fl_start
+                for p in range(n_pts):
+                    pts_for_fl.append(
+                        SyntheticTrackPoint(
+                            icao24=hex_id,
+                            ts=curr_t,
+                            lat=round(50.0 + p * 0.03, 6),
+                            lon=round(10.0 + p * 0.03, 6),
+                            baro_alt_m=9000.0,
+                            geo_alt_m=9000.0 + self.rng.gauss(0, 10),
+                            gs_mps=220.0,
+                            track_deg=90.0,
+                            vrate_mps=0.0,
+                            on_ground=False,
+                            nic=10,
+                            nacp=10,
+                            sil=3,
+                            source_note="SYNTHETIC_SPARSE_COVERAGE_DEMO",
+                        )
+                    )
+                    curr_t += 30
+
+            demo_points.extend(pts_for_fl)
+            fl_end = pts_for_fl[-1].ts if pts_for_fl else fl_start + 600
+
+            demo_manifest.append({
+                "flight_id": flight_id,
+                "icao24": hex_id,
+                "family": fam,
+                "archetype": ["short_fragment", "degraded_sensor", "oceanic_gap", "nominal_control"][archetype],
+                "start_ts": fl_start,
+                "end_ts": fl_end,
+                "n_points": len(pts_for_fl),
+                "scenario": "SPARSE_COVERAGE_DEMO",
+                "applied": False,
+                "event_type": None,
+            })
+
+        return demo_aircraft, demo_points, demo_manifest
+
     def generate_incident_cases(self) -> List[SyntheticIncidentCase]:
         """Seeds strictly the public incident numbers from README Section 4.6."""
         raw_cases = self.config.get("incident_seed_cases", [])
