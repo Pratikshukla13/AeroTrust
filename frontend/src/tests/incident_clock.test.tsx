@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import IncidentClockPage from '../pages/IncidentClockPage'
 
-describe('Phase 7: Incident Clock & Scoping Calculator Tests', () => {
+describe('Phase 7 & 7.1: Incident Clock & Scoping Calculator Tests', () => {
   beforeEach(() => {
     // Mock fetch for /api/incident-cases
     vi.stubGlobal('fetch', vi.fn().mockImplementation((url: string) => {
@@ -16,43 +16,143 @@ describe('Phase 7: Incident Clock & Scoping Calculator Tests', () => {
                 title: 'A320 Solar Radiation Single-Event Effect',
                 event_date: '2025-10-30',
                 public_statement_date: '2025-11-28',
-                directive_date: '2025-11-29',
+                directive_date: '2025-11-28',
+                directive_status: 'issued',
                 aircraft_affected_total: 6000,
                 aircraft_in_service: null,
                 aircraft_undelivered: null,
-                deliveries_context: 'Fewer than 100 remaining on 1 Dec 2025.',
+                deliveries_context: 'About 6,000 aircraft, fewer than 100 remaining on 1 Dec 2025.',
+                in_service_scope_notes: null,
                 days_event_to_statement: 29,
                 source_url: 'https://ad.easa.europa.eu/ad/2025-XXXX-E',
+                source_type: 'regulator',
                 verification_status: 'needs verification',
+                sources: [
+                  {
+                    url: 'https://ad.easa.europa.eu/ad/2025-XXXX-E',
+                    title: 'EASA Emergency Airworthiness Directive',
+                    source_type: 'regulator',
+                    fact_referenced: 'Emergency AD issued 28 Nov 2025 for ~6,000 aircraft; effective date to be confirmed from AD document.',
+                  },
+                  {
+                    url: 'https://www.airbus.com/en/newsroom/press-releases/2025-11-alert-a320-flight-controls',
+                    title: 'Airbus Alert Notification to Operators',
+                    source_type: 'manufacturer',
+                    fact_referenced: 'Airbus alert issued 28 Nov 2025; stated intense solar radiation may corrupt data critical to flight controls; <100 remaining on 1 Dec 2025.',
+                  },
+                ],
+                dated_events: [
+                  {
+                    date: '2025-10-30',
+                    label: 'Incident Event',
+                    description: 'Flight controls data corruption event occurs at cruise altitude.',
+                    source_url: 'https://ad.easa.europa.eu/ad/2025-XXXX-E',
+                    source_type: 'regulator',
+                  },
+                  {
+                    date: '2025-11-28',
+                    label: 'Airbus Alert & EASA Emergency AD Issued',
+                    description: 'Airbus alert and EASA emergency directive issued 28 Nov 2025.',
+                    source_url: 'https://ad.easa.europa.eu/ad/2025-XXXX-E',
+                    source_type: 'regulator',
+                  },
+                ],
+                fleet_breakdowns: [],
               },
               {
                 case_id: 'A320-PANEL-2025',
                 title: 'A320 Fuselage Panels Production Discrepancy',
                 event_date: null,
-                public_statement_date: null,
+                public_statement_date: '2025-12-02',
                 directive_date: '2025-12-17',
+                directive_status: 'proposed',
                 aircraft_affected_total: 628,
                 aircraft_in_service: 177,
                 aircraft_undelivered: 451,
-                deliveries_context: null,
+                deliveries_context: '2025 delivery target cut 820 to 790 on 3 Dec 2025. EASA proposed directive published 17 Dec 2025. Later final directive to be confirmed.',
+                in_service_scope_notes: null,
                 days_event_to_statement: null,
-                source_url: 'https://ad.easa.europa.eu/ad/US-2025-XXXX',
+                source_url: 'https://ad.easa.europa.eu/ad/US-2025-XXXX-Proposed',
+                source_type: 'regulator',
                 verification_status: 'needs verification',
+                sources: [
+                  {
+                    url: 'https://ad.easa.europa.eu/ad/US-2025-XXXX-Proposed',
+                    title: 'EASA Proposed Airworthiness Directive (PAD)',
+                    source_type: 'regulator',
+                    fact_referenced: 'Proposed directive published 17 Dec 2025 (177 in service, 451 in production).',
+                  },
+                  {
+                    url: 'https://www.airbus.com/en/newsroom/press-releases/2025-12-a320-fuselage-statement',
+                    title: 'Airbus Public Statement on Fuselage Panels',
+                    source_type: 'manufacturer',
+                    fact_referenced: 'Airbus public statement 2 Dec 2025 confirming 628 aircraft in scope.',
+                  },
+                ],
+                dated_events: [
+                  {
+                    date: '2025-12-02',
+                    label: 'Airbus Public Statement',
+                    description: 'Airbus discloses 628 aircraft in scope.',
+                    source_url: 'https://www.airbus.com/en/newsroom/press-releases/2025-12-a320-fuselage-statement',
+                    source_type: 'manufacturer',
+                  },
+                ],
+                fleet_breakdowns: [
+                  {
+                    name: 'EASA Proposed Airworthiness Directive',
+                    source_type: 'regulator',
+                    in_service: 177,
+                    undelivered_or_production: 451,
+                    customer_allocated_or_other: null,
+                    total: 628,
+                    notes: 'Published 17 Dec 2025: 177 in-service, 451 in production.',
+                  },
+                  {
+                    name: 'Reuters Industry Investigation',
+                    source_type: 'wire',
+                    in_service: 168,
+                    undelivered_or_production: 245,
+                    customer_allocated_or_other: 215,
+                    total: 628,
+                    notes: 'Secondary sourced breakdown: 168 airline fleet, 245 assembly plant, 215 parts supplier.',
+                  },
+                ],
               },
               {
-                case_id: 'A330-TOOL-2026',
-                title: 'A330 Stray Assembly Tool Inspection',
+                case_id: 'A330NEO-TOOL-2026',
+                title: 'A330neo Stray Assembly Tool Inspection',
                 event_date: null,
                 public_statement_date: null,
                 directive_date: null,
+                directive_status: 'proposed',
                 aircraft_affected_total: null,
                 aircraft_in_service: null,
                 aircraft_undelivered: null,
-                deliveries_context:
-                  'Zero deliveries in June and July 2026; nine in March to May 2026. Number of aircraft inspected not disclosed. Policy to the regulator due mid-November 2026.',
+                deliveries_context: 'Zero deliveries in June and July 2026; 3, 2, 4 in March, April, May; one on 11 Aug 2026. Number of aircraft inspected not disclosed. Policy to regulator due mid-November 2026.',
+                in_service_scope_notes: 'conflicting reports, needs verification',
                 days_event_to_statement: null,
                 source_url: 'https://www.airbus.com/en/investors/commercial-aircraft-deliveries-2026',
+                source_type: 'manufacturer',
                 verification_status: 'needs verification',
+                sources: [
+                  {
+                    url: 'https://www.airbus.com/en/investors/commercial-aircraft-deliveries-2026',
+                    title: 'Airbus Commercial Aircraft Monthly Deliveries File',
+                    source_type: 'manufacturer',
+                    fact_referenced: 'Deliveries log: 0 in June/July 2026, 3 in March, 2 in April, 4 in May, 1 on 11 Aug 2026.',
+                  },
+                ],
+                dated_events: [
+                  {
+                    date: '2026-03-31',
+                    label: 'March Deliveries',
+                    description: '3 A330neo aircraft delivered.',
+                    source_url: 'https://www.airbus.com/en/investors/commercial-aircraft-deliveries-2026',
+                    source_type: 'manufacturer',
+                  },
+                ],
+                fleet_breakdowns: [],
               },
             ]),
         })
@@ -65,37 +165,78 @@ describe('Phase 7: Incident Clock & Scoping Calculator Tests', () => {
     vi.restoreAllMocks()
   })
 
-  it('renders required mandatory disclosure copy', async () => {
+  it('renders required mandatory disclosure copy', () => {
     render(<IncidentClockPage />)
-    const copyBanner = await screen.findByTestId('calculator-mandated-copy')
+    const copyBanner = screen.getByTestId('calculator-mandated-copy')
     expect(copyBanner.textContent).toContain(
       'This calculator turns public information into a scenario. It does not describe Airbus internal data or decisions. Scenario outputs depend on the inputs you enter.'
     )
+  })
+
+  it('renders exact mandatory radiation copy and decoupling note', () => {
+    render(<IncidentClockPage />)
+    const exactRequiredCopy =
+      'Airbus stated that intense solar radiation may corrupt data critical to flight controls. Independent experts have questioned whether the radiation level on that date was unusual.'
+    const matchingElements = screen.getAllByText(new RegExp(exactRequiredCopy, 'i'))
+    expect(matchingElements.length).toBeGreaterThanOrEqual(1)
+
+    const decouplingNotes = screen.getAllByText(/Axis B is exposure context, not a cause/i)
+    expect(decouplingNotes.length).toBeGreaterThanOrEqual(1)
+  })
+
+  it('verifies no page element contains forbidden solar causal phrase', () => {
+    const { container } = render(<IncidentClockPage />)
+    const text = container.textContent?.toLowerCase() || ''
+    const forbidden = 'solar ' + 'storm ' + 'caused'
+    expect(text.includes(forbidden)).toBe(false)
   })
 
   it('UI test: renders "needs verification" for EVERY case until status is sourced', async () => {
     render(<IncidentClockPage />)
     const badgeSolar = await screen.findByTestId('badge-verification-A320-SOLAR-2025')
     const badgePanel = await screen.findByTestId('badge-verification-A320-PANEL-2025')
-    const badgeTool = await screen.findByTestId('badge-verification-A330-TOOL-2026')
+    const badgeTool = await screen.findByTestId('badge-verification-A330NEO-TOOL-2026')
 
     expect(badgeSolar.textContent).toBe('needs verification')
     expect(badgePanel.textContent).toBe('needs verification')
     expect(badgeTool.textContent).toBe('needs verification')
   })
 
-  it('renders A320 solar radiation timeline view with 29-day computed gap', async () => {
+  it('renders A320 solar radiation timeline view with 29-day computed gap', () => {
     render(<IncidentClockPage />)
-    expect(screen.getByText('30 Oct 2025')).toBeDefined()
-    expect(screen.getByText('28 Nov 2025')).toBeDefined()
-    expect(screen.getByText('29 Nov 2025')).toBeDefined()
+    expect(screen.getAllByText('30 Oct 2025').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText('28 Nov 2025').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText('1 Dec 2025').length).toBeGreaterThanOrEqual(1)
     expect(screen.getByText('29 Days')).toBeDefined()
-    expect(
-      screen.getByText(/reflects public disclosure timing only and says nothing about internal engineering/i)
-    ).toBeDefined()
+    expect(screen.getAllByText(/Axis B is exposure context, not a cause/i).length).toBeGreaterThanOrEqual(1)
   })
 
-  it('test: no preset contains an unsourced number (unsourced remain empty & highlighted)', async () => {
+  it('renders dual breakdowns for A320 panels and conflicting reports for A330neo', async () => {
+    render(<IncidentClockPage />)
+    // Wait for async fetch to set state
+    await screen.findByText(/EASA Proposed Airworthiness Directive/i)
+
+    // A320 panels dual breakdown
+    expect(screen.getByText(/Reuters Industry Investigation/i)).toBeDefined()
+    expect(screen.getByText(/168 in service/i)).toBeDefined()
+    expect(screen.getByText(/245 production\/undelivered/i)).toBeDefined()
+    expect(screen.getByText(/215 customer-allocated/i)).toBeDefined()
+
+    // A330neo conflicting reports notice
+    expect(screen.getByText(/conflicting reports, needs verification/i)).toBeDefined()
+    expect(screen.getByText(/A330neo Stray Assembly Tool Inspection/i)).toBeDefined()
+  })
+
+  it('renders primary source links and source_type badges', async () => {
+    render(<IncidentClockPage />)
+    await screen.findByText(/EASA Emergency Airworthiness Directive/i)
+    const badges = screen.getAllByText(/regulator|manufacturer|wire/i)
+    expect(badges.length).toBeGreaterThan(0)
+    expect(screen.getByText('EASA Emergency Airworthiness Directive')).toBeDefined()
+    expect(screen.getByText('Airbus Alert Notification to Operators')).toBeDefined()
+  })
+
+  it('test: no preset contains an unsourced number (unsourced remain empty & highlighted)', () => {
     render(<IncidentClockPage />)
 
     // Click Solar Preset
@@ -142,7 +283,7 @@ describe('Phase 7: Incident Clock & Scoping Calculator Tests', () => {
     expect(inputValue.value).toBe('')
   })
 
-  it('test: formula with hand-computed values matches exactly', async () => {
+  it('test: formula with hand-computed values matches exactly', () => {
     render(<IncidentClockPage />)
 
     const inputDays = screen.getByTestId('input-days-to-scope')
@@ -179,7 +320,7 @@ describe('Phase 7: Incident Clock & Scoping Calculator Tests', () => {
     expect(valOneDayAircraftDays.textContent).toContain('150')
   })
 
-  it('test: blank inputs produce NO money figure', async () => {
+  it('test: blank inputs produce NO money figure', () => {
     render(<IncidentClockPage />)
 
     const inputDays = screen.getByTestId('input-days-to-scope')
@@ -210,7 +351,7 @@ describe('Phase 7: Incident Clock & Scoping Calculator Tests', () => {
     expect(table.textContent).not.toContain('$')
   })
 
-  it('test: entered value produces expected financial calculation', async () => {
+  it('test: entered value produces expected financial calculation', () => {
     render(<IncidentClockPage />)
 
     const inputDays = screen.getByTestId('input-days-to-scope')

@@ -567,7 +567,7 @@ def get_limitations():
         "All results synthetic: benchmark evaluated on simulated ADS-B perturbations, not real-world air traffic.",
         "Abstention exercised only in the labelled rule-trigger demo and never in the benchmark: 0.0% of benchmark flights hit an abstention rule because simulated commercial airway tracks have N >= 68 points and dual valid checks.",
         "False alarms driven by the generator's assumed barometric-fault rate (2% per point, uniform 60 to 180 m): produces ~35 clean false alarms per 3,650 flights when residuals exceed 120.0m.",
-        "Radiation tables are illustrative placeholders: relative ionizing radiation index pending empirical ground station calibration.",
+        "Radiation tables are illustrative exposure context, not a cause: Airbus stated that intense solar radiation may corrupt data critical to flight controls. Independent experts have questioned whether the radiation level on that date was unusual. Axis B is exposure context, not a cause.",
         "Threat base-rate impact: detector precision drops sharply in peacetime low-prevalence airspaces due to the false alarm base rate.",
     ]
 

@@ -10,6 +10,8 @@ Prepared for Pratik Shukla | November 2026
 
 AeroTrust is a data-integrity observatory for aircraft. Airbus has openly named two outside threats to aircraft data: intense solar radiation (A320 recall, November 2025) and GNSS jamming/spoofing (EASA's top safety priority; Airbus's own Fly Your Ideas 2026 theme). AeroTrust scores both in one place, says "unknown" when evidence is weak, measures a new metric called Silent Acceptance Rate (SAR), and includes an Incident Clock that prices the cost of slow scoping using Airbus's public cases.
 
+> **Radiation Causality Notice:** Airbus stated that intense solar radiation may corrupt data critical to flight controls. Independent experts have questioned whether the radiation level on that date was unusual. Axis B is exposure context, not a cause.
+
 **Scope tiers**
 
 | Tier | Components |
@@ -49,9 +51,8 @@ Goal: find out what data you really have before writing any model code. Every it
 | # | Task | Notes |
 | --- | --- | --- |
 | S1 | Locate NOAA SWPC JSON services for proton flux (>10 MeV), Kp index, X-ray flux | **Verify exact endpoint names on the SWPC data page.** Store raw payloads with timestamps |
-| S2 | Find the historical archive for 30 October 2025 | Needed for the replay test |
 | V1 | Snapshot EASA's affected flight information regions list (7-day and 30-day rankings) weekly | Validation proxy. Note: it is itself built from ADS-B plus reports, so agreement is a sanity check, not proof |
-| V2 | Identify the 30 October 2025 JetBlue flight (Flight 1230, emergency landing at Tampa) in the data | Test case n=1. Confirm callsign and time window before use |
+| V2 | Identify candidate flights in historical data | Test case n=1. Confirm callsign and time window before use |
 
 ### 2.4 Decision gate at end of Day 2
 
@@ -118,9 +119,10 @@ A score is replaced by **unknown** when any of these hold: too few points in the
 Relative exposure index = altitude factor x geomagnetic-latitude factor x space-weather multiplier (from proton flux and Kp bins).
 
 - It is **relative**, not a probability of any failure. Never claim a bit-flip probability.
+- **Radiation Causality Notice:** Airbus stated that intense solar radiation may corrupt data critical to flight controls. Independent experts have questioned whether the radiation level on that date was unusual. Axis B is exposure context, not a cause.
 - For the shape of each factor, use a documented published model or tables (for example FAA CARI-7 or NAIRAS publications), and **cite the source in your README**. Do not invent constants.
 
-### 4.6 Incident Clock & Scoping Calculator (Phase 7)
+### 4.6 Incident Clock & Scoping Calculator (Phase 7 & 7.1)
 
 **Inputs (all user-editable):** days to scope, aircraft held in-service, aircraft held undelivered, baseline monthly handover rate (optional), share recovered later (optional), value per aircraft (optional).
 
@@ -131,22 +133,23 @@ Relative exposure index = altitude factor x geomagnetic-latitude factor x space-
 - **Output d (Valuation Impact):** If `value_per_aircraft` is blank, **no money figure is shown**. Shows `--` with prompts to enter valuation.
 - **One-Day Cost of Delay:** Stated in `aircraft-days / day`, with financial rate shown only if valuation is provided.
 - **Sensitivity Matrix:** Sensitivity over scoping duration (0.5x, 1x, 2x).
-- **Public Disclosure Timeline:** A320 solar radiation timeline (30 Oct 2025 event -> 28 Nov 2025 statement -> 29 Nov 2025 AD), detailing the computed 29-day public gap with public-only disclosure caveat.
+- **Public Disclosure Timeline:** A320 solar radiation timeline (30 Oct 2025 event -> 28 Nov 2025 statement -> 28 Nov 2025 AD issued -> 1 Dec 2025 remediation), detailing the computed 29-day public gap with public-only disclosure caveat.
 
 **Seed Cases (Strictly public facts; all marked "needs verification" until source URL is confirmed and marked sourced):**
 
-| Case ID | Title | Sourced Public Facts | Verification Status |
-| --- | --- | --- | --- |
-| `A320-SOLAR-2025` | A320 Solar Radiation Single-Event Effect | Incident 30 Oct 2025; public statement 28 Nov 2025; emergency directive effective 29 Nov 2025; about 6,000 aircraft affected; fewer than 100 remaining on 1 Dec 2025. Computed gap: 29 days. | `needs verification` |
-| `A320-PANEL-2025` | A320 Fuselage Panels Production Discrepancy | Directive 17 Dec 2025; 628 potentially affected (177 in service, 451 undelivered); event date unknown. | `needs verification` |
-| `A330-TOOL-2026` | A330 Stray Assembly Tool Inspection | Zero deliveries in June and July 2026; nine in March to May 2026; number of aircraft inspected not disclosed; policy to the regulator due mid-November 2026; event date unknown. | `needs verification` |
+| Case ID | Title | Directive Status | Sourced Public Facts | Verification Status |
+| --- | --- | --- | --- | --- |
+| `A320-SOLAR-2025` | A320 Solar Radiation Single-Event Effect | `issued` | Airbus alert and EASA emergency directive issued 28 Nov 2025 (effective date to be confirmed from the AD document); about 6,000 aircraft affected; fewer than 100 remaining on 1 Dec 2025. Computed gap: 29 days. | `needs verification` |
+| `A320-PANEL-2025` | A320 Fuselage Panels Production Discrepancy | `proposed` | Airbus public statement 2 Dec 2025 (628 in scope); 2025 delivery target cut 820 to 790 on 3 Dec 2025; EASA proposed directive published 17 Dec 2025 (177 in service, 451 in production); later final directive to be confirmed. Dual sourced breakdowns: EASA proposed (177 in-service / 451 production) vs Reuters investigation (168 airline / 245 plant / 215 supplier). | `needs verification` |
+| `A330NEO-TOOL-2026` | A330neo Stray Assembly Tool Inspection | `proposed` | Zero deliveries in June and July 2026; 3, 2, 4 in March, April, May; one on 11 Aug 2026; number of aircraft inspected not disclosed; policy to regulator due mid-November 2026; scope of in-service inspections has conflicting reports (some say 24, some say 4), shown as `conflicting reports, needs verification`. | `needs verification` |
 
 *Mandatory Scenario Notice:* "This calculator turns public information into a scenario. It does not describe Airbus internal data or decisions. Scenario outputs depend on the inputs you enter."
 
+*Mandatory Radiation Context:* "Airbus stated that intense solar radiation may corrupt data critical to flight controls. Independent experts have questioned whether the radiation level on that date was unusual. Axis B is exposure context, not a cause."
 
 ### 4.7 Precursor scanner (hypothesis generator only)
 
-Find A320-family aircraft in cruise with a sudden pitch-down-like profile: vertical rate drops sharply and recovers, with a defined altitude loss, outside normal phase changes. Tune thresholds on the 30 October 2025 flight, then run on other flights and **count false alarms** (turbulence, TCAS, ATC-directed changes). Output is a private, manually reviewed candidate list. It proves nothing by itself.
+Find A320-family aircraft in cruise with a sudden pitch-down-like profile: vertical rate drops sharply and recovers, with a defined altitude loss, outside normal phase changes. Run across cruise flights and **count false alarms** (turbulence, TCAS, ATC-directed changes). Output is a private, manually reviewed candidate list. It proves nothing by itself.
 
 ---
 

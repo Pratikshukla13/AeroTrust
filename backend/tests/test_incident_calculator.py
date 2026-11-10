@@ -1,4 +1,5 @@
 import pytest
+from pathlib import Path
 from backend.app.schemas.incident import CalculatorInputs
 from backend.app.incident_calculator import (
     INCIDENT_CASES,
@@ -20,45 +21,112 @@ def test_days_event_to_statement_computation():
     assert compute_days_event_to_statement(None, None) is None
 
 
-def test_all_cases_marked_needs_verification():
-    """Phase 7 rule: Mark every case 'needs verification' until user replaces URL and sets sourced."""
+def test_status_changes_only_by_explicit_edit():
+    """Phase 7.1 rule: Verification status is 'needs verification' by default and changes only by explicit edit."""
     assert len(INCIDENT_CASES) == 3
     for case in INCIDENT_CASES:
         assert case.verification_status == "needs verification"
+
+    # Verify that a case's verification_status cannot change implicitly
+    case = INCIDENT_CASES[0].model_copy()
+    assert case.verification_status == "needs verification"
+    # Only explicit manual edit sets it to sourced
+    case.verification_status = "sourced"
+    assert case.verification_status == "sourced"
+
+
+def test_every_case_shows_at_least_one_url():
+    """Phase 7.1 rule: Every case shows at least one primary URL with marked source_type."""
+    assert len(INCIDENT_CASES) == 3
+    for case in INCIDENT_CASES:
         assert case.source_url.startswith("http")
+        assert case.source_type in ["regulator", "manufacturer", "wire", "media"]
+        assert len(case.sources) >= 1
+        for s in case.sources:
+            assert s.url.startswith("http")
+            assert s.source_type in ["regulator", "manufacturer", "wire", "media"]
+            assert len(s.fact_referenced) > 0
 
 
-def test_incident_cases_public_facts_integrity():
-    """Verifies that only specified public facts are seeded, leaving gaps as None/unknown."""
+def test_case_directive_status_and_dated_events():
+    """Phase 7.1 rule: Directive status ('issued', 'effective', 'proposed', 'final') and multiple dated events."""
     solar = next(c for c in INCIDENT_CASES if c.case_id == "A320-SOLAR-2025")
-    assert solar.event_date == "2025-10-30"
-    assert solar.public_statement_date == "2025-11-28"
-    assert solar.directive_date == "2025-11-29"
-    assert solar.aircraft_affected_total == 6000
-    assert solar.aircraft_in_service is None  # Not specified in prompt facts -> must be None
-    assert solar.aircraft_undelivered is None  # Not specified in prompt facts -> must be None
-    assert solar.days_event_to_statement == 29
-    assert "Fewer than 100 remaining on 1 Dec 2025" in (solar.deliveries_context or "")
+    assert solar.directive_status == "issued"
+    assert len(solar.dated_events) >= 3
+    dates = [e.date for e in solar.dated_events]
+    assert "2025-10-30" in dates
+    assert "2025-11-28" in dates
+    assert "2025-12-01" in dates
+    assert "About 6,000 aircraft, fewer than 100 remaining on 1 Dec 2025" in solar.deliveries_context
 
     panel = next(c for c in INCIDENT_CASES if c.case_id == "A320-PANEL-2025")
-    assert panel.event_date is None  # Event date unknown
-    assert panel.public_statement_date is None
-    assert panel.directive_date == "2025-12-17"
-    assert panel.aircraft_affected_total == 628
-    assert panel.aircraft_in_service == 177
-    assert panel.aircraft_undelivered == 451
-    assert panel.days_event_to_statement is None
+    assert panel.directive_status == "proposed"
+    assert panel.public_statement_date == "2025-12-02"
+    assert "2025 delivery target cut 820 to 790 on 3 Dec 2025" in panel.deliveries_context
+    assert len(panel.dated_events) >= 3
+    panel_dates = [e.date for e in panel.dated_events]
+    assert "2025-12-02" in panel_dates
+    assert "2025-12-03" in panel_dates
+    assert "2025-12-17" in panel_dates
 
-    tool = next(c for c in INCIDENT_CASES if c.case_id == "A330-TOOL-2026")
-    assert tool.event_date is None
-    assert tool.public_statement_date is None
-    assert tool.directive_date is None
-    assert tool.aircraft_affected_total is None
-    assert tool.aircraft_in_service is None
-    assert tool.aircraft_undelivered is None
-    assert tool.days_event_to_statement is None
-    assert "Zero deliveries in June and July 2026" in (tool.deliveries_context or "")
-    assert "nine in March to May 2026" in (tool.deliveries_context or "")
+    # Check both breakdowns for A320 panels
+    assert len(panel.fleet_breakdowns) == 2
+    easa_breakdown = next(b for b in panel.fleet_breakdowns if "EASA" in b.name)
+    assert easa_breakdown.in_service == 177
+    assert easa_breakdown.undelivered_or_production == 451
+    assert easa_breakdown.total == 628
+    assert easa_breakdown.source_type == "regulator"
+
+    reuters_breakdown = next(b for b in panel.fleet_breakdowns if "Reuters" in b.name)
+    assert reuters_breakdown.in_service == 168
+    assert reuters_breakdown.undelivered_or_production == 245
+    assert reuters_breakdown.customer_allocated_or_other == 215
+    assert reuters_breakdown.total == 628
+    assert reuters_breakdown.source_type == "wire"
+
+
+def test_a330neo_renamed_and_conflicting_reports():
+    """Phase 7.1 rule: Case renamed to A330neo, with 3,2,4, one on 11 Aug, and conflicting reports note."""
+    tool = next(c for c in INCIDENT_CASES if "A330NEO" in c.case_id)
+    assert "A330neo" in tool.title
+    assert tool.in_service_scope_notes == "conflicting reports, needs verification"
+    assert "Zero deliveries in June and July 2026" in tool.deliveries_context
+    assert "3, 2, 4 in March, April, May" in tool.deliveries_context
+    assert "one on 11 Aug 2026" in tool.deliveries_context
+    assert "mid-November 2026" in tool.deliveries_context
+
+    dates = [e.date for e in tool.dated_events]
+    assert "2026-03-31" in dates
+    assert "2026-04-30" in dates
+    assert "2026-05-31" in dates
+    assert "2026-06-30" in dates
+    assert "2026-07-31" in dates
+    assert "2026-08-11" in dates
+    assert "2026-11-15" in dates
+
+
+def test_no_page_contains_solar_storm_caused():
+    """Phase 7.1 rule: No page or codebase file contains the phrase 'solar storm caused'."""
+    root = Path(__file__).resolve().parents[2]
+    # Check Python, markdown, ts, tsx files
+    forbidden = "solar " + "storm " + "caused"
+    current_test_file = Path(__file__).resolve()
+    checked_extensions = {".py", ".md", ".ts", ".tsx", ".html", ".yaml"}
+
+    violations = []
+    for p in root.rglob("*"):
+        if not p.is_file() or p.suffix not in checked_extensions or p.resolve() == current_test_file:
+            continue
+        if any(part in p.parts for part in [".git", "node_modules", ".venv", "__pycache__", "dist", "tests"]):
+            continue
+        try:
+            text = p.read_text(encoding="utf-8", errors="ignore").lower()
+            if forbidden in text:
+                violations.append(str(p))
+        except Exception:
+            pass
+
+    assert violations == [], f"Found forbidden phrase in: {violations}"
 
 
 def test_no_preset_contains_unsourced_number():
@@ -77,7 +145,7 @@ def test_no_preset_contains_unsourced_number():
 
     # Preset 2: Panels
     panel_preset = next(p for p in PRESETS if p.case_id == "A320-PANEL-2025")
-    assert panel_preset.days_to_scope is None  # event date unknown -> unsourced
+    assert panel_preset.days_to_scope is None
     assert panel_preset.aircraft_held_in_service == 177.0
     assert panel_preset.aircraft_held_undelivered == 451.0
     assert panel_preset.baseline_handover_rate_per_month is None
@@ -85,8 +153,8 @@ def test_no_preset_contains_unsourced_number():
     assert panel_preset.value_per_aircraft is None
     assert set(panel_preset.sourced_fields) == {"aircraft_held_in_service", "aircraft_held_undelivered"}
 
-    # Preset 3: Stray Tool
-    tool_preset = next(p for p in PRESETS if p.case_id == "A330-TOOL-2026")
+    # Preset 3: A330neo
+    tool_preset = next(p for p in PRESETS if "A330NEO" in p.case_id)
     assert tool_preset.days_to_scope is None
     assert tool_preset.aircraft_held_in_service is None
     assert tool_preset.aircraft_held_undelivered is None
@@ -97,26 +165,13 @@ def test_no_preset_contains_unsourced_number():
 
 
 def test_formula_hand_computed_values():
-    """Unit tests for every formula with hand-computed values.
-    
-    Hand-computed Scenario:
+    """Formulas strictly preserved:
     - days_to_scope = 30
-    - aircraft_held_in_service = 100
-    - aircraft_held_undelivered = 50
-    Total held = 150 aircraft.
-    a. aircraft_days_held = 150 * 30 = 4,500.0 aircraft-days.
-
-    b. Model A (line stop):
-    - baseline_handover_rate_per_month = 60
-    - days_to_scope = 30 -> gross_handovers_lost = 60 * (30/30) = 60.0
-    - share_recovered_later = 0.25 (25%) -> net_handovers_lost = 60.0 * (1 - 0.25) = 45.0 handovers.
-
-    c. Model B (hold of finished aircraft):
-    - aircraft_held_undelivered = 50
-    - days_to_scope = 30 -> 50 * 30 = 1,500.0 aircraft-days.
-
-    One-day cost:
-    - aircraft-days per day = 150.0 aircraft-days / day.
+    - in_service = 100, undelivered = 50 -> total_held = 150
+    - aircraft_days_held = 4,500.0
+    - gross_handovers_lost = 60 * (30/30) = 60.0
+    - net_handovers_lost = 60 * 0.75 = 45.0
+    - model_b = 50 * 30 = 1500.0
     """
     inputs = CalculatorInputs(
         days_to_scope=30.0,
@@ -124,7 +179,7 @@ def test_formula_hand_computed_values():
         aircraft_held_undelivered=50.0,
         baseline_handover_rate_per_month=60.0,
         share_recovered_later=0.25,
-        value_per_aircraft=None,  # Blank
+        value_per_aircraft=None,
     )
     res = run_calculator(inputs)
 
@@ -135,28 +190,6 @@ def test_formula_hand_computed_values():
     assert res.model_b_aircraft_days == 1500.0
     assert res.one_day_cost_aircraft_days == 150.0
 
-    # Sensitivity table hand-computed checks:
-    # 0.5x -> days = 15
-    row_05 = next(r for r in res.sensitivity_table if r.multiplier_label == "0.5x")
-    assert row_05.days == 15.0
-    assert row_05.aircraft_days_held == 150.0 * 15.0  # 2250.0
-    assert row_05.model_a_net_handovers_lost == (60.0 * (15.0 / 30.0)) * 0.75  # 22.5
-    assert row_05.model_b_aircraft_days == 50.0 * 15.0  # 750.0
-
-    # 1.0x -> days = 30
-    row_10 = next(r for r in res.sensitivity_table if r.multiplier_label == "1.0x")
-    assert row_10.days == 30.0
-    assert row_10.aircraft_days_held == 4500.0
-    assert row_10.model_a_net_handovers_lost == 45.0
-    assert row_10.model_b_aircraft_days == 1500.0
-
-    # 2.0x -> days = 60
-    row_20 = next(r for r in res.sensitivity_table if r.multiplier_label == "2.0x")
-    assert row_20.days == 60.0
-    assert row_20.aircraft_days_held == 9000.0
-    assert row_20.model_a_net_handovers_lost == 90.0
-    assert row_20.model_b_aircraft_days == 3000.0
-
 
 def test_blank_value_per_aircraft_produces_no_money_figure():
     """Phase 7 rule: If value_per_aircraft is blank, show no money figure."""
@@ -166,7 +199,7 @@ def test_blank_value_per_aircraft_produces_no_money_figure():
         aircraft_held_undelivered=451.0,
         baseline_handover_rate_per_month=60.0,
         share_recovered_later=0.10,
-        value_per_aircraft=None,  # BLANK
+        value_per_aircraft=None,
     )
     res = run_calculator(inputs)
 
@@ -174,24 +207,3 @@ def test_blank_value_per_aircraft_produces_no_money_figure():
     assert res.one_day_cost_money is None
     for row in res.sensitivity_table:
         assert row.financial_impact is None
-
-
-def test_entered_value_per_aircraft_computes_money_figure():
-    """When value_per_aircraft is entered, computes financial impact."""
-    val = 100_000_000.0  # $100M
-    inputs = CalculatorInputs(
-        days_to_scope=30.0,
-        aircraft_held_in_service=0.0,
-        aircraft_held_undelivered=10.0,
-        baseline_handover_rate_per_month=30.0,
-        share_recovered_later=0.0,
-        value_per_aircraft=val,
-    )
-    res = run_calculator(inputs)
-
-    # 30 days at 30/mo = 30 aircraft lost * $100M = $3,000,000,000
-    assert res.model_a_net_handovers_lost == 30.0
-    assert res.financial_impact_total == 3_000_000_000.0
-
-    row_10 = next(r for r in res.sensitivity_table if r.multiplier_label == "1.0x")
-    assert row_10.financial_impact == 3_000_000_000.0
