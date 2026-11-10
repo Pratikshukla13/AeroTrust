@@ -14,3 +14,8 @@
 > **Mathematical Derivation & Verification**:
 > Precision is derived strictly via Bayes rule: $P(\text{Spoof}|\text{Alert}) = \frac{p \cdot \text{TPR}}{p \cdot \text{TPR} + (1-p) \cdot \text{FPR}}$.
 > At benchmark threat prevalence $p = 17.47\%$, leg-level pooled precision is **83.0%** (95% Wilson range: [79.7%, 85.8%]).
+> At the benchmark's own leg-level attack share (about 27 to 29%), the derived and observed precision agree at about 90%. At assumed lower prevalences it falls as shown.
+> - Seed 3001 (attack share 29.38%): derived precision = 90.1% (non-spoofed FPR) / 88.9% (clean FPR)
+> - Seed 3002 (attack share 26.58%): derived precision = 91.6% (non-spoofed FPR) / 90.7% (clean FPR)
+> - Seed 3003 (attack share 27.60%): derived precision = 91.4% (non-spoofed FPR) / 90.0% (clean FPR)
+> - Pooled (attack share 27.86%): derived precision = 89.9% (clean FPR)

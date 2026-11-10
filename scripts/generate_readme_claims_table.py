@@ -89,12 +89,6 @@ def extract_metrics():
     s3001_lines = [l for l in sar_text.splitlines() if l.startswith("| Seed 3001")]
     s3001_suppressed = [l for l in s3001_lines if "SUPPRESSED" in l]
 
-    abstention_text = (DOCS_GEN / "abstention_demo_table.md").read_text(encoding="utf-8")
-    demo_match = re.search(
-        r"Overall Rule-Trigger Demo Suite\s*\|\s*\*\*(\d+)\*\*\s*\|\s*[^|]+\|\s*[^|]+\|\s*[^|]+\|\s*\*\*(\d+)\*\*\s*\|\s*\*\*([\d\.]+%)\*\*",
-        abstention_text,
-    )
-
     return {
         "tpr_val": tpr_val,
         "tpr_ci": tpr_ci,
@@ -105,9 +99,6 @@ def extract_metrics():
         "fp_by_seed": fp_by_seed,
         "sar_suppressed_count": len(s3001_suppressed),
         "sar_total_cells": len(s3001_lines),
-        "demo_abstention_flights": demo_match.group(1) if demo_match else "200",
-        "demo_abstained_count": demo_match.group(2) if demo_match else "125",
-        "demo_abstention_rate": demo_match.group(3) if demo_match else "62.5%",
     }
 
 def get_row_data(m):
@@ -135,7 +126,7 @@ def get_row_data(m):
         {
             "claim": "Recall on all spoofed legs (pooled)",
             "value": f"{m['tpr_val']} ({m['tpr_ci']})",
-            "unit": f"Scheduled flight legs, pooled seeds 3001–3003 (N = {total_spoofed:,} spoofed legs / {total_legs:,} legs)",
+            "unit": f"Scheduled flight legs, pooled seeds 3001–3003 (N = {total_spoofed:,} spoofed legs / {total_legs:,} legs; non-spoofed legs 12,986, of which clean-only legs: 11,123)",
             "source": "docs/generated/base_rate_honesty_table.md & leg_level_metrics.md",
             "source_link": "[`docs/generated/base_rate_honesty_table.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/generated/base_rate_honesty_table.md) & [`leg_level_metrics.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/generated/leg_level_metrics.md)",
         },
@@ -146,7 +137,7 @@ def get_row_data(m):
                 f"Combined: {m['event_metrics']['3001']['combined']}–{m['event_metrics']['3003']['combined']}; "
                 f"Horizontal offset: {m['event_metrics']['3001']['h_offset']}; "
                 f"Horizontal drift: {m['event_metrics']['3001']['h_drift']} "
-                f"(Note: 40.8% [37.6%, 44.0%] was the altitude-attack-only figure from dev/test seeds 1337/2024)"
+                f"(Note: 40.8% is an earlier README figure that is no longer reported)"
             ),
             "unit": "Scheduled flight legs per attack subtype, seeds 3001, 3002, 3003",
             "source": "docs/generated/event_type_honesty_table.md",
@@ -155,12 +146,12 @@ def get_row_data(m):
         {
             "claim": "Observed leg-level precision per seed",
             "value": (
-                f"Seed 3001: {p3001['prec']} (TP={p3001['tp']}, FP={p3001['fp']}); "
-                f"Seed 3002: {p3002['prec']} (TP={p3002['tp']}, FP={p3002['fp']}); "
-                f"Seed 3003: {p3003['prec']} (TP={p3003['tp']}, FP={p3003['fp']}) "
+                f"Seed 3001: {p3001['prec']} (TP={p3001['tp']}, FP={p3001['fp']}, denom={int(p3001['tp']) + int(p3001['fp'])}); "
+                f"Seed 3002: {p3002['prec']} (TP={p3002['tp']}, FP={p3002['fp']}, denom={int(p3002['tp']) + int(p3002['fp'])}); "
+                f"Seed 3003: {p3003['prec']} (TP={p3003['tp']}, FP={p3003['fp']}, denom={int(p3003['tp']) + int(p3003['fp'])}) "
                 f"at benchmark attack share {p3002['attack_share']}–{p3001['attack_share']} (1,595–1,763 spoofed legs / 6,001 legs per seed)"
             ),
-            "unit": "Scheduled flight legs per seed, unpooled",
+            "unit": "Scheduled flight legs per seed, unpooled (denominator: total flagged legs TP + FP)",
             "source": "docs/generated/leg_level_metrics.md",
             "source_link": "[`docs/generated/leg_level_metrics.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/generated/leg_level_metrics.md)",
         },
@@ -186,7 +177,7 @@ def get_row_data(m):
                 f"Seed 3002: {fp3002.get('baro_drift_error', 35)} baro drift, {fp3002.get('boundary_truncation', 8)} boundary truncation, {fp3002.get('jamming_co_occurrence', 1)} jamming; "
                 f"Seed 3003: {fp3003.get('baro_drift_error', 36)} baro drift, {fp3003.get('boundary_truncation', 8)} boundary truncation, {fp3003.get('jamming_co_occurrence', 0)} jamming"
             ),
-            "unit": "Clean scheduled flight legs per seed (TN: 4,193, 4,361, 4,300 across 6,001 legs per seed)",
+            "unit": "Clean scheduled flight legs per seed (TN: 4,193, 4,361, 4,300 across 6,001 legs per seed; clean FPR 1.17% denominator: 11,123 clean-only legs)",
             "source": "docs/generated/fp_leg_audit_table.md",
             "source_link": "[`docs/generated/fp_leg_audit_table.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/generated/fp_leg_audit_table.md)",
         },
@@ -196,7 +187,7 @@ def get_row_data(m):
                 f"SAR suppression: N >= 30 strictly enforced ({m['sar_suppressed_count']}/{m['sar_total_cells']} regional cells masked); "
                 f"Horizontal recall: 0.0%; "
                 f"Consensus: Inactive (0% contribution, disabled in v0.3); "
-                f"Abstention: 0.0% on benchmark seeds, exercised only in demo ({m['demo_abstention_rate']}, {m['demo_abstained_count']}/{m['demo_abstention_flights']})"
+                f"Abstention: Benchmark: 0.0%. Rule-trigger demo: 125/200, which is by construction (demo scenarios were built to trigger rules), not a measured rate."
             ),
             "unit": "Regional/family cohorts and demo flights (seeds 3001–3003, demo seed 9999)",
             "source": "docs/generated/sar_cell_suppression_table.md & abstention_demo_table.md",
@@ -212,7 +203,18 @@ def generate_readme_table(rows):
     ]
     for r in rows:
         lines.append(f"| **{r['claim']}** | {r['value']} | {r['unit']} | {r['source_link']} |")
-    return "\n".join(lines)
+
+    # Add required precision note
+    note = (
+        "\n> **Precision at Benchmark Base Rate vs Assumed Prevalences**:\n"
+        "> At the benchmark's own leg-level attack share (about 27 to 29%), the derived and observed precision agree at about 90%. "
+        "At assumed lower prevalences it falls as shown.\n"
+        "> - Seed 3001 (attack share 29.38%): derived precision = 90.1% (non-spoofed FPR) / 88.9% (clean FPR) vs observed 90.1%\n"
+        "> - Seed 3002 (attack share 26.58%): derived precision = 91.6% (non-spoofed FPR) / 90.7% (clean FPR) vs observed 91.6%\n"
+        "> - Seed 3003 (attack share 27.60%): derived precision = 91.4% (non-spoofed FPR) / 90.0% (clean FPR) vs observed 91.4%\n"
+        "> - Pooled (attack share 27.86%): derived precision = 89.9% (clean FPR)"
+    )
+    return "\n".join(lines) + "\n" + note
 
 def generate_pdf_table_html(rows):
     html = [
@@ -238,6 +240,9 @@ def generate_pdf_table_html(rows):
         html.append("      </tr>")
     html.append("    </tbody>")
     html.append("  </table>")
+    html.append('  <p style="font-size: 6.8pt; color: #475569; margin-top: 3px;">')
+    html.append('    At the benchmark\'s own leg-level attack share (about 27 to 29%), the derived and observed precision agree at about 90%. At assumed lower prevalences it falls as shown.')
+    html.append('  </p>')
     html.append("</div>")
     return "\n".join(html)
 
@@ -253,11 +258,8 @@ def update_all():
     replacement = f"## Claims and Evidence\n\n{new_table}\n\n---"
     updated = re.sub(pattern, replacement, content, flags=re.DOTALL)
 
-    # Line 20 exact text
-    line_20_pattern = r"\* \*\*Scoping Cost Sensitivity Modeling\*\*:.*|\* \*\*Scenario Arithmetic.*"
-    line_20_replacement = "* Scenario arithmetic over public cases: aircraft-days held; money appears only if you enter a value."
-    updated = re.sub(line_20_pattern, line_20_replacement, updated)
-    updated = updated.replace("`v1.0.3-demo`", "`v1.0.4-demo`")
+    # Ensure app tag is v1.0.5-demo
+    updated = updated.replace("`v1.0.4-demo`", "`v1.0.5-demo`")
     readme_path.write_text(updated, encoding="utf-8")
 
     # 2. Save PDF HTML snippet

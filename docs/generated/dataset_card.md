@@ -16,6 +16,20 @@
 | **`attack_share` Knob** | **0.1747** (17.47%) | Fraction of flights experiencing spoofing attacks (planned timetable: 0.23). |
 | **`disturbance_prevalence` Knobs** | **0.20** turb, **0.15** gap, **0.02** baro | Background atmospheric turbulence, dropouts, and barometric bias. |
 
+> **Operational Population Definitions & Denominators (Pooled Seeds 3001-3003, Scheduled Legs $N = 18,000$)**:
+> 1. **Population Definitions**:
+>    - `clean`: neither spoofed nor jammed ($N_{\text{clean-only}} = 11,123$ legs across pooled seeds 3001–3003).
+>    - `non-spoofed`: clean + jam-only ($N_{\text{non-spoofed}} = 12,986$ legs, of which clean-only legs: 11,123, jam-only legs: 1,863).
+>    - `spoofed`: verified trajectory spoofing applied ($N_{\text{spoof}} = 5,014$ legs).
+> 2. **Denominator for 1.17% False-Positive Rate**:
+>    - Evaluated over the **11,123 clean-only legs** (neither spoofed nor jammed). With 130 clean false positives pooled (43 + 43 + 44), Clean $\text{FPR} = 130 / 11,123 = 1.1687\% \approx \mathbf{1.17\%}$.
+>    - Over all 12,986 non-spoofed legs (including 2 jamming-zone false positives), non-spoofed $\text{FPR} = 132 / 12,986 = 1.0165\% \approx 1.02\%$.
+> 3. **Denominator for Per-Seed Precision Tables**:
+>    - The denominator is total flagged legs ($\text{TP} + \text{FP}$, where $\text{FP} = 44$ non-spoofed legs flagged per seed):
+>      - Seed 3001: $401 / (401 + 44) = 401 / 445 = \mathbf{90.1\%}$
+>      - Seed 3002: $482 / (482 + 44) = 482 / 526 = \mathbf{91.6\%}$
+>      - Seed 3003: $470 / (470 + 44) = 470 / 514 = \mathbf{91.4\%}$
+
 > **Class Definitions & Count Reconciliation (1,449 $\to$ 1,205 $\to$ 913)**:
 > 1. **Exact Definition of 'Positive'**: A flight is defined as a *Spoofing Positive* if and only if its flight window intersects an active spoofing event interval where the offset was actually applied (`applied == True` and `event_type == 'spoofing'`). On the held-out test seed, exactly **913** flights meet this criterion, establishing the exact calibration base rate of **0.1747**.
 > 2. **Exact Definition of 'Hostile'**: A flight is defined as *Hostile* if it experiences either spoofing OR jamming. In our test world, 913 spoofed flights and 427 jammed flights have 2 overlapping flights, yielding exactly **1,338 distinct hostile flights** (Hostile Share = 25.61%). Clean flights ($N_{clean} = 3,887$) experience neither threat.

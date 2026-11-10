@@ -1,12 +1,18 @@
 # AeroTrust: Avionics Telemetry Integrity Observatory
 
-**Evaluation Tag**: `v0.3.2-verified` | **App Tag**: `v1.0.4-demo`
+**Evaluation Tag**: `v0.3.2-verified` | **App Tag**: `v1.0.5-demo`
 
 > **Disclaimer**: Independent personal project, not affiliated with or endorsed by Airbus. Uses public information only.
 
 AeroTrust is an avionics data-integrity observatory designed to evaluate aircraft ADS-B telemetry against GNSS spoofing, interference, and atmospheric radiation anomalies in a single unified interface. Operating under frozen verification benchmarks on synthetic flight trajectories, it pairs physics-based altimetry consistency checks with an unsupervised abstention engine, classifying telemetry into four standardized evidence tiers (`no_alert`, `flagged_altitude_inconsistency`, `jamming_degraded`, `insufficient`). It features an aggregate Silent Acceptance Rate (SAR) auditor, geographic H3 interference mapping, and an Incident Scenario Calculator for aviation airworthiness directives.
 
 > **SYNTHETIC DATASET NOTICE**: All operational flight paths, telemetry points, and threat injections evaluated in AeroTrust are generated synthetically. Performance benchmarks reflect simulated ADS-B disruptions and do not represent operational airline flight safety records.
+
+> **Evaluation Populations & Denominators**:
+> - **Populations**: `clean` = neither spoofed nor jammed; `non-spoofed` = clean + jam-only.
+> - **Benchmark Dataset (Pooled Seeds 3001–3003, N=18,000 Scheduled Legs)**: non-spoofed legs 12,986 (of which clean-only legs: 11,123; jam-only legs: 1,863); spoofed legs: 5,014.
+> - **Clean FPR Denominator**: The 1.17% clean false-positive rate is evaluated over the 11,123 clean-only legs (130 / 11,123).
+> - **Per-Seed Precision Denominators**: Evaluated over all flagged legs (TP + FP): Seed 3001: 445 (401/445 = 90.1%); Seed 3002: 526 (482/526 = 91.6%); Seed 3003: 514 (470/514 = 91.4%).
 
 ---
 
@@ -61,9 +67,10 @@ flowchart TD
     end
 
     subgraph Core_Engine ["Detection & Scoring Engine (Frozen v0.3.2)"]
-        CHECK_A["Check (a): Altitude Consistency<br/>(|Geo - Baro| > 120m)"]
-        CHECK_C["Check (c): Jamming Degradation<br/>(NIC / NACp / SIL Collapse)"]
+        CHECK_A["Check (a): Altitude Consistency<br/>(|Geo - Baro| > 120m, Alert Rule)"]
+        CHECKS_BC["Checks (b) & (c): Kinematic & Position-Velocity<br/>(Supporting checks, not in the alert rule)"]
         CHECK_D["Check (d): Peer Consensus<br/>(INACTIVE / Disabled in v0.3)"]
+        JAM_DET["Jamming Detector<br/>(NIC / NACp / SIL degradation by cell)"]
         ABSTAIN["Abstention Engine<br/>(Coverage & Sensor Plausibility)"]
         TIER_MAP["Evidence Tier Classifier<br/>(no_alert / flagged / jamming / insufficient)"]
     end
@@ -82,8 +89,8 @@ flowchart TD
         UI_INCIDENT["Incident Scenario Calculator<br/>(Directive Days & Arithmetic)"]
     end
 
-    ADS_B --> CHECK_A & CHECK_C & ABSTAIN
-    CHECK_A & CHECK_C & CHECK_D & ABSTAIN --> TIER_MAP
+    ADS_B --> CHECK_A & CHECKS_BC & JAM_DET & ABSTAIN
+    CHECK_A & CHECKS_BC & CHECK_D & JAM_DET & ABSTAIN --> TIER_MAP
     TIER_MAP --> PG_DB
     SWPC --> PG_DB
     PG_DB --> SAR_ENG
@@ -99,12 +106,19 @@ flowchart TD
 
 | Claim | Reported value (synthetic data) | Unit and seeds | Source table |
 | :--- | :--- | :--- | :--- |
-| **Recall on all spoofed legs (pooled)** | 26.98% ([25.77%, 28.23%]) | Scheduled flight legs, pooled seeds 3001–3003 (N = 5,014 spoofed legs / 18,000 legs) | [`docs/generated/base_rate_honesty_table.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/generated/base_rate_honesty_table.md) & [`leg_level_metrics.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/generated/leg_level_metrics.md) |
-| **Recall by attack type** | Altitude offset: 37.7%–51.6%; Combined: 34.0%–43.5%; Horizontal offset: 0.0%; Horizontal drift: 0.0% (Note: 40.8% [37.6%, 44.0%] was the altitude-attack-only figure from dev/test seeds 1337/2024) | Scheduled flight legs per attack subtype, seeds 3001, 3002, 3003 | [`docs/generated/event_type_honesty_table.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/generated/event_type_honesty_table.md) |
-| **Observed leg-level precision per seed** | Seed 3001: 90.1% (TP=401, FP=44); Seed 3002: 91.6% (TP=482, FP=44); Seed 3003: 91.4% (TP=470, FP=44) at benchmark attack share 26.6%–29.4% (1,595–1,763 spoofed legs / 6,001 legs per seed) | Scheduled flight legs per seed, unpooled | [`docs/generated/leg_level_metrics.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/generated/leg_level_metrics.md) |
+| **Recall on all spoofed legs (pooled)** | 26.98% ([25.77%, 28.23%]) | Scheduled flight legs, pooled seeds 3001–3003 (N = 5,014 spoofed legs / 18,000 legs; non-spoofed legs 12,986, of which clean-only legs: 11,123) | [`docs/generated/base_rate_honesty_table.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/generated/base_rate_honesty_table.md) & [`leg_level_metrics.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/generated/leg_level_metrics.md) |
+| **Recall by attack type** | Altitude offset: 37.7%–51.6%; Combined: 34.0%–43.5%; Horizontal offset: 0.0%; Horizontal drift: 0.0% (Note: 40.8% is an earlier README figure that is no longer reported) | Scheduled flight legs per attack subtype, seeds 3001, 3002, 3003 | [`docs/generated/event_type_honesty_table.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/generated/event_type_honesty_table.md) |
+| **Observed leg-level precision per seed** | Seed 3001: 90.1% (TP=401, FP=44, denom=445); Seed 3002: 91.6% (TP=482, FP=44, denom=526); Seed 3003: 91.4% (TP=470, FP=44, denom=514) at benchmark attack share 26.6%–29.4% (1,595–1,763 spoofed legs / 6,001 legs per seed) | Scheduled flight legs per seed, unpooled (denominator: total flagged legs TP + FP) | [`docs/generated/leg_level_metrics.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/generated/leg_level_metrics.md) |
 | **Expected precision at assumed threat prevalence (derived, assumed prevalence)** | p=0.01%: 0.2% ([0.2%, 0.3%]); p=0.1%: 2.3% ([1.8%, 2.8%]); p=1%: 18.9% ([15.8%, 22.4%]); p=5%: 54.9% ([49.5%, 60.1%]); p=17.47%: 83.0% ([79.7%, 85.8%]) (Derived via Bayes rule from pooled TPR 26.98% and clean FPR 1.17%; 83.0% belongs here) | Derived via Bayes rule over scheduled flight legs (pooled seeds 3001–3003) | [`docs/generated/base_rate_honesty_table.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/generated/base_rate_honesty_table.md) |
-| **Clean false positives per seed (v0.3.2 reproduced counts)** | 44, 44, 44 per seed (superseded '42 to 52' range removed). Breakdown: Seed 3001: 35 baro drift, 8 boundary truncation, 1 jamming; Seed 3002: 35 baro drift, 8 boundary truncation, 1 jamming; Seed 3003: 36 baro drift, 8 boundary truncation, 0 jamming | Clean scheduled flight legs per seed (TN: 4,193, 4,361, 4,300 across 6,001 legs per seed) | [`docs/generated/fp_leg_audit_table.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/generated/fp_leg_audit_table.md) |
-| **Suppression and inactive/demo capabilities** | SAR suppression: N >= 30 strictly enforced (20/24 regional cells masked); Horizontal recall: 0.0%; Consensus: Inactive (0% contribution, disabled in v0.3); Abstention: 0.0% on benchmark seeds, exercised only in demo (62.5%, 125/200) | Regional/family cohorts and demo flights (seeds 3001–3003, demo seed 9999) | [`docs/generated/sar_cell_suppression_table.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/generated/sar_cell_suppression_table.md) & [`abstention_demo_table.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/generated/abstention_demo_table.md) |
+| **Clean false positives per seed (v0.3.2 reproduced counts)** | 44, 44, 44 per seed (superseded '42 to 52' range removed). Breakdown: Seed 3001: 35 baro drift, 8 boundary truncation, 1 jamming; Seed 3002: 35 baro drift, 8 boundary truncation, 1 jamming; Seed 3003: 36 baro drift, 8 boundary truncation, 0 jamming | Clean scheduled flight legs per seed (TN: 4,193, 4,361, 4,300 across 6,001 legs per seed; clean FPR 1.17% denominator: 11,123 clean-only legs) | [`docs/generated/fp_leg_audit_table.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/generated/fp_leg_audit_table.md) |
+| **Suppression and inactive/demo capabilities** | SAR suppression: N >= 30 strictly enforced (20/24 regional cells masked); Horizontal recall: 0.0%; Consensus: Inactive (0% contribution, disabled in v0.3); Abstention: Benchmark: 0.0%. Rule-trigger demo: 125/200, which is by construction (demo scenarios were built to trigger rules), not a measured rate. | Regional/family cohorts and demo flights (seeds 3001–3003, demo seed 9999) | [`docs/generated/sar_cell_suppression_table.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/generated/sar_cell_suppression_table.md) & [`abstention_demo_table.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/generated/abstention_demo_table.md) |
+
+> **Precision at Benchmark Base Rate vs Assumed Prevalences**:
+> At the benchmark's own leg-level attack share (about 27 to 29%), the derived and observed precision agree at about 90%. At assumed lower prevalences it falls as shown.
+> - Seed 3001 (attack share 29.38%): derived precision = 90.1% (non-spoofed FPR) / 88.9% (clean FPR) vs observed 90.1%
+> - Seed 3002 (attack share 26.58%): derived precision = 91.6% (non-spoofed FPR) / 90.7% (clean FPR) vs observed 91.6%
+> - Seed 3003 (attack share 27.60%): derived precision = 91.4% (non-spoofed FPR) / 90.0% (clean FPR) vs observed 91.4%
+> - Pooled (attack share 27.86%): derived precision = 89.9% (clean FPR)
 
 ---
 
@@ -123,7 +137,7 @@ flowchart TD
 
 ## License & Attributions
 
-* **Evaluation Tag**: `v0.3.2-verified` | **App Tag**: `v1.0.4-demo`
+* **Evaluation Tag**: `v0.3.2-verified` | **App Tag**: `v1.0.5-demo`
 * **Disclaimer**: Independent personal project, not affiliated with or endorsed by Airbus. Uses public information only.
 * **License**: [MIT License](file:///c:/Users/ASus/Desktop/AeroTrust/LICENSE)
 * **Attributions**: Full catalog of public datasets, textures, and open-source libraries available in [`docs/ATTRIBUTIONS.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/ATTRIBUTIONS.md).

@@ -303,12 +303,12 @@ async function run() {
   </div>
   <div style="text-align: right;">
     <div class="badge-tag">Eval Tag: v0.3.2-verified</div>
-    <div class="badge-tag" style="margin-top: 2px;">App Tag: v1.0.4-demo</div>
+    <div class="badge-tag" style="margin-top: 2px;">App Tag: v1.0.5-demo</div>
   </div>
 </div>
 
 <div class="synthetic-banner">
-  <strong>SYNTHETIC DATASET NOTICE:</strong> All trajectories and threat injections are synthetic simulations. Numbers derived from pooled clean seeds (3001-3003; 18,000 scheduled legs). No operational commercial flights are depicted.
+  <strong>SYNTHETIC DATASET NOTICE:</strong> All trajectories and threat injections are synthetic simulations. Populations: clean = neither spoofed nor jammed; non-spoofed = clean + jam-only. Scheduled legs N = 18,000 (pooled clean seeds 3001-3003): non-spoofed legs 12,986 (of which clean-only legs: 11,123), spoofed legs 5,014. No operational commercial flights are depicted.
 </div>
 
 <div class="section">
@@ -324,8 +324,8 @@ async function run() {
     <div class="box-can">
       <div class="box-title">&#10003; WHAT AEROTRUST CAN DO</div>
       <ul>
-        <li><strong>Altimetry Verification:</strong> Compares barometric vs GNSS altitude residuals, flagging vertical discrepancies &gt; 120.0 m (Check a).</li>
-        <li><strong>Interference Clustering:</strong> Aggregates multi-aircraft NIC/NACp/SIL drops into H3 spatial cells for regional jamming detection.</li>
+        <li><strong>Altimetry Verification:</strong> Compares barometric vs GNSS altitude residuals, flagging vertical discrepancies &gt; 120.0 m (Check a, Alert Rule; Checks b &amp; c supporting).</li>
+        <li><strong>Interference Clustering:</strong> Aggregates multi-aircraft NIC/NACp/SIL drops into H3 spatial cells via dedicated Jamming Detector.</li>
         <li><strong>Evidence-Tiered Output:</strong> Never exposes uncalibrated probabilities or claims flights are &quot;safe&quot;; uses standardized evidence tiers.</li>
         <li><strong>Privacy-Preserving SAR:</strong> Evaluates Silent Acceptance Rate with cell suppression for cohorts where N &lt; 30.</li>
         <li><strong>Incident Scenario Calculator:</strong> Scenario arithmetic over public cases: aircraft-days held; money appears only if you enter a value.</li>
@@ -358,7 +358,7 @@ ${claimsTableHtml}
 </div>
 
 <div class="footer">
-  <div>Eval Tag: v0.3.2-verified &bull; App Tag: v1.0.4-demo &bull; Independent personal project, not affiliated with or endorsed by Airbus. Uses public information only.</div>
+  <div>Eval Tag: v0.3.2-verified &bull; App Tag: v1.0.5-demo &bull; Independent personal project, not affiliated with or endorsed by Airbus. Uses public information only.</div>
   <div>Page 1 of 1</div>
 </div>
 

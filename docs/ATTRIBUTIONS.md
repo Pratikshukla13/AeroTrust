@@ -9,8 +9,9 @@ This document catalogues all third-party datasets, textures, public sources, and
 ### 1.1 Earth Surface Texture (`frontend/public/textures/earth_atmos_2048.jpg`)
 * **File Name**: `frontend/public/textures/earth_atmos_2048.jpg`
 * **Status**: **provenance not yet verified**
-* **Claimed source (unverified)**: NASA Visible Earth / Blue Marble: Land Surface, Shallow Water, and Shaded Topography.
+* **Claimed source (unverified)**: NASA Visible Earth (provenance not yet verified)
 * **URL**: https://visibleearth.nasa.gov/images/57752/blue-marble-land-surface-shallow-water-and-shaded-topography
+* **URL Verification Note**: The old Visible Earth URL redirects to a generic NASA Science page; image record not confirmed from this page. Image title and creators: not checked (not read from fetched page).
 * **TODO**: Replace `frontend/public/textures/earth_atmos_2048.jpg` with a direct NASA Visible Earth download from an authenticated public-domain archive to record its source URL and download date.
 
 ### 1.2 Natural Earth Vector GeoJSON Data

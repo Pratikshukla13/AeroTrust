@@ -40,7 +40,7 @@
 1. **Click**: Top-left AeroTrust logo or **Overview** tab.
 2. **Observe**:
    - Four Evidence Tiers: `no_alert`, `flagged_altitude_inconsistency`, `jamming_degraded`, `insufficient`.
-   - Dataset Card: 18,000 scheduled legs (pooled clean seeds 3001–3003), $N_{\text{clean}} = 12,986$, $N_{\text{spoof}} = 5,014$, tier distribution: 14,654 `no_alert`, 1,485 `flagged_altitude_inconsistency`, 1,861 `jamming_degraded`, 0 `insufficient`.
+   - Populations & Dataset Card: clean = neither spoofed nor jammed; non-spoofed = clean + jam-only. Scheduled legs $N = 18,000$ (pooled clean seeds 3001–3003): non-spoofed legs 12,986 (of which clean-only legs: 11,123), spoofed legs 5,014. Denominators: clean FPR (1.17%) uses 11,123 clean-only legs (130 / 11,123); per-seed precision uses all flagged legs (TP + FP: 445, 526, 514). Tier distribution: 14,654 `no_alert`, 1,485 `flagged_altitude_inconsistency`, 1,861 `jamming_degraded`, 0 `insufficient`.
    - Headline Box: "What this can and cannot do".
 3. **Presenter Script**:
    > "Notice the four standardized tiers. In v0.3, we strictly retired misleading labels like 'ok' or 'safe'. If an aircraft has consistent barometric and geometric data, it is marked `no_alert`, not 'safe'. If peer coverage is too sparse to evaluate, it is marked `insufficient`. This eliminates the dangerous illusion of guaranteed clearance."

@@ -35,5 +35,5 @@
 > Because `altitude_consistency_v2` relies strictly on barometric vs geometric altimetry (Check a behind the abstention gate), attacks that displace only latitude/longitude without modifying vertical altitude produce zero vertical anomaly.
 > Multi-aircraft consensus (Check d) is implemented, inactive, needs re-validation. Cross-checks for horizontal spoofing (TDoA multilateration, Mode S EHS roll angle, on-board INS fusion) are documented as **FUTURE WORK ONLY**.
 
-> **Historical 40.8% Figure Provenance**:
-> During Phase 2/3 development on test seeds 1337 and 2024, an altitude-attack-only recall of **40.8%** [37.6%, 44.0%] was reported for vertical attacks (`altitude_offset` and `combined`). Across all spoofing types including lateral attacks on clean benchmark seeds (3001-3003), pooled recall is 26.98% because horizontal spoofing recall is 0.0%.
+> **Historical Note**:
+> 40.8% is an earlier README figure that is no longer reported.
