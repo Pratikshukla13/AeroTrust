@@ -99,7 +99,7 @@ export default function FlightDetailPage() {
   const getTierColor = (tier: string) => {
     switch (tier) {
       case 'flagged_altitude_inconsistency':
-        return { text: '#f43f5e', bg: 'rgba(244, 63, 94, 0.12)', border: 'rgba(244, 63, 94, 0.4)' }
+        return { text: '#fb7185', bg: 'rgba(244, 63, 94, 0.12)', border: 'rgba(244, 63, 94, 0.4)' }
       case 'jamming_degraded':
         return { text: '#fbbf24', bg: 'rgba(251, 191, 36, 0.12)', border: 'rgba(251, 191, 36, 0.4)' }
       case 'insufficient':
@@ -275,7 +275,7 @@ export default function FlightDetailPage() {
                 className="glass-card"
                 style={{
                   padding: '18px',
-                  borderTop: `3px solid ${flightData.check_a.flag ? '#f43f5e' : '#34d399'}`,
+                  borderTop: `3px solid ${flightData.check_a.flag ? '#fb7185' : '#34d399'}`,
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
@@ -286,8 +286,8 @@ export default function FlightDetailPage() {
                       fontWeight: 700,
                       padding: '2px 6px',
                       borderRadius: '4px',
-                      backgroundColor: flightData.check_a.flag ? 'rgba(244, 63, 94, 0.2)' : 'rgba(52, 211, 153, 0.2)',
-                      color: flightData.check_a.flag ? '#f43f5e' : '#34d399',
+                      backgroundColor: flightData.check_a.flag ? '#991b1b' : 'rgba(52, 211, 153, 0.2)',
+                      color: flightData.check_a.flag ? '#fee2e2' : '#34d399',
                     }}
                   >
                     {flightData.check_a.flag ? 'FLAGGED' : 'NOMINAL'}
@@ -300,7 +300,7 @@ export default function FlightDetailPage() {
                   Max Residual: <strong>{flightData.check_a.residual ? `${flightData.check_a.residual.toFixed(1)} m` : 'N/A'}</strong> (threshold: 120.0 m)
                 </div>
                 {flightData.check_a.reasons.length > 0 ? (
-                  <div style={{ fontSize: '0.75rem', color: '#f43f5e', fontFamily: 'monospace' }}>
+                  <div style={{ fontSize: '0.75rem', color: '#fb7185', fontFamily: 'monospace' }}>
                     {flightData.check_a.reasons.map((r, i) => (
                       <div key={i}>&bull; {r}</div>
                     ))}
@@ -439,8 +439,8 @@ export default function FlightDetailPage() {
                 </div>
                 {flightData.flagged_window && (
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <span style={{ width: '12px', height: '10px', backgroundColor: 'rgba(244, 63, 94, 0.3)', border: '1px solid #f43f5e' }} />
-                    <span style={{ color: '#f43f5e', fontWeight: 600 }}>Flagged Window</span>
+                    <span style={{ width: '12px', height: '10px', backgroundColor: 'rgba(244, 63, 94, 0.3)', border: '1px solid #fb7185' }} />
+                    <span style={{ color: '#fb7185', fontWeight: 600 }}>Flagged Window</span>
                   </div>
                 )}
               </div>

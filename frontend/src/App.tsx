@@ -56,9 +56,9 @@ const NAV_ITEMS: NavItem[] = [
   { id: 'sar', label: 'SAR Metrics', icon: ShieldAlert },
   { id: 'limitations', label: 'Limitations', icon: AlertOctagon },
   { id: 'incident-clock', label: 'Incident Clock', icon: Clock },
-  { id: 'briefing', label: 'Briefing', icon: FileText },
-  { id: 'corridors', label: 'Corridors', icon: Navigation, badge: 'Stretch' },
-  { id: 'watchlist', label: 'Watchlist', icon: EyeOff, badge: 'Private' },
+  { id: 'briefing', label: 'Briefing', icon: FileText, badge: 'Planned, not in this release' },
+  { id: 'corridors', label: 'Corridors', icon: Navigation, badge: 'Planned, not in this release' },
+  { id: 'watchlist', label: 'Watchlist', icon: EyeOff, badge: 'Planned, not in this release' },
 ]
 
 export default function App() {
@@ -123,11 +123,74 @@ export default function App() {
       case 'incident-clock':
         return <IncidentClockPage />
       case 'briefing':
-        return <BriefingPage />
+        return (
+          <div>
+            <div
+              style={{
+                marginBottom: '16px',
+                padding: '12px 16px',
+                borderRadius: '8px',
+                backgroundColor: 'rgba(234, 179, 8, 0.12)',
+                border: '1px solid rgba(234, 179, 8, 0.4)',
+                color: '#fef08a',
+                fontSize: 'var(--text-sm)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+              }}
+            >
+              <AlertOctagon size={16} aria-hidden="true" style={{ color: '#fbbf24' }} />
+              <span><strong>Planned, not in this release:</strong> Briefing generator is scheduled for future milestones and is not part of the active v0.3.2 release.</span>
+            </div>
+            <BriefingPage />
+          </div>
+        )
       case 'corridors':
-        return <CorridorsPage />
+        return (
+          <div>
+            <div
+              style={{
+                marginBottom: '16px',
+                padding: '12px 16px',
+                borderRadius: '8px',
+                backgroundColor: 'rgba(234, 179, 8, 0.12)',
+                border: '1px solid rgba(234, 179, 8, 0.4)',
+                color: '#fef08a',
+                fontSize: 'var(--text-sm)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+              }}
+            >
+              <AlertOctagon size={16} aria-hidden="true" style={{ color: '#fbbf24' }} />
+              <span><strong>Planned, not in this release:</strong> Flight corridor analyzer is scheduled for future milestones and is not part of the active v0.3.2 release.</span>
+            </div>
+            <CorridorsPage />
+          </div>
+        )
       case 'watchlist':
-        return <WatchlistPage />
+        return (
+          <div>
+            <div
+              style={{
+                marginBottom: '16px',
+                padding: '12px 16px',
+                borderRadius: '8px',
+                backgroundColor: 'rgba(234, 179, 8, 0.12)',
+                border: '1px solid rgba(234, 179, 8, 0.4)',
+                color: '#fef08a',
+                fontSize: 'var(--text-sm)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+              }}
+            >
+              <AlertOctagon size={16} aria-hidden="true" style={{ color: '#fbbf24' }} />
+              <span><strong>Planned, not in this release:</strong> Tail watchlist is scheduled for future milestones and is not part of the active v0.3.2 release.</span>
+            </div>
+            <WatchlistPage />
+          </div>
+        )
       default:
         return <OverviewPage activeDataset={activeDataset} onNavigate={setCurrentRoute} />
     }
@@ -298,13 +361,30 @@ export default function App() {
                 {item.badge && (
                   <span
                     style={{
-                      fontSize: '0.6875rem',
+                      fontSize: '0.625rem',
                       fontWeight: 600,
-                      padding: '2px 6px',
+                      padding: '2px 5px',
                       borderRadius: '4px',
-                      backgroundColor: item.badge === 'Private' ? 'rgba(244, 63, 94, 0.2)' : 'rgba(100, 116, 139, 0.3)',
-                      color: item.badge === 'Private' ? '#fda4af' : '#cbd5e1',
-                      border: `1px solid ${item.badge === 'Private' ? 'rgba(244, 63, 94, 0.4)' : 'rgba(100, 116, 139, 0.4)'}`,
+                      whiteSpace: 'nowrap',
+                      backgroundColor:
+                        item.badge.includes('Planned')
+                          ? 'rgba(245, 158, 11, 0.15)'
+                          : item.badge === 'Private'
+                          ? 'rgba(244, 63, 94, 0.2)'
+                          : 'rgba(100, 116, 139, 0.3)',
+                      color:
+                        item.badge.includes('Planned')
+                          ? '#fbbf24'
+                          : item.badge === 'Private'
+                          ? '#fda4af'
+                          : '#cbd5e1',
+                      border: `1px solid ${
+                        item.badge.includes('Planned')
+                          ? 'rgba(245, 158, 11, 0.4)'
+                          : item.badge === 'Private'
+                          ? 'rgba(244, 63, 94, 0.4)'
+                          : 'rgba(100, 116, 139, 0.4)'
+                      }`,
                     }}
                   >
                     {item.badge}

@@ -107,3 +107,38 @@ def test_get_flight_radiation():
     assert "geomag_lat" in first
     assert "components" in first
 
+
+def test_incident_cases_api():
+    """Phase 7: verifies /api/incident-cases, /api/incident-presets, and /api/incident-calculator."""
+    res = client.get("/api/incident-cases")
+    assert res.status_code == 200
+    cases = res.json()
+    assert len(cases) == 3
+    for c in cases:
+        assert c["verification_status"] == "needs verification"
+        assert "case_id" in c
+        assert "source_url" in c
+
+    res_p = client.get("/api/incident-presets")
+    assert res_p.status_code == 200
+    presets = res_p.json()
+    assert len(presets) == 3
+
+    # Test calculator API endpoint
+    payload = {
+        "days_to_scope": 30.0,
+        "aircraft_held_in_service": 100.0,
+        "aircraft_held_undelivered": 50.0,
+        "baseline_handover_rate_per_month": 60.0,
+        "share_recovered_later": 0.25,
+        "value_per_aircraft": None,
+    }
+    res_c = client.post("/api/incident-calculator", json=payload)
+    assert res_c.status_code == 200
+    out = res_c.json()
+    assert out["aircraft_days_held"] == 4500.0
+    assert out["model_a_net_handovers_lost"] == 45.0
+    assert out["financial_impact_total"] is None
+    assert len(out["sensitivity_table"]) == 3
+
+

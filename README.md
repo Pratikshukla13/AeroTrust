@@ -120,17 +120,29 @@ Relative exposure index = altitude factor x geomagnetic-latitude factor x space-
 - It is **relative**, not a probability of any failure. Never claim a bit-flip probability.
 - For the shape of each factor, use a documented published model or tables (for example FAA CARI-7 or NAIRAS publications), and **cite the source in your README**. Do not invent constants.
 
-### 4.6 Incident Clock
+### 4.6 Incident Clock & Scoping Calculator (Phase 7)
 
-**Inputs:** days to scope, aircraft held (in-service and undelivered), handover rate. **Outputs:** aircraft-days held, estimated deliveries slipped across a period, with every assumption listed.
+**Inputs (all user-editable):** days to scope, aircraft held in-service, aircraft held undelivered, baseline monthly handover rate (optional), share recovered later (optional), value per aircraft (optional).
 
-**Seed cases (public numbers only; verify each against its source before demo):**
+**Outputs (with formulas and assumptions listed on screen):**
+- **Output a (Aircraft-Days Held):** `aircraft_days_held = (aircraft_held_in_service + aircraft_held_undelivered) × days_to_scope`.
+- **Output b (Model A - Line Stop):** `gross_handovers_lost = baseline_handover_rate_per_month × (days_to_scope / 30)`, net of `share_recovered_later` if provided.
+- **Output c (Model B - Finished Aircraft Hold):** Delivery slippage in aircraft-days: `handover_delay_aircraft_days = aircraft_held_undelivered × days_to_scope`.
+- **Output d (Valuation Impact):** If `value_per_aircraft` is blank, **no money figure is shown**. Shows `--` with prompts to enter valuation.
+- **One-Day Cost of Delay:** Stated in `aircraft-days / day`, with financial rate shown only if valuation is provided.
+- **Sensitivity Matrix:** Sensitivity over scoping duration (0.5x, 1x, 2x).
+- **Public Disclosure Timeline:** A320 solar radiation timeline (30 Oct 2025 event -> 28 Nov 2025 statement -> 29 Nov 2025 AD), detailing the computed 29-day public gap with public-only disclosure caveat.
 
-| Case | Public facts to seed |
-| --- | --- |
-| A320 solar radiation | Incident 30 Oct 2025; Airbus public statement 28 Nov 2025; EASA emergency AD effective 29 Nov 2025; roughly 6,000 aircraft; fewer than 100 remaining on 1 Dec 2025 |
-| A320 fuselage panels | EASA directive 17 Dec 2025; 628 potentially affected (177 in service, 451 undelivered); 2025 target cut from 820 to 790 |
-| A330 stray tool | Zero A330 deliveries in June and July 2026; 9 in March-May; Airbus has not disclosed how many aircraft needed inspection; policy due to EASA by mid-November 2026 |
+**Seed Cases (Strictly public facts; all marked "needs verification" until source URL is confirmed and marked sourced):**
+
+| Case ID | Title | Sourced Public Facts | Verification Status |
+| --- | --- | --- | --- |
+| `A320-SOLAR-2025` | A320 Solar Radiation Single-Event Effect | Incident 30 Oct 2025; public statement 28 Nov 2025; emergency directive effective 29 Nov 2025; about 6,000 aircraft affected; fewer than 100 remaining on 1 Dec 2025. Computed gap: 29 days. | `needs verification` |
+| `A320-PANEL-2025` | A320 Fuselage Panels Production Discrepancy | Directive 17 Dec 2025; 628 potentially affected (177 in service, 451 undelivered); event date unknown. | `needs verification` |
+| `A330-TOOL-2026` | A330 Stray Assembly Tool Inspection | Zero deliveries in June and July 2026; nine in March to May 2026; number of aircraft inspected not disclosed; policy to the regulator due mid-November 2026; event date unknown. | `needs verification` |
+
+*Mandatory Scenario Notice:* "This calculator turns public information into a scenario. It does not describe Airbus internal data or decisions. Scenario outputs depend on the inputs you enter."
+
 
 ### 4.7 Precursor scanner (hypothesis generator only)
 

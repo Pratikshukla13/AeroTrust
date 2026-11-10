@@ -40,6 +40,18 @@ from backend.app.schemas.api import (
     TrustScoreResponse,
 )
 
+from backend.app.schemas.incident import (
+    IncidentCase,
+    IncidentCasePreset,
+    CalculatorInputs,
+    CalculatorOutputs,
+)
+from backend.app.incident_calculator import (
+    INCIDENT_CASES,
+    PRESETS,
+    run_calculator,
+)
+
 router = APIRouter(prefix="/api", tags=["observatory"])
 
 TAG_NAME = "v0.3.2-verified"
@@ -846,6 +858,27 @@ def get_flight_detail(flight_id: str):
         flagged_window=flagged_win,
         points=points,
     )
+
+
+# --- Incident Clock & Scoping Calculator Endpoints (Phase 7) ---
+
+@router.get("/incident-cases", response_model=List[IncidentCase])
+def get_incident_cases() -> List[IncidentCase]:
+    """Returns strictly public incident cases with verification status."""
+    return INCIDENT_CASES
+
+
+@router.get("/incident-presets", response_model=List[IncidentCasePreset])
+def get_incident_presets() -> List[IncidentCasePreset]:
+    """Returns presets containing ONLY sourced parameters; unsourced are None."""
+    return PRESETS
+
+
+@router.post("/incident-calculator", response_model=CalculatorOutputs)
+def calculate_incident_clock(inputs: CalculatorInputs) -> CalculatorOutputs:
+    """Executes the Phase 7 scoping calculator and sensitivity table without invented constants."""
+    return run_calculator(inputs)
+
 
 
 
