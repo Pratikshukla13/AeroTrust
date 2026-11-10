@@ -4,10 +4,10 @@
 
 | Evaluation Cohort | Total Spoofed Legs ($N_{\text{spf}}$) | Realized Silent Spoofed Legs | Realized Attack Silent Share (%) | Silent Attack Recall (%) | Non-Silent Attack Recall (%) | Empirical $\widehat{\text{SAR}}$ (%) | Gap ($\widehat{\text{SAR}} - \text{Realized}$) (%) | Primary Divergence Drivers |
 |:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---|
-| Seed 3001 | 1757 | 435 | **24.76%** | 24.83% (108/435) | 23.90% (316/1322) | **26.39%** | **+1.64%** | Recall asymmetry (Δ_rec=+0.9%) + FP silent influx |
-| Seed 3002 | 1607 | 418 | **26.01%** | 27.03% (113/418) | 31.20% (371/1189) | **24.20%** | **-1.81%** | Recall asymmetry (Δ_rec=-4.2%) + FP silent influx |
-| Seed 3003 | 1692 | 454 | **26.83%** | 28.85% (131/454) | 28.92% (358/1238) | **27.36%** | **+0.52%** | Recall asymmetry (Δ_rec=-0.1%) + FP silent influx |
-| *Synthetic Pooling for Illustration* | **5,056** | **1,307** | **25.85%** | **26.93%** | **27.87%** | **25.98%** | **+0.13%** | Pooled: Silent recall 26.9% vs Non-Silent 27.9% |
+| Seed 3001 | 1763 | 429 | **24.33%** | 24.24% (104/429) | 22.26% (297/1334) | **26.97%** | **+2.63%** | Recall asymmetry (Δ_rec=+2.0%) + FP silent influx |
+| Seed 3002 | 1595 | 409 | **25.64%** | 27.14% (111/409) | 31.28% (371/1186) | **23.38%** | **-2.26%** | Recall asymmetry (Δ_rec=-4.1%) + FP silent influx |
+| Seed 3003 | 1656 | 432 | **26.09%** | 27.31% (118/432) | 28.76% (352/1224) | **25.10%** | **-0.99%** | Recall asymmetry (Δ_rec=-1.4%) + FP silent influx |
+| *Synthetic Pooling for Illustration* | **5,014** | **1,270** | **25.33%** | **26.22%** | **27.24%** | **25.05%** | **-0.28%** | Pooled: Silent recall 26.2% vs Non-Silent 27.2% |
 
 > **Decomposition Insights**:
 > 1. **$\\widehat{\text{SAR}}$ vs Attack Share**: Realized silent attack share is $\approx 26.2\%$, while empirical $\widehat{\text{SAR}}$ is $\approx 29.6\%$.

@@ -109,20 +109,27 @@ def test_no_stray_error_strings_in_phase4_docs():
 
 
 def test_subtraction_attack_on_suppressed_cells_fails():
-    """Phase 4.1 Task 2: Verify that subtraction attacks on suppressed cells are underdetermined and fail.
+    """Phase 4.2 Task 4: Verify that joint subtraction attacks across cell, family, and region tables fail.
 
     Checks:
-    1. In sar_cell_suppression_table.md, all suppressed cells have counts masked as 'suppressed' (no integers).
+    1. In sar_cell_suppression_table.md, all suppressed cells have counts masked as 'suppressed' (no numbers).
     2. Any row with suppressed cells possesses complementary suppression (>= 2 suppressed cells).
-    3. An algebraic marginal subtraction attack attempting to deduce the suppressed cell's value
-       has at least 1 degree of freedom (cannot uniquely isolate the cell).
+    3. Runs an algebraic linear optimization attack over sar_cell_suppression_table.md,
+       sar_coarse_aggregations_table.md (Family totals), and Region totals jointly.
+    4. Proves that exactly 0 suppressed cells can be uniquely recovered (all intervals have min < max).
     """
+    from scipy.optimize import linprog
+
     cell_table_path = os.path.join("docs", "generated", "sar_cell_suppression_table.md")
+    coarse_table_path = os.path.join("docs", "generated", "sar_coarse_aggregations_table.md")
     assert os.path.exists(cell_table_path), f"Missing artifact: {cell_table_path}"
+    assert os.path.exists(coarse_table_path), f"Missing artifact: {coarse_table_path}"
+
     cell_lines = open(cell_table_path, "r", encoding="utf-8").readlines()
 
     # Parse cell table rows
     rows = []
+    cells_by_cohort = {}
     for line in cell_lines:
         line = line.strip()
         if not line.startswith("|") or "Evaluation Cohort" in line or "|:---" in line:
@@ -130,6 +137,8 @@ def test_subtraction_attack_on_suppressed_cells_fails():
         cols = [c.strip() for c in line.split("|")[1:-1]]
         if len(cols) >= 8:
             cohort, family, region, n_str, n_sil_str, sar_str, ci_str, status = cols[:8]
+            is_supp = "SUPPRESSED" in status
+            val = None if is_supp else int(n_str.replace("*", "").replace(",", ""))
             rows.append({
                 "cohort": cohort,
                 "family": family,
@@ -140,6 +149,9 @@ def test_subtraction_attack_on_suppressed_cells_fails():
                 "ci_str": ci_str,
                 "status": status,
             })
+            if cohort not in cells_by_cohort:
+                cells_by_cohort[cohort] = {}
+            cells_by_cohort[cohort][(family, region)] = (val, is_supp)
 
     assert len(rows) > 0, "No data rows parsed from sar_cell_suppression_table.md"
 
@@ -151,27 +163,105 @@ def test_subtraction_attack_on_suppressed_cells_fails():
             assert r["sar_str"] == "—", f"Leakage: SAR '{r['sar_str']}' exposed in suppressed cell: {r}"
             assert r["ci_str"] == "—", f"Leakage: CI '{r['ci_str']}' exposed in suppressed cell: {r}"
 
-    # Group by (cohort, family) to test row-level marginal subtraction
-    from collections import defaultdict
-    cohort_fam_cells = defaultdict(list)
-    for r in rows:
-        cohort_fam_cells[(r["cohort"], r["family"])].append(r)
+    # Parse coarse aggregations for Family totals and Region totals
+    coarse_lines = open(coarse_table_path, "r", encoding="utf-8").readlines()
+    family_totals = {}
+    region_totals = {}
+    mode = None
 
-    # For any row containing suppressed cells:
-    for (cohort, family), cells in cohort_fam_cells.items():
-        supp_cells = [c for c in cells if "SUPPRESSED" in c["status"]]
-        if supp_cells:
-            # Rule 2: Complementary suppression must ensure at least 2 cells in the row are suppressed
-            assert len(supp_cells) >= 2, (
-                f"Subtraction vulnerability in ({cohort}, {family}): only {len(supp_cells)} cell suppressed, "
-                "allowing algebraic recovery by subtracting published cells from family total!"
-            )
+    for line in coarse_lines:
+        line = line.strip()
+        if "### A. Aircraft Family-Only Aggregation" in line:
+            mode = "family"
+            continue
+        elif "### B. Geographic Region-Only Aggregation" in line:
+            mode = "region"
+            continue
+        if not line.startswith("|") or "Aggregation Cohort" in line or "|:---" in line:
+            continue
+        cols = [c.strip() for c in line.split("|")[1:-1]]
+        if mode == "family" and len(cols) >= 3:
+            cohort = cols[0]
+            fam = cols[1].replace("*", "")
+            n_val = int(cols[2].replace(",", "").replace("*", ""))
+            if cohort not in family_totals:
+                family_totals[cohort] = {}
+            family_totals[cohort][fam] = n_val
+        elif mode == "region" and len(cols) >= 3:
+            cohort = cols[0]
+            reg = cols[1].replace("*", "")
+            n_val = int(cols[2].replace(",", "").replace("*", ""))
+            if cohort not in region_totals:
+                region_totals[cohort] = {}
+            region_totals[cohort][reg] = n_val
 
-            # Rule 3: Simulate subtraction attack
-            # An attacker tries to solve: x_1 + x_2 + ... + x_k = Row_Total - sum(published)
-            # Since k >= 2, there are infinitely many integer combinations summing to this constant,
-            # meaning the linear system is underdetermined with >= 1 degree of freedom.
-            degrees_of_freedom = len(supp_cells) - 1
-            assert degrees_of_freedom >= 1, f"Subtraction attack degrees of freedom must be >= 1, got {degrees_of_freedom}"
+    families = ["A320-family", "A330", "A350", "other"]
+    regions = ["Baltic", "Eastern Mediterranean", "Black Sea", "Middle East", "Western Europe", "North Atlantic"]
+
+    total_recoverable_cells = 0
+
+    # Rule 3 & 4: Joint Linear Subtraction Solver across Cell, Family, and Region tables
+    for cohort, grid in cells_by_cohort.items():
+        fam_tot = family_totals.get(cohort, {})
+        reg_tot = region_totals.get(cohort, {})
+        if not fam_tot or not reg_tot:
+            continue
+
+        var_list = [(fam, reg) for fam in families for reg in regions]
+        var_map = {v: idx for idx, v in enumerate(var_list)}
+
+        A_eq = []
+        b_eq = []
+        bounds = []
+
+        # Family marginal constraints
+        for fam in families:
+            row = [0.0] * 24
+            for reg in regions:
+                row[var_map[(fam, reg)]] = 1.0
+            A_eq.append(row)
+            b_eq.append(float(fam_tot[fam]))
+
+        # Region marginal constraints
+        for reg in regions:
+            col = [0.0] * 24
+            for fam in families:
+                col[var_map[(fam, reg)]] = 1.0
+            A_eq.append(col)
+            b_eq.append(float(reg_tot[reg]))
+
+        # Cell bounds
+        for fam, reg in var_list:
+            val, is_supp = grid[(fam, reg)]
+            if is_supp:
+                bounds.append((0.0, float(fam_tot[fam])))
+            else:
+                bounds.append((float(val), float(val)))
+
+        # Solve min and max for each suppressed cell
+        for fam, reg in var_list:
+            val, is_supp = grid[(fam, reg)]
+            if is_supp:
+                idx = var_map[(fam, reg)]
+                c_min = [0.0] * 24
+                c_min[idx] = 1.0
+                res_min = linprog(c_min, A_eq=A_eq, b_eq=b_eq, bounds=bounds, method="highs")
+
+                c_max = [0.0] * 24
+                c_max[idx] = -1.0
+                res_max = linprog(c_max, A_eq=A_eq, b_eq=b_eq, bounds=bounds, method="highs")
+
+                assert res_min.success and res_max.success, f"Linear solver failed on feasible cohort {cohort}"
+                x_min = res_min.fun
+                x_max = -res_max.fun
+
+                # If interval collapses to a single value, the cell is leaked
+                if abs(x_max - x_min) < 1e-4:
+                    total_recoverable_cells += 1
+
+    # Exactly 0 suppressed cells must be recoverable across all published tables
+    assert total_recoverable_cells == 0, (
+        f"Subtraction vulnerability: {total_recoverable_cells} suppressed cells were uniquely recovered!"
+    )
 
 
