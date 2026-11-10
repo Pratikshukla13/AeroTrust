@@ -58,7 +58,7 @@ export default function FlightDetailPage() {
 
   // 1. Fetch flight choices on mount
   useEffect(() => {
-    fetch('/api/flights?limit=25')
+    fetch('/api/flights?limit=50')
       .then((res) => res.json())
       .then((data: FlightOption[]) => {
         if (data && data.length > 0) {

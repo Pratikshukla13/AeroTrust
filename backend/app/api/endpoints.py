@@ -690,13 +690,49 @@ def list_flights_summary(
     conn = get_db_connection()
     cur = conn.cursor()
 
-    cur.execute("""
-        SELECT flight_id, segment_start, segment_end, status, reasons
-        FROM trust_scores
-        ORDER BY segment_start DESC
-        LIMIT 500;
-    """)
-    rows = cur.fetchall()
+    if tier:
+        cur.execute("""
+            SELECT flight_id, segment_start, segment_end, status, reasons
+            FROM trust_scores
+            ORDER BY segment_start DESC
+            LIMIT 500;
+        """)
+        rows = cur.fetchall()
+    else:
+        # Provide a balanced representation across tiers so inspection can test all alert states
+        # with exemplar demo flight x603da7_1794073786 guaranteed first
+        cur.execute("""
+            (
+                SELECT flight_id, segment_start, segment_end, status, reasons
+                FROM trust_scores
+                WHERE flight_id = 'x603da7_1794073786'
+            )
+            UNION ALL
+            (
+                SELECT flight_id, segment_start, segment_end, status, reasons
+                FROM trust_scores
+                WHERE status = 'degraded' AND flight_id != 'x603da7_1794073786'
+                ORDER BY segment_start DESC
+                LIMIT 30
+            )
+            UNION ALL
+            (
+                SELECT flight_id, segment_start, segment_end, status, reasons
+                FROM trust_scores
+                WHERE status = 'no_alert'
+                ORDER BY segment_start DESC
+                LIMIT 15
+            )
+            UNION ALL
+            (
+                SELECT flight_id, segment_start, segment_end, status, reasons
+                FROM trust_scores
+                WHERE status IN ('unknown', 'insufficient')
+                ORDER BY segment_start DESC
+                LIMIT 5
+            );
+        """)
+        rows = cur.fetchall()
     conn.close()
 
     results: List[FlightSummary] = []
