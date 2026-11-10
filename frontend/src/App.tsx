@@ -1,5 +1,7 @@
-import { useState, lazy, Suspense } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import SyntheticBanner from './components/SyntheticBanner'
+import DatasetFingerprintBar, { DatasetFingerprintData } from './components/DatasetFingerprintBar'
+import DatasetSelector, { DatasetMode } from './components/DatasetSelector'
 import OverviewPage from './pages/OverviewPage'
 import MapPage from './pages/MapPage'
 import FlightDetailPage from './pages/FlightDetailPage'
@@ -23,9 +25,10 @@ import {
   AlertOctagon,
   Menu,
   X,
+  Tag,
 } from 'lucide-react'
 
-// Lazy-load EarthBackground so initial paint of dashboard is never blocked
+// Lazy-load EarthBackground so initial paint is fast
 const EarthBackground = lazy(() => import('./components/EarthBackground'))
 
 export type RouteId =
@@ -51,27 +54,72 @@ const NAV_ITEMS: NavItem[] = [
   { id: 'map', label: 'Interference Map', icon: MapIcon },
   { id: 'flight-detail', label: 'Flight Detail', icon: Plane },
   { id: 'sar', label: 'SAR Metrics', icon: ShieldAlert },
+  { id: 'limitations', label: 'Limitations', icon: AlertOctagon },
   { id: 'incident-clock', label: 'Incident Clock', icon: Clock },
   { id: 'briefing', label: 'Briefing', icon: FileText },
   { id: 'corridors', label: 'Corridors', icon: Navigation, badge: 'Stretch' },
   { id: 'watchlist', label: 'Watchlist', icon: EyeOff, badge: 'Private' },
-  { id: 'limitations', label: 'Limitations', icon: AlertOctagon },
 ]
 
 export default function App() {
   const [currentRoute, setCurrentRoute] = useState<RouteId>('overview')
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [activeDataset, setActiveDataset] = useState<DatasetMode>('benchmark')
+  const [metaFingerprints, setMetaFingerprints] = useState<Record<string, DatasetFingerprintData> | null>(null)
+  const [releaseTag, setReleaseTag] = useState<string>('v0.3.2-verified')
+
+  useEffect(() => {
+    fetch('/api/meta')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.fingerprints) {
+          setMetaFingerprints(data.fingerprints)
+          if (data.tag) setReleaseTag(data.tag)
+        }
+      })
+      .catch(() => {
+        // Fallback default fingerprint
+        setMetaFingerprints({
+          benchmark: {
+            tag: 'v0.3.2-verified',
+            name: 'Frozen Benchmark Dataset',
+            seed: '3001-3003 (Pooled Clean)',
+            flights: 18000,
+            n_clean: 13410,
+            n_spoof: 2729,
+            n_jam: 1861,
+            config_hash: 'b6011043368eca73',
+            primary_unit: 'scheduled leg',
+          },
+          rule_trigger_demo: {
+            tag: 'v0.3.2-verified',
+            name: 'Rule-Trigger Demo (Telemetry Degradation Audit)',
+            seed: '9999',
+            flights: 200,
+            n_clean: 175,
+            n_spoof: 25,
+            n_jam: 0,
+            config_hash: 'b6011043368eca73',
+            primary_unit: 'demo flight',
+          },
+        })
+      })
+  }, [])
+
+  const currentFingerprint = metaFingerprints ? metaFingerprints[activeDataset] : null
 
   const renderCurrentPage = () => {
     switch (currentRoute) {
       case 'overview':
-        return <OverviewPage />
+        return <OverviewPage activeDataset={activeDataset} onNavigate={setCurrentRoute} />
       case 'map':
         return <MapPage />
       case 'flight-detail':
         return <FlightDetailPage />
       case 'sar':
         return <SARPage />
+      case 'limitations':
+        return <LimitationsPage />
       case 'incident-clock':
         return <IncidentClockPage />
       case 'briefing':
@@ -80,16 +128,14 @@ export default function App() {
         return <CorridorsPage />
       case 'watchlist':
         return <WatchlistPage />
-      case 'limitations':
-        return <LimitationsPage />
       default:
-        return <OverviewPage />
+        return <OverviewPage activeDataset={activeDataset} onNavigate={setCurrentRoute} />
     }
   }
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', position: 'relative' }}>
-      {/* 1. Full <EarthBackground/> Component (Lazy-loaded, replaces placeholder completely) */}
+      {/* 1. Earth Background Component */}
       <Suspense fallback={null}>
         <EarthBackground />
       </Suspense>
@@ -97,21 +143,23 @@ export default function App() {
       {/* 2. Persistent Synthetic Banner */}
       <SyntheticBanner />
 
-      {/* 3. Responsive Header Bar */}
+      {/* 3. Header Bar with Dataset Selector, Release Tag & Limitations Link */}
       <header
         style={{
           position: 'sticky',
           top: '38px',
           zIndex: 40,
-          height: 'var(--header-height)',
-          backgroundColor: 'rgba(7, 11, 20, 0.85)',
+          minHeight: 'var(--header-height)',
+          backgroundColor: 'rgba(7, 11, 20, 0.9)',
           backdropFilter: 'blur(16px)',
           WebkitBackdropFilter: 'blur(16px)',
           borderBottom: '1px solid #1e293b',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          padding: '0 24px',
+          flexWrap: 'wrap',
+          padding: '8px 24px',
+          gap: '12px',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -130,7 +178,10 @@ export default function App() {
           >
             {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+          <div
+            onClick={() => setCurrentRoute('overview')}
+            style={{ display: 'flex', alignItems: 'baseline', gap: '8px', cursor: 'pointer' }}
+          >
             <span style={{ fontSize: '1.25rem', fontWeight: 800, color: '#f8fafc', letterSpacing: '-0.02em' }}>
               AeroTrust
             </span>
@@ -140,24 +191,68 @@ export default function App() {
           </div>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#34d399', boxShadow: '0 0 8px #34d399' }} />
-            <span style={{ fontSize: 'var(--text-xs)', color: '#cbd5e1', fontWeight: 500 }}>
-              Fleet Telemetry Nominal
-            </span>
+        {/* Center / Right: Dataset Selector + Release Tag + Limitations quick-link */}
+        <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+          {/* Dataset Selector (Benchmark vs Rule-Trigger Demo) */}
+          <DatasetSelector activeDataset={activeDataset} onChangeDataset={setActiveDataset} />
+
+          {/* Release Tag Badge */}
+          <div
+            data-testid="header-tag-badge"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '5px',
+              padding: '4px 10px',
+              borderRadius: '6px',
+              backgroundColor: 'rgba(56, 189, 248, 0.12)',
+              border: '1px solid rgba(56, 189, 248, 0.35)',
+              color: '#38bdf8',
+              fontSize: '0.75rem',
+              fontWeight: 700,
+            }}
+          >
+            <Tag size={12} aria-hidden="true" />
+            <span>Tag: {releaseTag}</span>
           </div>
+
+          {/* Limitations Link (Explicitly required in the top bar) */}
+          <button
+            type="button"
+            data-testid="topbar-limitations-link"
+            onClick={() => setCurrentRoute('limitations')}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '5px 12px',
+              borderRadius: '6px',
+              backgroundColor: currentRoute === 'limitations' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(30, 41, 59, 0.8)',
+              border: currentRoute === 'limitations' ? '1px solid #f87171' : '1px solid #475569',
+              color: currentRoute === 'limitations' ? '#fca5a5' : '#cbd5e1',
+              fontSize: '0.75rem',
+              fontWeight: 600,
+              cursor: 'pointer',
+              transition: 'all 0.15s ease',
+            }}
+          >
+            <AlertOctagon size={13} aria-hidden="true" style={{ color: '#ef4444' }} />
+            <span>Limitations</span>
+          </button>
         </div>
       </header>
 
-      {/* 4. Main Application Workspace (Sidebar + Content Area) */}
-      <div style={{ display: 'flex', flex: 1, position: 'relative', zIndex: 10 }}>
+      {/* 4. Subheader: Dataset Fingerprint Bar on EVERY page */}
+      <DatasetFingerprintBar fingerprint={currentFingerprint} tag={releaseTag} />
+
+      {/* 5. Main Application Workspace (Sidebar + Dynamic Page) */}
+      <div style={{ display: 'flex', flex: 1, position: 'relative', zIndex: 45 }}>
         {/* Sidebar Navigation */}
         <nav
           aria-label="Main Navigation"
           style={{
             width: 'var(--sidebar-width)',
-            backgroundColor: 'rgba(11, 17, 32, 0.85)',
+            backgroundColor: 'rgba(11, 17, 32, 0.9)',
             backdropFilter: 'blur(12px)',
             WebkitBackdropFilter: 'blur(12px)',
             borderRight: '1px solid #1e293b',
@@ -220,7 +315,7 @@ export default function App() {
           })}
         </nav>
 
-        {/* Dynamic Route Content (Resting on dark high-contrast glass panels) */}
+        {/* Dynamic Route Content */}
         <main
           style={{
             flex: 1,
@@ -228,7 +323,7 @@ export default function App() {
             maxWidth: '1360px',
             width: '100%',
             margin: '0 auto',
-            minHeight: 'calc(100vh - var(--header-height) - var(--banner-height))',
+            minHeight: 'calc(100vh - var(--header-height) - var(--banner-height) - 34px)',
           }}
         >
           {renderCurrentPage()}
@@ -239,16 +334,20 @@ export default function App() {
         @media (max-width: 840px) {
           .mobile-menu-btn {
             display: block !important;
+            position: relative;
+            z-index: 70 !important;
           }
           .sidebar-nav {
             position: fixed;
-            top: calc(var(--header-height) + var(--banner-height));
+            top: 0;
             left: 0;
             bottom: 0;
-            z-index: 45;
+            z-index: 65 !important;
+            padding-top: 140px !important;
             transform: translateX(-100%);
             transition: transform 0.2s ease-in-out;
-            width: 260px !important;
+            width: 280px !important;
+            box-shadow: 4px 0 24px rgba(0,0,0,0.8);
           }
           .sidebar-nav.mobile-open {
             transform: translateX(0);

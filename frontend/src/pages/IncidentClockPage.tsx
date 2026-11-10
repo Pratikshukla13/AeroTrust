@@ -38,7 +38,7 @@ export default function IncidentClockPage() {
 
         <div className="glass-card" style={{ padding: '20px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-            <span style={{ fontSize: 'var(--text-xs)', fontWeight: 700, color: '#f43f5e' }}>Case A330-TOOL-2026</span>
+            <span style={{ fontSize: 'var(--text-xs)', fontWeight: 700, color: '#fb7185' }}>Case A330-TOOL-2026</span>
             <span style={{ fontSize: 'var(--text-xs)', color: '#94a3b8' }}>75 Days Scoping</span>
           </div>
           <h4 style={{ margin: '0 0 6px', color: '#f8fafc', fontSize: 'var(--text-base)' }}>Stray Assembly Tool</h4>

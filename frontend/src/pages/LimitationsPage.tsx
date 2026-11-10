@@ -1,89 +1,236 @@
-import { AlertOctagon, Check, FileCode, Shield } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { AlertOctagon } from 'lucide-react'
+
+interface BaseRateRow {
+  scenario: string
+  prevalence_pct: number
+  precision_pct: number
+  ci_low: number
+  ci_high: number
+  false_alarms_per_10k: number
+  guidance: string
+}
+
+interface LimitationsData {
+  tag: string
+  dataset_fingerprint: {
+    tag: string
+    name: string
+    seed: string
+    flights: number
+    primary_unit: string
+    config_hash: string
+  }
+  bullets: string[]
+  base_rate_table: BaseRateRow[]
+}
 
 export default function LimitationsPage() {
+  const [data, setData] = useState<LimitationsData | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    fetch('/api/limitations')
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP error ${res.status}`)
+        return res.json()
+      })
+      .then((json: LimitationsData) => {
+        setData(json)
+        setLoading(false)
+      })
+      .catch((err) => {
+        setError(`Failed to retrieve limitations: ${err.message}`)
+        setLoading(false)
+      })
+  }, [])
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+      {/* Header Panel */}
       <div className="glass-panel" style={{ padding: '24px 28px' }}>
-        <h2 style={{ margin: '0 0 8px', fontSize: 'var(--text-xl)', fontWeight: 700, color: '#f8fafc' }}>
-          Methodology &amp; Engineering Limitations
-        </h2>
-        <p style={{ margin: 0, fontSize: 'var(--text-sm)', color: '#94a3b8' }}>
-          Frank disclosure of methodological caveats, data boundaries, and outside-in modeling assumptions per README Section 8.
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+          <div style={{ padding: '6px', borderRadius: '6px', backgroundColor: 'rgba(239, 68, 68, 0.15)', color: '#ef4444' }}>
+            <AlertOctagon size={20} aria-hidden="true" />
+          </div>
+          <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800, color: '#f8fafc' }}>
+            Methodology &amp; Engineering Limitations
+          </h2>
+        </div>
+        <p style={{ margin: 0, fontSize: '0.875rem', color: '#94a3b8', lineHeight: 1.6 }}>
+          Comprehensive engineering boundaries, noise assumptions, abstention scope, and threat base-rate sensitivity disclosures.
         </p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
-        <div className="glass-card" style={{ padding: '24px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
-            <div style={{ padding: '8px', borderRadius: '8px', backgroundColor: 'rgba(244, 63, 94, 0.15)', color: '#f43f5e' }}>
-              <AlertOctagon size={20} aria-hidden="true" />
-            </div>
-            <h3 style={{ margin: 0, fontSize: 'var(--text-base)', color: '#f8fafc', fontWeight: 700 }}>
-              1. Decision Support, Not Safety-Critical
-            </h3>
-          </div>
-          <p style={{ margin: 0, fontSize: 'var(--text-sm)', color: '#cbd5e1', lineHeight: '1.6' }}>
-            AeroTrust is designed for fleet operational visibility and regulatory scoping support. It is not an onboard avionics system and does not issue flight-critical steering guidance.
-          </p>
+      {loading && (
+        <div className="glass-panel" style={{ padding: '40px', textAlign: 'center' }}>
+          <p style={{ margin: 0, color: '#38bdf8', fontSize: '0.9375rem' }}>Loading limitations from API...</p>
         </div>
+      )}
 
-        <div className="glass-card" style={{ padding: '24px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
-            <div style={{ padding: '8px', borderRadius: '8px', backgroundColor: 'rgba(251, 191, 36, 0.15)', color: '#fbbf24' }}>
-              <Shield size={20} aria-hidden="true" />
-            </div>
-            <h3 style={{ margin: 0, fontSize: 'var(--text-base)', color: '#f8fafc', fontWeight: 700 }}>
-              2. Relative Radiation Index, Not Probabilities
-            </h3>
-          </div>
-          <p style={{ margin: 0, fontSize: 'var(--text-sm)', color: '#cbd5e1', lineHeight: '1.6' }}>
-            The ionizing radiation metric is strictly a <strong>relative exposure index</strong> based on altitude, geomagnetic latitude, and solar proton flux. It never claims a hardware bit-flip failure probability.
-          </p>
+      {error && (
+        <div className="glass-panel" style={{ padding: '24px', borderLeft: '4px solid #ef4444' }}>
+          <p style={{ margin: 0, color: '#fca5a5', fontSize: '0.875rem' }}>{error}</p>
         </div>
+      )}
 
-        <div className="glass-card" style={{ padding: '24px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
-            <div style={{ padding: '8px', borderRadius: '8px', backgroundColor: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8' }}>
-              <FileCode size={20} aria-hidden="true" />
-            </div>
-            <h3 style={{ margin: 0, fontSize: 'var(--text-base)', color: '#f8fafc', fontWeight: 700 }}>
-              3. Synthetic Injection Validation
+      {!loading && data && (
+        <>
+          {/* Engineering Boundary Disclosures (8 Core Bullets) */}
+          <div className="glass-panel" data-testid="limitations-bullets-panel" style={{ padding: '24px 28px' }}>
+            <h3 style={{ margin: '0 0 16px', fontSize: '1.125rem', fontWeight: 700, color: '#f8fafc' }}>
+              Operational Boundaries &amp; Caveats
             </h3>
-          </div>
-          <p style={{ margin: 0, fontSize: 'var(--text-sm)', color: '#cbd5e1', lineHeight: '1.6' }}>
-            Real-world GNSS spoofing ground truth is confidential. Detector precision and recall are benchmarked via controlled synthetic perturbations (offsets, lateral drifts, and noise) rather than classified operational recordings.
-          </p>
-        </div>
 
-        <div className="glass-card" style={{ padding: '24px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
-            <div style={{ padding: '8px', borderRadius: '8px', backgroundColor: 'rgba(52, 211, 153, 0.15)', color: '#34d399' }}>
-              <Check size={20} aria-hidden="true" />
-            </div>
-            <h3 style={{ margin: 0, fontSize: 'var(--text-base)', color: '#f8fafc', fontWeight: 700 }}>
-              4. External Outside-In Scoping
-            </h3>
-          </div>
-          <p style={{ margin: 0, fontSize: 'var(--text-sm)', color: '#cbd5e1', lineHeight: '1.6' }}>
-            Airbus and EASA maintain internal engineering teardowns. AeroTrust operates exclusively on publicly accessible open-source telemetry architectures and validated external reporting.
-          </p>
-        </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              {data.bullets.map((bullet, idx) => {
+                const parts = bullet.split(':')
+                const title = parts[0]
+                const desc = parts.slice(1).join(':')
 
-        <div className="glass-card" style={{ padding: '24px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
-            <div style={{ padding: '8px', borderRadius: '8px', backgroundColor: 'rgba(239, 68, 68, 0.15)', color: '#ef4444' }}>
-              <AlertOctagon size={20} aria-hidden="true" />
+                return (
+                  <div
+                    key={idx}
+                    data-testid={`limitation-item-${idx}`}
+                    style={{
+                      padding: '14px 18px',
+                      backgroundColor: 'rgba(30, 41, 59, 0.5)',
+                      border: '1px solid #334155',
+                      borderRadius: '8px',
+                      display: 'flex',
+                      gap: '12px',
+                      alignItems: 'flex-start',
+                    }}
+                  >
+                    <span
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '24px',
+                        height: '24px',
+                        borderRadius: '50%',
+                        backgroundColor: 'rgba(56, 189, 248, 0.15)',
+                        color: '#38bdf8',
+                        fontSize: '0.75rem',
+                        fontWeight: 700,
+                        flexShrink: 0,
+                        marginTop: '2px',
+                      }}
+                    >
+                      {idx + 1}
+                    </span>
+                    <div>
+                      <h4 style={{ margin: '0 0 4px', fontSize: '0.9375rem', fontWeight: 700, color: '#f8fafc' }}>
+                        {title}
+                      </h4>
+                      <p style={{ margin: 0, fontSize: '0.8125rem', color: '#cbd5e1', lineHeight: 1.55 }}>
+                        {desc.trim()}
+                      </p>
+                    </div>
+                  </div>
+                )
+              })}
             </div>
-            <h3 style={{ margin: 0, fontSize: 'var(--text-base)', color: '#f8fafc', fontWeight: 700 }}>
-              5. Multi-Aircraft Consensus (Check d) Inactive
-            </h3>
           </div>
-          <p style={{ margin: 0, fontSize: 'var(--text-sm)', color: '#cbd5e1', lineHeight: '1.6' }}>
-            Multi-aircraft consensus is <strong>implemented, inactive, needs re-validation</strong>. In v0.3, Check (d) was disabled due to a self-referential peer anomaly bug identified during holdout testing. Detection in v0.3 relies exclusively on <code>altitude_consistency_v2</code> (Check a behind the abstention gate); Check (d) does not contribute to detection in v0.3.
-          </p>
-        </div>
-      </div>
+
+          {/* Base-Rate Table: Expected Precision vs Threat Prevalence */}
+          <div className="glass-panel" data-testid="base-rate-table-panel" style={{ padding: '24px 28px', overflowX: 'auto' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '12px', marginBottom: '16px' }}>
+              <div>
+                <h3 style={{ margin: '0 0 4px', fontSize: '1.125rem', fontWeight: 700, color: '#f8fafc' }}>
+                  Threat Base-Rate &amp; Precision Sensitivity Table
+                </h3>
+                <p style={{ margin: 0, fontSize: '0.8125rem', color: '#94a3b8' }}>
+                  Demonstrating that detector precision drops sharply in peacetime environments due to the false alarm base rate (Bayes rule).
+                </p>
+              </div>
+
+              <span
+                style={{
+                  fontSize: '0.75rem',
+                  padding: '4px 8px',
+                  borderRadius: '4px',
+                  backgroundColor: 'rgba(239, 68, 68, 0.12)',
+                  border: '1px solid rgba(239, 68, 68, 0.35)',
+                  color: '#f87171',
+                  fontWeight: 600,
+                }}
+              >
+                Bayesian Base-Rate Reality
+              </span>
+            </div>
+
+            <table
+              data-testid="base-rate-table"
+              style={{
+                width: '100%',
+                borderCollapse: 'collapse',
+                fontSize: '0.8125rem',
+                textAlign: 'left',
+              }}
+            >
+              <thead>
+                <tr style={{ borderBottom: '2px solid #334155', color: '#94a3b8' }}>
+                  <th style={{ padding: '10px 12px', fontWeight: 700 }}>Airspace Operational Scenario</th>
+                  <th style={{ padding: '10px 12px', fontWeight: 700, textAlign: 'right' }}>Threat Prevalence (p)</th>
+                  <th style={{ padding: '10px 12px', fontWeight: 700, textAlign: 'right' }}>Expected Precision</th>
+                  <th style={{ padding: '10px 12px', fontWeight: 700, textAlign: 'center' }}>95% Wilson Bounds</th>
+                  <th style={{ padding: '10px 12px', fontWeight: 700, textAlign: 'right' }}>False Alarms / 10k Flights</th>
+                  <th style={{ padding: '10px 12px', fontWeight: 700 }}>Operational Alerting Guidance</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.base_rate_table.map((row, idx) => {
+                  const isLowPrec = row.precision_pct < 10.0
+                  return (
+                    <tr
+                      key={idx}
+                      data-testid={`base-rate-row-${idx}`}
+                      style={{
+                        borderBottom: '1px solid #1e293b',
+                        backgroundColor: isLowPrec ? 'rgba(239, 68, 68, 0.05)' : 'rgba(30, 41, 59, 0.4)',
+                      }}
+                    >
+                      <td style={{ padding: '12px', fontWeight: 700, color: '#f8fafc' }}>
+                        {row.scenario}
+                      </td>
+                      <td style={{ padding: '12px', textAlign: 'right', fontFamily: 'monospace', color: '#cbd5e1' }}>
+                        {row.prevalence_pct.toFixed(2)}%
+                      </td>
+                      <td
+                        style={{
+                          padding: '12px',
+                          textAlign: 'right',
+                          fontFamily: 'monospace',
+                          fontWeight: 700,
+                          color: isLowPrec ? '#f87171' : '#34d399',
+                        }}
+                      >
+                        {row.precision_pct.toFixed(1)}%
+                      </td>
+                      <td style={{ padding: '12px', textAlign: 'center', fontFamily: 'monospace', color: '#cbd5e1' }}>
+                        [{row.ci_low.toFixed(1)}%, {row.ci_high.toFixed(1)}%]
+                      </td>
+                      <td style={{ padding: '12px', textAlign: 'right', fontFamily: 'monospace', color: '#cbd5e1' }}>
+                        {row.false_alarms_per_10k.toFixed(1)}
+                      </td>
+                      <td style={{ padding: '12px', color: '#cbd5e1', fontSize: '0.75rem' }}>
+                        {row.guidance}
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+
+            <div style={{ marginTop: '14px', fontSize: '0.75rem', color: '#94a3b8', fontStyle: 'italic' }}>
+              Precision formula: P(Spoof | Alert) = (p * TPR) / [p * TPR + (1 - p) * FPR], using pooled leg-level TPR = 26.98% and clean FPR = 1.17%.
+            </div>
+          </div>
+        </>
+      )}
     </div>
   )
 }
-
