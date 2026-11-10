@@ -9,7 +9,7 @@ This document catalogues all third-party datasets, textures, public sources, and
 ### 1.1 Earth Surface Texture (`frontend/public/textures/earth_atmos_2048.jpg`)
 * **File Name**: `frontend/public/textures/earth_atmos_2048.jpg`
 * **Status**: **provenance not yet verified**
-* **Attributed Upstream**: NASA Visible Earth / Blue Marble: Land Surface, Shallow Water, and Shaded Topography.
+* **Claimed source (unverified)**: NASA Visible Earth / Blue Marble: Land Surface, Shallow Water, and Shaded Topography.
 * **URL**: https://visibleearth.nasa.gov/images/57752/blue-marble-land-surface-shallow-water-and-shaded-topography
 * **TODO**: Replace `frontend/public/textures/earth_atmos_2048.jpg` with a direct NASA Visible Earth download from an authenticated public-domain archive to record its source URL and download date.
 
@@ -32,7 +32,7 @@ This document catalogues all third-party datasets, textures, public sources, and
 * **License**: **Public Domain** (U.S. Federal Government open scientific data).
 
 ### 2.2 Aviation Safety Bulletins & Regulatory Incident Notices
-* **Usage**: Historical incident benchmarks in `data/incident_cases.json` and Incident Clock (`/incidents`).
+* **Usage**: Historical incident benchmarks in `data/incident_cases.json` and Incident Scenario Calculator (`/incidents`).
 * **Sources**:
   - European Union Aviation Safety Agency (EASA): Emergency Airworthiness Directives (EAD) & Proposed Directives. URL: https://ad.easa.europa.eu/
   - Direction Générale de l'Aviation Civile (DGAC / BEA France): Technical safety communications.

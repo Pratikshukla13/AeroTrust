@@ -55,8 +55,8 @@ const NAV_ITEMS: NavItem[] = [
   { id: 'flight-detail', label: 'Flight Detail', icon: Plane },
   { id: 'sar', label: 'SAR Metrics', icon: ShieldAlert },
   { id: 'limitations', label: 'Limitations', icon: AlertOctagon },
-  { id: 'incident-clock', label: 'Incident Clock', icon: Clock },
-  { id: 'briefing', label: 'Briefing', icon: FileText, badge: 'Planned, not in this release' },
+  { id: 'incident-clock', label: 'Incident Scenario Calculator', icon: Clock },
+  { id: 'briefing', label: 'Briefing (planned, not in this release)', icon: FileText, badge: 'Planned, not in this release' },
   { id: 'corridors', label: 'Corridors', icon: Navigation, badge: 'Planned, not in this release' },
   { id: 'watchlist', label: 'Watchlist', icon: EyeOff, badge: 'Planned, not in this release' },
 ]
@@ -67,7 +67,7 @@ export default function App() {
   const [activeDataset, setActiveDataset] = useState<DatasetMode>('benchmark')
   const [metaFingerprints, setMetaFingerprints] = useState<Record<string, DatasetFingerprintData> | null>(null)
   const [releaseTag, setReleaseTag] = useState<string>('v0.3.2-verified')
-  const [incidentNavLabel, setIncidentNavLabel] = useState<string>('Incident Clock (sources pending)')
+  const [incidentNavLabel, setIncidentNavLabel] = useState<string>('Incident Scenario Calculator (sources pending)')
 
   useEffect(() => {
     fetch('/api/incident-cases')
@@ -78,13 +78,13 @@ export default function App() {
           cases.length > 0 &&
           cases.every((c) => c.source_url && c.verification_status === 'sourced' && c.url_status === 'verified by user')
         if (allVerified) {
-          setIncidentNavLabel('Incident Clock')
+          setIncidentNavLabel('Incident Scenario Calculator')
         } else {
-          setIncidentNavLabel('Incident Clock (sources pending)')
+          setIncidentNavLabel('Incident Scenario Calculator (sources pending)')
         }
       })
       .catch(() => {
-        setIncidentNavLabel('Incident Clock (sources pending)')
+        setIncidentNavLabel('Incident Scenario Calculator (sources pending)')
       })
   }, [])
 
@@ -463,7 +463,7 @@ export default function App() {
           <span>
             App Tag:{' '}
             <strong data-testid="footer-app-tag" style={{ color: '#a78bfa', fontFamily: 'monospace' }}>
-              v1.0.2-demo
+              v1.0.3-demo
             </strong>
           </span>
         </div>

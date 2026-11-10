@@ -1,10 +1,10 @@
 # AeroTrust: Avionics Telemetry Integrity Observatory
 
-**Evaluation Tag**: `v0.3.2-verified` | **App Tag**: `v1.0.2-demo`
+**Evaluation Tag**: `v0.3.2-verified` | **App Tag**: `v1.0.3-demo`
 
 > **Disclaimer**: Independent personal project, not affiliated with or endorsed by Airbus. Uses public information only.
 
-AeroTrust is an avionics data-integrity observatory designed to evaluate aircraft ADS-B telemetry against GNSS spoofing, interference, and atmospheric radiation anomalies in a single unified interface. Operating under frozen verification benchmarks on synthetic flight trajectories, it pairs physics-based altimetry consistency checks with an unsupervised abstention engine, classifying telemetry into four standardized evidence tiers (`no_alert`, `flagged_altitude_inconsistency`, `jamming_degraded`, `insufficient`). It features an aggregate Silent Acceptance Rate (SAR) auditor, geographic H3 interference mapping, and an Incident Clock scoping calculator for aviation airworthiness directives.
+AeroTrust is an avionics data-integrity observatory designed to evaluate aircraft ADS-B telemetry against GNSS spoofing, interference, and atmospheric radiation anomalies in a single unified interface. Operating under frozen verification benchmarks on synthetic flight trajectories, it pairs physics-based altimetry consistency checks with an unsupervised abstention engine, classifying telemetry into four standardized evidence tiers (`no_alert`, `flagged_altitude_inconsistency`, `jamming_degraded`, `insufficient`). It features an aggregate Silent Acceptance Rate (SAR) auditor, geographic H3 interference mapping, and an Incident Scenario Calculator for aviation airworthiness directives.
 
 > **SYNTHETIC DATASET NOTICE**: All operational flight paths, telemetry points, and threat injections evaluated in AeroTrust are generated synthetically. Performance benchmarks reflect simulated ADS-B disruptions and do not represent operational airline flight safety records.
 
@@ -25,7 +25,7 @@ AeroTrust is an avionics data-integrity observatory designed to evaluate aircraf
 * **Execute Multi-Aircraft Peer Consensus**: Multi-aircraft consensus (Check d) is disabled in v0.3 due to self-referential graph dependencies and does not contribute to detection.
 * **Provide Reliable Cockpit Warnings in Peacetime Airspace**: In normal low-threat airspaces (0.01% base rate), precision drops to **0.2%** due to background barometric false alarms (~117 false alarms per 10,000 clean flights); independent sensor corroboration is required.
 * **Prove Radiation Causality**: Space weather indices (NOAA proton flux, Kp) serve strictly as illustrative exposure context; they do not establish physical causality for avionics computer upsets.
-* **Provide Certified Incident Financial Valuations**: Incident Clock cases are illustrative benchmarks; all seeded presets require verified primary regulatory documents.
+* **Provide Certified Incident Financial Valuations**: Incident Scenario Calculator cases are illustrative benchmarks; all seeded presets require verified primary regulatory documents.
 
 ---
 
@@ -79,7 +79,7 @@ flowchart TD
         UI_MAP["Interference Map<br/>(3D Globe & H3 Interference Hexagons)"]
         UI_FLIGHT["Flight Detail Inspector<br/>(Check Breakdown & Altimetry Plot)"]
         UI_SAR["SAR Privacy Auditor<br/>(Family & Regional Aggregates)"]
-        UI_INCIDENT["Incident Clock Calculator<br/>(Directive Scoping Costs)"]
+        UI_INCIDENT["Incident Scenario Calculator<br/>(Directive Scoping Costs)"]
     end
 
     ADS_B --> CHECK_A & CHECK_C & ABSTAIN
@@ -124,7 +124,7 @@ flowchart TD
 
 ## License & Attributions
 
-* **Evaluation Tag**: `v0.3.2-verified` | **App Tag**: `v1.0.2-demo`
+* **Evaluation Tag**: `v0.3.2-verified` | **App Tag**: `v1.0.3-demo`
 * **Disclaimer**: Independent personal project, not affiliated with or endorsed by Airbus. Uses public information only.
 * **License**: [MIT License](file:///c:/Users/ASus/Desktop/AeroTrust/LICENSE)
 * **Attributions**: Full catalog of public datasets, textures, and open-source libraries available in [`docs/ATTRIBUTIONS.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/ATTRIBUTIONS.md).

@@ -17,7 +17,8 @@ const FORBIDDEN_WORDS_REGEX = /\b(ok|safe|clear|assured)\b/i
 
 async function run() {
   console.log('--- Starting Vite Preview Server in Demo Mode ---')
-  const preview = spawn('npx', ['vite', 'preview', '--port', '4173', '--strictPort'], {
+  const cmd = process.platform === 'win32' ? 'npx.cmd' : 'npx'
+  const preview = spawn(cmd, ['vite', 'preview', '--port', '4173', '--strictPort'], {
     cwd: rootDir,
     shell: true,
     stdio: 'pipe',
@@ -28,7 +29,7 @@ async function run() {
 
   // Wait for preview server
   let serverReady = false
-  for (let i = 0; i < 40; i++) {
+  for (let i = 0; i < 60; i++) {
     try {
       const res = await fetch('http://localhost:4173')
       if (res.status === 200 || res.status === 304 || res.status === 404) {
@@ -54,7 +55,7 @@ async function run() {
     { id: 'flight-detail', label: 'Flight Detail' },
     { id: 'sar', label: 'SAR Metrics' },
     { id: 'limitations', label: 'Limitations' },
-    { id: 'incident-clock', label: 'Incident Clock' },
+    { id: 'incident-clock', label: 'Incident Scenario Calculator' },
   ]
 
   let allViolations = []
@@ -301,7 +302,7 @@ async function run() {
   </div>
   <div style="text-align: right;">
     <div class="badge-tag">Eval Tag: v0.3.2-verified</div>
-    <div class="badge-tag" style="margin-top: 2px;">App Tag: v1.0.2-demo</div>
+    <div class="badge-tag" style="margin-top: 2px;">App Tag: v1.0.3-demo</div>
   </div>
 </div>
 
@@ -312,7 +313,7 @@ async function run() {
 <div class="section">
   <div class="section-title">1. Executive Summary</div>
   <p style="font-size: 8pt; margin-bottom: 4px;">
-    AeroTrust is an avionics data-integrity observatory designed to evaluate aircraft ADS-B telemetry against GNSS spoofing, interference, and atmospheric radiation anomalies in a single unified interface. Operating under frozen verification benchmarks on synthetic flight trajectories, it pairs physics-based altimetry consistency checks with an unsupervised abstention engine, classifying telemetry into four standardized evidence tiers (<span class="tier-pill tier-no-alert">no_alert</span>, <span class="tier-pill tier-flagged">flagged_altitude_inconsistency</span>, <span class="tier-pill tier-jamming">jamming_degraded</span>, <span class="tier-pill tier-insufficient">insufficient</span>). It features an aggregate Silent Acceptance Rate (SAR) auditor, geographic H3 interference mapping, and an Incident Clock scoping calculator for aviation airworthiness directives.
+    AeroTrust is an avionics data-integrity observatory designed to evaluate aircraft ADS-B telemetry against GNSS spoofing, interference, and atmospheric radiation anomalies in a single unified interface. Operating under frozen verification benchmarks on synthetic flight trajectories, it pairs physics-based altimetry consistency checks with an unsupervised abstention engine, classifying telemetry into four standardized evidence tiers (<span class="tier-pill tier-no-alert">no_alert</span>, <span class="tier-pill tier-flagged">flagged_altitude_inconsistency</span>, <span class="tier-pill tier-jamming">jamming_degraded</span>, <span class="tier-pill tier-insufficient">insufficient</span>). It features an aggregate Silent Acceptance Rate (SAR) auditor, geographic H3 interference mapping, and an Incident Scenario Calculator for aviation airworthiness directives.
   </p>
 </div>
 
@@ -326,7 +327,7 @@ async function run() {
         <li><strong>Interference Clustering:</strong> Aggregates multi-aircraft NIC/NACp/SIL drops into H3 spatial cells for regional jamming detection.</li>
         <li><strong>Evidence-Tiered Output:</strong> Never exposes uncalibrated probabilities or claims flights are &quot;safe&quot;; uses standardized evidence tiers.</li>
         <li><strong>Privacy-Preserving SAR:</strong> Evaluates Silent Acceptance Rate with cell suppression for cohorts where N &lt; 30.</li>
-        <li><strong>Incident Clock:</strong> Models fleet scoping delay sensitivity under airworthiness directives using transparent parameters.</li>
+        <li><strong>Incident Scenario Calculator:</strong> Models fleet scoping delay sensitivity under airworthiness directives using transparent parameters.</li>
       </ul>
     </div>
     <div class="box-cannot">
@@ -337,7 +338,7 @@ async function run() {
         <li><strong>Consensus Inactive:</strong> Multi-aircraft consensus (Check d) is disabled due to self-referential graph loops.</li>
         <li><strong>Peacetime Base-Rate Drop:</strong> At 0.01% threat prevalence, precision drops to 0.2% due to background barometric noise.</li>
         <li><strong>No Radiation Causality:</strong> Solar proton flux and Kp indices serve strictly as illustrative exposure context, not a cause.</li>
-        <li><strong>No Audited Financials:</strong> Incident Clock cases require verified primary AD documents (currently unchecked).</li>
+        <li><strong>No Audited Financials:</strong> Incident Scenario Calculator cases require verified primary AD documents (currently unchecked).</li>
       </ul>
     </div>
   </div>
@@ -406,7 +407,7 @@ async function run() {
 </div>
 
 <div class="footer">
-  <div>Eval Tag: v0.3.2-verified &bull; App Tag: v1.0.2-demo &bull; Independent personal project, not affiliated with or endorsed by Airbus. Uses public information only.</div>
+  <div>Eval Tag: v0.3.2-verified &bull; App Tag: v1.0.3-demo &bull; Independent personal project, not affiliated with or endorsed by Airbus. Uses public information only.</div>
   <div>Page 1 of 1</div>
 </div>
 
@@ -452,7 +453,7 @@ async function run() {
   }
 
   if (allViolations.length === 0) {
-    reportMd += `\n*No accessibility violations detected across critical, serious, moderate, or minor rules.*\n`
+    reportMd += `\n*0 automated axe-core findings; manual accessibility checks pending.*\n`
   }
 
   fs.writeFileSync(path.join(docsDir, 'AXE_ACCESSIBILITY_REPORT.md'), reportMd, 'utf8')

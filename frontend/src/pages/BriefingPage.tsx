@@ -5,7 +5,7 @@ export default function BriefingPage() {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       <div className="glass-panel" style={{ padding: '24px 28px' }}>
         <h1 style={{ margin: '0 0 8px', fontSize: 'var(--text-xl)', fontWeight: 700, color: '#f8fafc' }}>
-          Autonomous Observatory Briefing
+          Briefing (planned, not in this release)
         </h1>
         <p style={{ margin: 0, fontSize: 'var(--text-sm)', color: '#94a3b8' }}>
           Executive synthesis of 24h interference events and radiation exposure context with 100% deterministic number verification.

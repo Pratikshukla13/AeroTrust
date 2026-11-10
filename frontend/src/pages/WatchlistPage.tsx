@@ -15,7 +15,7 @@ export default function WatchlistPage() {
           </div>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '6px 12px', borderRadius: '6px', backgroundColor: 'rgba(244, 63, 94, 0.1)', border: '1px solid rgba(244, 63, 94, 0.3)', color: '#f43f5e', fontSize: 'var(--text-xs)', fontWeight: 600 }}>
             <Lock size={12} aria-hidden="true" />
-            <span>Strict Air Safety Confidentiality</span>
+            <span>Strict Confidentiality</span>
           </div>
         </div>
 

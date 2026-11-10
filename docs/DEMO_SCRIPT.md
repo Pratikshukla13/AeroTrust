@@ -25,10 +25,10 @@
 * **Talking Point**:
   > "Here is our primary active detector: Check (a) geometric versus barometric altitude consistency. When the GNSS altitude deviates by more than 120 meters from barometric altimetry, the flight is flagged. We disclose uncalibrated internal scores only for diagnostics; cockpit operators see only the standardized tier and verifiable physical reasons."
 
-### Minute 1:30 – 2:00: Incident Clock & Limitations
-* **Action**: Click **Incident Clock**, then click the **Limitations** page.
+### Minute 1:30 – 2:00: Incident Scenario Calculator & Limitations
+* **Action**: Click **Incident Scenario Calculator**, then click the **Limitations** page.
 * **Talking Point**:
-  > "Integrity failures carry massive fleet holding costs. Our Incident Clock models the sensitivity of scoping delays using transparent public presets—all flagged with red 'primary source missing' badges until regulatory airworthiness directives are verified. Finally, on our Limitations page, we openly publish what our tool cannot do: 0% horizontal spoofing recall, disabled consensus, and degraded peacetime precision. We build trust by publishing our boundaries."
+  > "Integrity failures carry massive fleet holding costs. Our Incident Scenario Calculator models the sensitivity of scoping delays using transparent public presets—all flagged with red 'primary source missing' badges until regulatory airworthiness directives are verified. Finally, on our Limitations page, we openly publish what our tool cannot do: 0% horizontal spoofing recall, disabled consensus, and degraded peacetime precision. We build trust by publishing our boundaries."
 
 ---
 
@@ -72,15 +72,15 @@
 3. **Presenter Script**:
    > "Silent Acceptance Rate measures the proportion of spoofed flights where avionics accepted false data without triggering basic receiver alerts (NIC/NACp). But reporting micro-cohorts could leak airline fleet vulnerabilities. Therefore, our engine enforces complementary cell suppression: any cohort with fewer than 30 scheduled legs is masked, preventing inference by subtraction."
 
-### Step 5: Incident Clock & Limitations Disclosure (4:00 – 5:00)
-1. **Click**: **Incident Clock** tab.
+### Step 5: Incident Scenario Calculator & Limitations Disclosure (4:00 – 5:00)
+1. **Click**: **Incident Scenario Calculator** tab.
 2. **Action**:
    - Select the **A320 Panel Recall (2025)** preset.
    - Show that only sourced fields (`aircraft_held_in_service: 177`, `aircraft_held_undelivered: 451`) are filled; unsourced fields remain empty.
    - Note the red badge: **primary source missing (status: unchecked)**.
    - Click the **Limitations** tab and highlight the Base Rate Sensitivity table.
 3. **Presenter Script**:
-   > "In the Incident Clock, we separate verified facts from operational assumptions. Presets leave unsourced parameters empty, preventing fabricated valuations. Notice the red disclaimer: primary airworthiness directives require formal confirmation. Finally, on our Limitations page, we show that in normal peacetime conditions, false alarms from background sensor noise dominate, dropping precision to 0.2%. By disclosing these weaknesses openly, AeroTrust provides engineering credibility rather than marketing hype."
+   > "In the Incident Scenario Calculator, we separate verified facts from operational assumptions. Presets leave unsourced parameters empty, preventing fabricated valuations. Notice the red disclaimer: primary airworthiness directives require formal confirmation. Finally, on our Limitations page, we show that in normal peacetime conditions, false alarms from background sensor noise dominate, dropping precision to 0.2%. By disclosing these weaknesses openly, AeroTrust provides engineering credibility rather than marketing hype."
 
 ---
 
@@ -92,5 +92,5 @@
 | **Interference Map (`/map`)** | Spatial clustering of RF degradation into H3 cells. | Never claim this shows real Russian/Middle Eastern live military emitters. |
 | **Flight Detail (`/flight-detail`)** | Altimetry residual inspection and Check (a) mechanics. | Never claim the uncalibrated score is an absolute probability of hostile attack. |
 | **SAR Auditor (`/sar`)** | Fleet vulnerability auditing under $N \ge 30$ privacy protection. | Never claim SAR isolates individual airline operational culpability. |
-| **Incident Clock (`/incidents`)** | Sensitivity calculator for fleet holding costs under directives. | Never claim the financial numbers are audited airline losses. |
+| **Incident Scenario Calculator (`/incidents`)** | Sensitivity calculator for fleet holding costs under directives. | Never claim the financial numbers are audited airline losses. |
 | **Limitations (`/limitations`)** | Full disclosure of failure modes, 0% horizontal recall, and base-rate penalties. | Never promise that multi-aircraft consensus is actively protecting flights today. |

@@ -6,4 +6,4 @@
 | Route | Rule ID | Impact | Affected Elements | Description | Selector |
 |:---|:---|:---:|:---:|:---|:---|
 
-*No accessibility violations detected across critical, serious, moderate, or minor rules.*
+*0 automated axe-core findings; manual accessibility checks pending.*

@@ -208,7 +208,7 @@ async function run() {
     process.exit(1)
   }
 
-  console.log('\nSUCCESS: All 9 routes passed desktop and mobile automated Axe-core WCAG 2.1 AA auditing, full screenshot generation, and all Phase 6 integrity checks!')
+  console.log('\nSUCCESS: 0 automated axe-core findings; manual accessibility checks pending.')
 }
 
 run().catch((err) => {

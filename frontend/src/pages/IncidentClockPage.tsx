@@ -640,7 +640,7 @@ export default function IncidentClockPage() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
           <Clock size={24} style={{ color: '#38bdf8' }} aria-hidden="true" />
           <h1 style={{ margin: 0, fontSize: 'var(--text-xl)', fontWeight: 700, color: '#f8fafc' }}>
-            Incident Clock &amp; Scoping Cost Calculator
+            Incident Scenario Calculator
           </h1>
         </div>
         <p style={{ margin: '0 0 14px', fontSize: 'var(--text-sm)', color: '#94a3b8', lineHeight: 1.5 }}>
@@ -1029,7 +1029,7 @@ export default function IncidentClockPage() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', marginBottom: '20px' }}>
           <div>
             <h2 style={{ margin: '0 0 4px', fontSize: 'var(--text-lg)', fontWeight: 700, color: '#f8fafc' }}>
-              Scoping Scenario Modeller
+              Scoping Scenario Calculator
             </h2>
             <p style={{ margin: 0, fontSize: 'var(--text-xs)', color: '#94a3b8' }}>
               Choose a public preset to fill sourced numbers, or enter custom parameters.
