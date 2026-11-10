@@ -393,5 +393,80 @@ describe('Phase 6 Strict Regulatory & Integrity Testing', () => {
     const forbiddenMatches = allText.match(FORBIDDEN_WORDS_REGEX)
     expect(forbiddenMatches).toBeNull()
   })
+
+  // -------------------------------------------------------------------------
+  // 5. Phase 8.1 Demo Fallback Disclosure Test
+  // -------------------------------------------------------------------------
+  it('FlightDetail: shows visible fallback banner and updates header flight ID on static demo substitution', async () => {
+    const mockFallbackFlight = {
+      flight_id: 'x603da7_1794073786',
+      icao24: 'x603da7',
+      tier: 'flagged_altitude_inconsistency',
+      tier_reasons: ['geo_baro_discrepancy_exceeded'],
+      check_a: {
+        name: 'geo_baro_alt',
+        label: 'Geometric vs Barometric Altitude Consistency',
+        role: 'primary',
+        flag: true,
+        reasons: ['residual_exceeded_120m'],
+        residual: 185.4,
+      },
+      check_b: { name: 'pos_vel_consistency', label: 'Position/Velocity Feasibility', role: 'supporting', flag: false, reasons: [] },
+      check_c: { name: 'rf_integrity_degradation', label: 'ADS-B Integrity Degradation', role: 'supporting', flag: false, reasons: [] },
+      check_d: { name: 'multi_aircraft_consensus', label: 'Multi-Aircraft Consensus (Inactive)', role: 'inactive', flag: false, reasons: [] },
+      radiation: { tier: 'quiet', label: 'Quiet Solar Activity', relative_index: 1.0, notice: 'Illustrative context' },
+      uncalibrated_score: 0.88,
+      points: [
+        { ts: 1794073786, baro_alt_m: 10000, geo_alt_m: 10200, residual_m: 200, is_flagged: true },
+      ],
+      _demo_fallback: true,
+      _requested_flight_id: 'unknown_flight_9999',
+    }
+
+    vi.spyOn(globalThis, 'fetch').mockImplementation((url: RequestInfo | URL) => {
+      const urlStr = url.toString()
+      if (urlStr.includes('/api/flights')) {
+        return Promise.resolve({
+          ok: true,
+          status: 200,
+          json: () => Promise.resolve([
+            { flight_id: 'unknown_flight_9999', icao24: 'unknown', tier: 'flagged_altitude_inconsistency' },
+          ]),
+        } as Response)
+      }
+      if (urlStr.includes('/api/flight-detail/')) {
+        return Promise.resolve({
+          ok: true,
+          status: 200,
+          json: () => Promise.resolve(mockFallbackFlight),
+        } as Response)
+      }
+      return Promise.reject(new Error(`Unhandled URL: ${url}`))
+    })
+
+    render(<FlightDetailPage />)
+
+    await waitFor(
+      () => {
+        expect(screen.queryByText(/Loading flight telemetry points/i)).not.toBeInTheDocument()
+      },
+      { timeout: 3000 },
+    )
+
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('static-demo-fallback-banner')).toBeInTheDocument()
+      },
+      { timeout: 3000 },
+    )
+
+    // Check banner text content across child nodes
+    const banner = screen.getByTestId('static-demo-fallback-banner')
+    expect(banner).toHaveTextContent(/Not available in the static demo\. Showing example flight x603da7_1794073786 instead/i)
+
+    // Check page header shows the substituted flight's ID
+    const headerId = screen.getByTestId('header-flight-id')
+    expect(headerId).toHaveTextContent('x603da7_1794073786')
+  })
 })
 

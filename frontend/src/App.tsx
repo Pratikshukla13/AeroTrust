@@ -67,6 +67,26 @@ export default function App() {
   const [activeDataset, setActiveDataset] = useState<DatasetMode>('benchmark')
   const [metaFingerprints, setMetaFingerprints] = useState<Record<string, DatasetFingerprintData> | null>(null)
   const [releaseTag, setReleaseTag] = useState<string>('v0.3.2-verified')
+  const [incidentNavLabel, setIncidentNavLabel] = useState<string>('Incident Clock (sources pending)')
+
+  useEffect(() => {
+    fetch('/api/incident-cases')
+      .then((res) => (res.ok ? res.json() : Promise.reject(res)))
+      .then((cases: any[]) => {
+        const allVerified =
+          Array.isArray(cases) &&
+          cases.length > 0 &&
+          cases.every((c) => c.source_url && c.verification_status === 'sourced' && c.url_status === 'verified by user')
+        if (allVerified) {
+          setIncidentNavLabel('Incident Clock')
+        } else {
+          setIncidentNavLabel('Incident Clock (sources pending)')
+        }
+      })
+      .catch(() => {
+        setIncidentNavLabel('Incident Clock (sources pending)')
+      })
+  }, [])
 
   useEffect(() => {
     fetch('/api/meta')
@@ -356,7 +376,7 @@ export default function App() {
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <Icon size={17} style={{ color: isActive ? '#38bdf8' : '#94a3b8' }} aria-hidden="true" />
-                  <span>{item.label}</span>
+                  <span>{item.id === 'incident-clock' ? incidentNavLabel : item.label}</span>
                 </div>
                 {item.badge && (
                   <span
@@ -409,6 +429,46 @@ export default function App() {
           {renderCurrentPage()}
         </main>
       </div>
+
+      {/* Global Application Footer */}
+      <footer
+        role="contentinfo"
+        data-testid="app-footer"
+        style={{
+          borderTop: '1px solid rgba(148, 163, 184, 0.15)',
+          padding: '16px 32px',
+          backgroundColor: 'rgba(15, 23, 42, 0.85)',
+          backdropFilter: 'blur(8px)',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '12px',
+          fontSize: '0.75rem',
+          color: '#94a3b8',
+          position: 'relative',
+          zIndex: 40,
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+          <span>
+            Evaluation Tag:{' '}
+            <strong data-testid="footer-eval-tag" style={{ color: '#38bdf8', fontFamily: 'monospace' }}>
+              v0.3.2-verified
+            </strong>
+          </span>
+          <span style={{ color: '#475569' }}>|</span>
+          <span>
+            App Tag:{' '}
+            <strong data-testid="footer-app-tag" style={{ color: '#a78bfa', fontFamily: 'monospace' }}>
+              v1.0.1-demo
+            </strong>
+          </span>
+        </div>
+        <div data-testid="footer-disclaimer">
+          Independent personal project, not affiliated with or endorsed by Airbus. Uses public information only.
+        </div>
+      </footer>
 
       <style>{`
         @media (max-width: 840px) {

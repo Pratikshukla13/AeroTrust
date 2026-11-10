@@ -120,8 +120,22 @@ async function handleStaticRoute(urlString: string, fallbackFetch: typeof window
       if (detailResp.ok) {
         return detailResp
       }
-      // Fallback to first available dumped flight detail
-      return fallbackFetch('/static-data/flights/x603da7_1794073786.json')
+      // Flight not found in static snapshot set: fallback with explicit disclosure
+      const fallbackResp = await fallbackFetch('/static-data/flights/x603da7_1794073786.json')
+      if (fallbackResp.ok) {
+        const data = await fallbackResp.json()
+        data._demo_fallback = true
+        data._requested_flight_id = flightId
+        return new Response(JSON.stringify(data), {
+          status: 200,
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Demo-Fallback': 'true',
+            'X-Demo-Requested-Flight': flightId,
+            'X-Demo-Substituted-Flight': data.flight_id,
+          },
+        })
+      }
     }
   } catch (err) {
     console.warn('[StaticDemo] Interceptor fallback error:', err)

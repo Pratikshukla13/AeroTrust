@@ -7,11 +7,11 @@ This document catalogues all third-party datasets, textures, public sources, and
 ## 1. Cartographic & Earth Visualization Assets
 
 ### 1.1 Earth Surface Texture (`frontend/public/textures/earth_atmos_2048.jpg`)
-* **Source**: NASA Visible Earth / Blue Marble: Land Surface, Shallow Water, and Shaded Topography.
-* **Creator / Credit**: NASA Goddard Space Flight Center, Reto Stöckli (NASA Earth Observatory).
+* **File Name**: `frontend/public/textures/earth_atmos_2048.jpg`
+* **Status**: **provenance not yet verified**
+* **Attributed Upstream**: NASA Visible Earth / Blue Marble: Land Surface, Shallow Water, and Shaded Topography.
 * **URL**: https://visibleearth.nasa.gov/images/57752/blue-marble-land-surface-shallow-water-and-shaded-topography
-* **License**: **Public Domain** (Work of the United States Federal Government under 17 U.S.C. § 105).
-* **Provenance Verification**: This is the canonical 2048x1024 Blue Marble texture commonly bundled in open-source Three.js earth/globe visualizers, freely usable without royalty or commercial restriction.
+* **TODO**: Replace `frontend/public/textures/earth_atmos_2048.jpg` with a direct NASA Visible Earth download from an authenticated public-domain archive to establish full cryptographic provenance.
 
 ### 1.2 Natural Earth Vector GeoJSON Data
 * **Files**:

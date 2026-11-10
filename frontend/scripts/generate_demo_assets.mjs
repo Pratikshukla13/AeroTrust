@@ -78,11 +78,13 @@ async function run() {
       await page.screenshot({ path: ssPath, fullPage: false })
       console.log(`  Saved: ${ssPath}`)
 
-      // Verify Synthetic Banner & Dataset Fingerprint
+      // Verify Synthetic Banner & Dataset Fingerprint & Footer
       const hasBanner = await page.locator('[data-testid="synthetic-banner"]').isVisible()
       const hasFingerprint = await page.locator('text=v0.3.2-verified').first().isVisible()
+      const hasFooter = await page.locator('[data-testid="app-footer"]').isVisible()
       if (!hasBanner) integrityFailures.push({ route: route.id, failure: 'Synthetic banner missing' })
       if (!hasFingerprint) integrityFailures.push({ route: route.id, failure: 'Dataset fingerprint tag missing' })
+      if (!hasFooter) integrityFailures.push({ route: route.id, failure: 'Footer missing' })
 
       // Check forbidden words
       const text = await page.evaluate(() => document.body.innerText)
@@ -91,15 +93,26 @@ async function run() {
         integrityFailures.push({ route: route.id, failure: `Forbidden word rendered: ${match[0]}` })
       }
 
-      // Axe audit
-      const axeResults = await new AxeBuilder({ page })
-        .disableRules(['color-contrast'])
-        .analyze()
+      // Phase 8.1 Incident Clock: check "Work in progress: sources being verified" header
+      if (route.id === 'incident-clock') {
+        const hasPendingHeader = await page.locator('[data-testid="sources-work-in-progress-header"]').isVisible()
+        if (!hasPendingHeader) {
+          integrityFailures.push({ route: route.id, failure: '"Work in progress: sources being verified" header missing' })
+        }
+      }
 
-      const criticals = axeResults.violations.filter((v) => v.impact === 'critical' || v.impact === 'serious')
-      if (criticals.length > 0) {
-        console.warn(`  Axe issues on ${route.id}: ${criticals.length}`)
-        allViolations.push({ route: route.id, violations: criticals })
+      // Full Axe-core audit across all impact levels (critical, serious, moderate, minor)
+      const axeResults = await new AxeBuilder({ page }).analyze()
+      for (const v of axeResults.violations) {
+        allViolations.push({
+          route: route.id,
+          id: v.id,
+          impact: v.impact,
+          description: v.description,
+          nodes: v.nodes.length,
+          sampleSelector: v.nodes[0]?.target?.join(' '),
+          helpUrl: v.helpUrl,
+        })
       }
     }
     await desktopContext.close()
@@ -287,8 +300,8 @@ async function run() {
     <div class="subtitle">Avionics Telemetry Integrity Observatory &amp; Verification System</div>
   </div>
   <div style="text-align: right;">
-    <div class="badge-tag">Tag: v0.3.2-verified</div>
-    <div class="badge-tag" style="margin-top: 2px;">Hash: b6011043368eca73</div>
+    <div class="badge-tag">Eval Tag: v0.3.2-verified</div>
+    <div class="badge-tag" style="margin-top: 2px;">App Tag: v1.0.1-demo</div>
   </div>
 </div>
 
@@ -393,7 +406,7 @@ async function run() {
 </div>
 
 <div class="footer">
-  <div>AeroTrust Verification Release v1.0-demo &bull; MIT License &bull; NASA Visible Earth &amp; Natural Earth Public Domain Cartography</div>
+  <div>Eval Tag: v0.3.2-verified &bull; App Tag: v1.0.1-demo &bull; Independent personal project, not affiliated with or endorsed by Airbus. Uses public information only.</div>
   <div>Page 1 of 1</div>
 </div>
 
@@ -417,10 +430,38 @@ async function run() {
   }
 
   console.log('\n======================================================')
-  console.log('--- Phase 8 Demo Packaging & Integrity Verification Summary ---')
+  console.log('--- Phase 8.1 Full Axe-Core Accessibility Audit Results ---')
+  console.log('======================================================')
+  console.log(`Total Findings across all severities: ${allViolations.length}`)
+
+  const byImpact = { critical: 0, serious: 0, moderate: 0, minor: 0 }
+  for (const v of allViolations) {
+    if (byImpact[v.impact] !== undefined) byImpact[v.impact]++
+  }
+  console.log(`Breakdown: Critical: ${byImpact.critical}, Serious: ${byImpact.serious}, Moderate: ${byImpact.moderate}, Minor: ${byImpact.minor}`)
+
+  let reportMd = `# AeroTrust Axe-Core Full Accessibility Audit Report (Phase 8.1)\n\n`
+  reportMd += `> **Audit Scope**: All standard routes in static demo mode across Desktop (1366x768) and Mobile (390x844).\n`
+  reportMd += `> **Severity Breakdown**: Critical: **${byImpact.critical}**, Serious: **${byImpact.serious}**, Moderate: **${byImpact.moderate}**, Minor: **${byImpact.minor}** (Total: **${allViolations.length}**).\n\n`
+  reportMd += `| Route | Rule ID | Impact | Affected Elements | Description | Selector |\n`
+  reportMd += `|:---|:---|:---:|:---:|:---|:---|\n`
+
+  for (const v of allViolations) {
+    console.log(`[${v.impact.toUpperCase()}] Route: ${v.route} | Rule: ${v.id} | Elements: ${v.nodes} | ${v.description}`)
+    reportMd += `| \`${v.route}\` | \`${v.id}\` | **${v.impact}** | ${v.nodes} | ${v.description.replace(/\|/g, '\\|')} | \`${(v.sampleSelector || '').replace(/\|/g, '\\|')}\` |\n`
+  }
+
+  if (allViolations.length === 0) {
+    reportMd += `\n*No accessibility violations detected across critical, serious, moderate, or minor rules.*\n`
+  }
+
+  fs.writeFileSync(path.join(docsDir, 'AXE_ACCESSIBILITY_REPORT.md'), reportMd, 'utf8')
+  console.log(`Wrote full axe-core report to docs/AXE_ACCESSIBILITY_REPORT.md`)
+
+  console.log('\n======================================================')
+  console.log('--- Phase 8.1 Demo Packaging & Integrity Summary ---')
   console.log('======================================================')
   console.log(`Integrity Failures: ${integrityFailures.length}`)
-  console.log(`Axe Violations: ${allViolations.length}`)
 
   if (integrityFailures.length > 0) {
     console.error('Integrity failures detected:', integrityFailures)

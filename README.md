@@ -1,5 +1,9 @@
 # AeroTrust: Avionics Telemetry Integrity Observatory
 
+**Evaluation Tag**: `v0.3.2-verified` | **App Tag**: `v1.0.1-demo`
+
+> **Disclaimer**: Independent personal project, not affiliated with or endorsed by Airbus. Uses public information only.
+
 AeroTrust is an avionics data-integrity observatory designed to evaluate aircraft ADS-B telemetry against GNSS spoofing, interference, and atmospheric radiation anomalies in a single unified interface. Operating under frozen verification benchmarks on synthetic flight trajectories, it pairs physics-based altimetry consistency checks with an unsupervised abstention engine, classifying telemetry into four standardized evidence tiers (`no_alert`, `flagged_altitude_inconsistency`, `jamming_degraded`, `insufficient`). It features an aggregate Silent Acceptance Rate (SAR) auditor, geographic H3 interference mapping, and an Incident Clock scoping calculator for aviation airworthiness directives.
 
 > **SYNTHETIC DATASET NOTICE**: All operational flight paths, telemetry points, and threat injections evaluated in AeroTrust are generated synthetically. Performance benchmarks reflect simulated ADS-B disruptions and do not represent operational airline flight safety records.
@@ -120,5 +124,7 @@ flowchart TD
 
 ## License & Attributions
 
+* **Evaluation Tag**: `v0.3.2-verified` | **App Tag**: `v1.0.1-demo`
+* **Disclaimer**: Independent personal project, not affiliated with or endorsed by Airbus. Uses public information only.
 * **License**: [MIT License](file:///c:/Users/ASus/Desktop/AeroTrust/LICENSE)
 * **Attributions**: Full catalog of public datasets, textures, and open-source libraries available in [`docs/ATTRIBUTIONS.md`](file:///c:/Users/ASus/Desktop/AeroTrust/docs/ATTRIBUTIONS.md).

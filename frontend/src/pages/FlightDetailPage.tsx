@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Sun } from 'lucide-react'
+import { Sun, AlertTriangle } from 'lucide-react'
 
 interface CheckInfo {
   name: string
@@ -39,6 +39,8 @@ interface FlightDetailData {
   uncalibrated_score?: number | null
   flagged_window?: { start_ts: number; end_ts: number } | null
   points: FlightPoint[]
+  _demo_fallback?: boolean
+  _requested_flight_id?: string
 }
 
 interface FlightOption {
@@ -117,7 +119,10 @@ export default function FlightDetailPage() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
           <div>
             <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: '#f8fafc' }}>
-              Flight Telemetry &amp; Detector Inspection
+              Flight Telemetry &amp; Detector Inspection:{' '}
+              <span data-testid="header-flight-id" style={{ fontFamily: 'monospace', color: '#38bdf8' }}>
+                {flightData ? flightData.flight_id : selectedFlightId}
+              </span>
             </h2>
             <p style={{ margin: '4px 0 0', fontSize: '0.8125rem', color: '#94a3b8' }}>
               Single-flight telemetry: Check (a) primary altitude discrepancy, supporting checks, inactive consensus, and relative radiation tier.
@@ -156,6 +161,33 @@ export default function FlightDetailPage() {
           </div>
         </div>
       </div>
+
+      {/* Visible Fallback Banner for Static Demo Mode */}
+      {!loading && flightData?._demo_fallback && (
+        <aside
+          role="alert"
+          aria-label="Static Demo Flight Fallback Notice"
+          data-testid="static-demo-fallback-banner"
+          style={{
+            padding: '12px 18px',
+            borderRadius: '8px',
+            backgroundColor: 'rgba(180, 83, 9, 0.25)',
+            border: '1px solid #f59e0b',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            color: '#fef3c7',
+            fontWeight: 600,
+            fontSize: '0.875rem',
+          }}
+        >
+          <AlertTriangle size={20} style={{ color: '#fbbf24', flexShrink: 0 }} aria-hidden="true" />
+          <span>
+            Not available in the static demo. Showing example flight{' '}
+            <strong style={{ fontFamily: 'monospace', color: '#ffffff' }}>{flightData.flight_id}</strong> instead.
+          </span>
+        </aside>
+      )}
 
       {loading && (
         <div className="glass-panel" style={{ padding: '40px', textAlign: 'center' }}>

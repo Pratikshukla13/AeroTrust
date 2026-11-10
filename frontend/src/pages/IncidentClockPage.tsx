@@ -10,6 +10,7 @@ import {
   DollarSign,
   ShieldAlert,
   GitBranch,
+  AlertTriangle,
 } from 'lucide-react'
 
 export interface DatedEvent {
@@ -353,6 +354,19 @@ export default function IncidentClockPage() {
       })
   }, [])
 
+  const hasUnverifiedSources = useMemo(() => {
+    return (
+      cases.length === 0 ||
+      cases.some(
+        (c) =>
+          !c.source_url ||
+          c.verification_status !== 'sourced' ||
+          c.url_status !== 'verified by user' ||
+          (c.dated_events && c.dated_events.some((e) => !e.source_url || e.url_status !== 'verified by user'))
+      )
+    )
+  }, [cases])
+
   // Presets load ONLY sourced parameters; unsourced fields remain empty and visually highlighted
   const handleApplyPreset = (presetId: string) => {
     setActivePreset(presetId)
@@ -655,6 +669,35 @@ export default function IncidentClockPage() {
           </p>
         </div>
       </div>
+
+      {/* Phase 8.1 Work in Progress: Sources Being Verified Header */}
+      {hasUnverifiedSources && (
+        <aside
+          role="region"
+          aria-label="Source Verification Status"
+          data-testid="sources-work-in-progress-header"
+          style={{
+            padding: '16px 20px',
+            borderRadius: '8px',
+            backgroundColor: 'rgba(180, 83, 9, 0.25)',
+            border: '1px solid #f59e0b',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '14px',
+            color: '#fef3c7',
+          }}
+        >
+          <AlertTriangle size={24} style={{ color: '#fbbf24', flexShrink: 0 }} aria-hidden="true" />
+          <div>
+            <h3 style={{ margin: 0, fontSize: '0.9375rem', fontWeight: 700, color: '#fef3c7' }}>
+              Work in progress: sources being verified
+            </h3>
+            <p style={{ margin: '4px 0 0', fontSize: '0.8125rem', color: '#fde68a', lineHeight: 1.5 }}>
+              One or more cases lack a verified primary regulatory URL. Red markers highlight unverified or missing primary documentation.
+            </p>
+          </div>
+        </aside>
+      )}
 
       {/* 2. Public Case Ground Truth Display */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
